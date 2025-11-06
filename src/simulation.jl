@@ -22,8 +22,8 @@ function simulate_many!(c1::Classes.Classe, c2::Classes.Classe; N=50, out_dir="d
         push!(summary, (i, winner))
     end
 
-    write(joinpath(out_dir, "combat_results.csv"), all_logs)
-    write(joinpath(out_dir, "combat_summary.csv"), summary)
+    CSV.write(joinpath(out_dir, "combat_results.csv"), all_logs)
+    CSV.write(joinpath(out_dir, "combat_summary.csv"), summary)
     println("Résultats enregistrés dans $out_dir")
 end
 
