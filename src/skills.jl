@@ -32,4 +32,20 @@ function use_skill(att::Mage, skl::Fireball, def::Classe; dmg_mat=Dict(), skill_
     return dmg
 end
 
+function use_skill(att::Chevalier, skl::PowerStrike, def::Classe; dmg_mat::Dict=Dict{Tuple{String,String},Int}(), skill_usage::Dict=Dict{String,Int}(), allies=nothing, enemies=nothing)
+    if att.stats.PM < skl.cost_pm
+        println("$(att.nom) n'a pas assez de PM pour PowerStrike.")
+        return 0
+    end
+    att.stats.PM -= skl.cost_pm
+    base_atk = skl.power + Int(round(att.stats.ATK*0.7))
+    dmg, crit = compute_damage(base_atk, def.stats.DEFENSE, sd_frac=0.03, crit_chance=0.18, crit_mult=1.7)
+    def.stats.PV = max(def.stats.PV - dmg, 0)
+    println("$(att.nom) utilise PowerStrike sur $(def.nom) => $dmg dégâts" * (crit ? " (CRIT!)" : ""))
+    acls=string(typeof(att)); dcls=string(typeof(def))
+    dmg_mat[(acls,dcls)] = get(dmg_mat,(acls,dcls),0) + dmg
+    skill_usage[string(typeof(skl))] = get(skill_usage,string(typeof(skl)),0) + 1
+    return dmg
+end
+
 end # module Skills
