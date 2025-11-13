@@ -14,15 +14,11 @@ function afficher_stats(c::Role)
     println("$(c.nom): PV=$(s.PV), PM=$(s.PM), ATK=$(s.ATK), VIT=$(s.VITESSE), DEF=$(s.DEFENSE)")
 end
 
-function choose_action(actor::Role, defender::Role)
-    if actor isa Mage && actor.stats.PM ≥ 10
-        return (:skill, Fireball(10, 30))
-    elseif actor isa Chevalier && actor.stats.PM ≥ 8 && rand() < 0.2
-        return (:skill, PowerStrike(8, 20))
-    else
-        return (:attack, nothing)
-    end
-end
+choose_action(actor::Role, defender::Role) = (:attack, nothing)
+
+choose_action(actor::Mage, defender::Role) = actor.stats.PM ≥ 10 ? (:skill, Fireball(10, 30)) : (:attack, nothing)
+
+choose_action(actor::Chevalier, defender::Role) = (actor.stats.PM ≥ 8 && rand() < 0.2) ? (:skill, PowerStrike(8, 20)) : (:attack, nothing)
 
 function combat(j1::Role, j2::Role; max_rounds=100, dmg_mat=Dict(), skill_usage=Dict())
     logs = AttackLog[]

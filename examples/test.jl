@@ -9,7 +9,7 @@ chevalier.stats = Stats(PV=120, PM=20, ATK=40, VITESSE=30, DEFENSE=15)
 
 println("=== Début du test de combat ===")
 println("Personnages en présence :")
-show(mage)
-show(chevalier)
+mage
+chevalier
 
-simulation(mage, chevalier)
+rand(mage, chevalier)

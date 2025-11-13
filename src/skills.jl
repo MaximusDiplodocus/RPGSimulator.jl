@@ -10,7 +10,7 @@ function use_skill(att::Role, skl::Skill, target; kwargs...)
 end
 
 # Exemple : Fireball (Mage)
-function use_skill(att::Mage, skl::Fireball, def::Role; dmg_mat=Dict(), skill_usage=Dict(), kwargs...)
+function use_skill(att::Mage, skl::Fireball, def::Role; dmg_mat=Dict(), skill_usage=Dict())
     if att.stats.PM < skl.cost_pm
         println("$(att.nom) n'a pas assez de PM pour Fireball.")
         return 0

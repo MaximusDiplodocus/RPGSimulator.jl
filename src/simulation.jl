@@ -1,4 +1,4 @@
-function simulation(j1::Role, j2::Role; n_simulations=10, max_rounds=100, dmg_mat=Dict(), skill_usage=Dict())
+function Base.rand(j1::Role, j2::Role; n_simulations=10, max_rounds=100, dmg_mat=Dict(), skill_usage=Dict())
     results = Dict(j1.nom => 0, j2.nom => 0)
     
     # Sauvegarder les PV initiaux
