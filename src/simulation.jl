@@ -1,12 +1,4 @@
-module Simulation
-
-using ..Classes
-using ..Combat
-using CSV, DataFrames, Dates
-
-export simulate_many!
-
-function simulate_many!(c1::Classes.Classe, c2::Classes.Classe; N=50, out_dir="data")
+function simulate(c1::Role, c2::Role; N=50, out_dir="data")
     mkpath(out_dir)
     all_logs = DataFrame(combat=Int[], time=DateTime[], round=Int[], actor=String[],
                          action=String[], target=String[], damage=Int[], actor_PV=Int[], target_PV=Int[])
@@ -27,5 +19,3 @@ function simulate_many!(c1::Classes.Classe, c2::Classes.Classe; N=50, out_dir="d
     println("Résultats enregistrés dans $out_dir")
     return (logs_df=all_logs, summary_df=summary)
 end
-
-end # module Simulation

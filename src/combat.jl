@@ -1,13 +1,3 @@
-module Combat
-
-using ..Classes
-using ..Effets
-using ..Attaques
-using ..Skills
-using Dates
-
-export AttackLog, combat, afficher_stats
-
 struct AttackLog
     time::DateTime
     round::Int
@@ -19,22 +9,22 @@ struct AttackLog
     target_PV::Int
 end
 
-function afficher_stats(c::Classe)
+function afficher_stats(c::Role)
     s = c.stats
     println("$(c.nom): PV=$(s.PV), PM=$(s.PM), ATK=$(s.ATK), VIT=$(s.VITESSE), DEF=$(s.DEFENSE)")
 end
 
-function choose_action(actor::Classe, defender::Classe)
-    if actor isa Classes.Mage && actor.stats.PM ≥ 10
+function choose_action(actor::Role, defender::Role)
+    if actor isa Mage && actor.stats.PM ≥ 10
         return (:skill, Fireball(10, 30))
-    elseif actor isa Classes.Chevalier && actor.stats.PM ≥ 8 && rand() < 0.2
+    elseif actor isa Chevalier && actor.stats.PM ≥ 8 && rand() < 0.2
         return (:skill, PowerStrike(8, 20))
     else
         return (:attack, nothing)
     end
 end
 
-function combat(j1::Classe, j2::Classe; max_rounds=100, dmg_mat=Dict(), skill_usage=Dict())
+function combat(j1::Role, j2::Role; max_rounds=100, dmg_mat=Dict(), skill_usage=Dict())
     logs = AttackLog[]
     round = 1
     while j1.stats.PV>0 && j2.stats.PV>0 && round ≤ max_rounds
@@ -73,7 +63,5 @@ function combat(j1::Classe, j2::Classe; max_rounds=100, dmg_mat=Dict(), skill_us
         round += 1
     end
     winner = j1.stats.PV > 0 ? j1.nom : j2.nom
-    return logs, winner
+    return winner
 end
-
-end # module Combat

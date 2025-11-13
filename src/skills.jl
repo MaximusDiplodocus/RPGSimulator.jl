@@ -1,23 +1,16 @@
-module Skills
-
-using ..Classes
-using ..Attaques
-
-export Skill, Fireball, PowerStrike, Heal, AOE, use_skill
-
 abstract type Skill end
 struct Fireball <: Skill; cost_pm::Int; power::Int; end
 struct PowerStrike <: Skill; cost_pm::Int; power::Int; end
 struct Heal <: Skill; cost_pm::Int; amount::Int; end
 struct AOE <: Skill; cost_pm::Int; power::Int; radius::Int; end
 
-function use_skill(att::Classe, skl::Skill, target; kwargs...)
+function use_skill(att::Role, skl::Skill, target; kwargs...)
     println("$(att.nom) utilise une compétence non spécifiée pour ce type.")
     return 0
 end
 
 # Exemple : Fireball (Mage)
-function use_skill(att::Mage, skl::Fireball, def::Classe; dmg_mat=Dict(), skill_usage=Dict(), kwargs...)
+function use_skill(att::Mage, skl::Fireball, def::Role; dmg_mat=Dict(), skill_usage=Dict(), kwargs...)
     if att.stats.PM < skl.cost_pm
         println("$(att.nom) n'a pas assez de PM pour Fireball.")
         return 0
@@ -32,7 +25,7 @@ function use_skill(att::Mage, skl::Fireball, def::Classe; dmg_mat=Dict(), skill_
     return dmg
 end
 
-function use_skill(att::Chevalier, skl::PowerStrike, def::Classe; dmg_mat::Dict=Dict{Tuple{String,String},Int}(), skill_usage::Dict=Dict{String,Int}(), allies=nothing, enemies=nothing)
+function use_skill(att::Chevalier, skl::PowerStrike, def::Role; dmg_mat::Dict=Dict{Tuple{String,String},Int}(), skill_usage::Dict=Dict{String,Int}(), allies=nothing, enemies=nothing)
     if att.stats.PM < skl.cost_pm
         println("$(att.nom) n'a pas assez de PM pour PowerStrike.")
         return 0
@@ -47,5 +40,3 @@ function use_skill(att::Chevalier, skl::PowerStrike, def::Classe; dmg_mat::Dict=
     skill_usage[string(typeof(skl))] = get(skill_usage,string(typeof(skl)),0) + 1
     return dmg
 end
-
-end # module Skills

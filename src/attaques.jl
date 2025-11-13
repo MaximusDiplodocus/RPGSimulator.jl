@@ -1,10 +1,3 @@
-module Attaques
-
-using ..Classes
-using Distributions, Random
-
-export compute_damage, attaquer
-
 function compute_damage(base_atk::Int, def::Int; sd_frac=0.12, crit_chance=0.10, crit_mult=1.6)
     sd = max(1.0, abs(base_atk)*sd_frac)
     d = rand(Normal(base_atk, sd))
@@ -15,7 +8,7 @@ function compute_damage(base_atk::Int, def::Int; sd_frac=0.12, crit_chance=0.10,
     return raw, is_crit
 end
 
-function attaquer(att::Classe, def::Classe; shield::Int=0, dmg_mat=Dict(), skill_usage=Dict())
+function attaquer(att::Role, def::Role; shield::Int=0, dmg_mat=Dict(), skill_usage=Dict())
     dmg, crit = compute_damage(att.stats.ATK, def.stats.DEFENSE - shield)
     def.stats.PV = max(def.stats.PV - dmg, 0)
     println("$(att.nom) attaque $(def.nom) et inflige $dmg dégâts" * (crit ? " (CRIT!)" : ""))
@@ -23,5 +16,3 @@ function attaquer(att::Classe, def::Classe; shield::Int=0, dmg_mat=Dict(), skill
     dmg_mat[(acls,dcls)] = get(dmg_mat,(acls,dcls),0) + dmg
     return dmg
 end
-
-end # module Attaques

@@ -1,9 +1,3 @@
-module Effets
-
-using ..Classes
-
-export StatusEffect, Poison, Shield, Stun, Regen, Bleed, apply_effects_round!, apply_effect!
-
 abstract type StatusEffect end
 
 mutable struct Poison <: StatusEffect
@@ -30,7 +24,7 @@ mutable struct Bleed <: StatusEffect
     dmg_per_turn::Int
 end
 
-function apply_effects_round!(c::Classes.Classe)
+function apply_effects_round!(c::Role)
     new_effects = Any[]
     total_shield, total_poison, total_bleed, regen_amount = 0, 0, 0, 0
     stunned = false
@@ -73,6 +67,4 @@ function apply_effects_round!(c::Classes.Classe)
     return (total_shield, stunned, regen_amount, total_damage)
 end
 
-apply_effect!(c::Classe) = apply_effects_round!(c)[1]
-
-end # module Effets
+apply_effect!(c::Role) = apply_effects_round!(c)[1]
