@@ -1,12 +1,5 @@
-# ======================================
-# Example/test.jl — Script de démonstration du moteur RPG
-# ======================================
-
-# Active le module principal du jeu
-push!(LOAD_PATH, joinpath(@__DIR__, "..", "src"))
 using RPGSimulator
 
-# Création de deux personnages pour le test
 mage = Mage(nom="Jed")
 mage.stats = Stats(PV=100, PM=20, ATK=30, VITESSE=40, DEFENSE=10)
 
@@ -19,4 +12,4 @@ println("Personnages en présence :")
 show(mage)
 show(chevalier)
 
-simulate_many!(mage, chevalier)
+simulation(mage, chevalier)

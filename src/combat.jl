@@ -63,5 +63,5 @@ function combat(j1::Role, j2::Role; max_rounds=100, dmg_mat=Dict(), skill_usage=
         round += 1
     end
     winner = j1.stats.PV > 0 ? j1.nom : j2.nom
-    return winner
+    return "Le winner est : $winner"
 end
