@@ -1,17 +1,27 @@
 # New Book
 
+<<<<<<< Updated upstream
 ```julia (editor=true, logging=false, output=true)
 using Bonito, Tables
 import Pkg; Pkg.activate("C:/Users/Hussin/Documents/GitHub/RPGSimulator.jl") # Quand ce sera le final on pourra l'enlever
 using RPGSimulator
 
 # Création des personnages
+=======
+```julia (editor=true, logging=true, output=true)
+using CSV, DataFrames, CairoMakie
+using Bonito, Tables
+include("../Examples/test.jl")  # ou ajoute le chemin d'inclusion du package RPGSimulator
+
+# --- Création des personnages ---
+>>>>>>> Stashed changes
 archer = Archer(nom="Jed")
 archer.stats = Stats(PV=100, PM=20, ATK=30, VITESSE=40, DEFENSE=10)
 
 gobelin = Gobelin(nom="Hussin")
 gobelin.stats = Stats(PV=120, PM=0, ATK=35, VITESSE=40, DEFENSE=5)
 
+<<<<<<< Updated upstream
 # Simulation de 5 combats
 all_logs, summary = simulate_many!(archer, gobelin, N=5, out_dir="data")
 
@@ -38,12 +48,26 @@ pv = DataFrame(combat=all_logs.combat, round=all_logs.round, actor=all_logs.acto
 
 # Affichage points de vie par round
 Bonito.DOM.div(
+=======
+# --- Simulation de 3 combats (sans écriture automatique CSV) ---
+all_logs, summary = simulate_many!(archer, gobelin, N=3, out_dir="data")
+
+# --- Préparer les DataFrames à afficher ---
+# Convertir les logs en DataFrame des PV par round - exemple simple
+pv = DataFrame(combat=all_logs.combat, round=all_logs.round, actor=all_logs.actor, pv=all_logs.actor_PV)
+
+# --- Affichage avec Bonito ---
+Bonito.DOM.div(
+    Bonito.DOM.h2("Résumé des combats"),
+    Bonito.Table(summary),
+>>>>>>> Stashed changes
     Bonito.DOM.h2("Points de vie par round"),
     Bonito.Table(pv)
 )
 
 ```
 ```julia (editor=true, logging=false, output=true)
+<<<<<<< Updated upstream
 # Simulation / exemple de données DEFENSE par round
 defense_data = DataFrame(combat=Int[], round=Int[], actor=String[], defense=Int[])
 
@@ -68,6 +92,10 @@ using Bonito, Tables
 using Plots
 Plots.plotlyjs()  # Backend interactif
 
+=======
+using CSV, DataFrames, CairoMakie
+using Bonito, Tables
+>>>>>>> Stashed changes
 include("../Examples/test.jl")
 
 # --- Création des personnages ---
@@ -77,6 +105,7 @@ archer.stats = Stats(PV=100, PM=20, ATK=30, VITESSE=40, DEFENSE=10)
 gobelin = Gobelin(nom="Hussin")
 gobelin.stats = Stats(PV=120, PM=0, ATK=35, VITESSE=40, DEFENSE=5)
 
+<<<<<<< Updated upstream
 # --- Simulation de 5 combats ---
 all_logs, summary = simulate_many!(archer, gobelin, N=5, out_dir="data")
 
@@ -210,6 +239,21 @@ end
 Bonito.DOM.div(
     Bonito.DOM.h2("Simulation de PV interactive"),
     interactive_pv_simulation()
+=======
+# --- Simulation de 3 combats (sans affichage automatique) ---
+res = simulate_many!(archer, gobelin, N=3);
+
+# --- Préparer les DataFrames à afficher ---
+summary = res.summary_df
+pv = res.pv_df
+
+# --- Affichage avec Bonito ---
+Bonito.DOM.div(
+    Bonito.DOM.h2("Résumé des combats"),
+    Bonito.Table(summary),
+    Bonito.DOM.h2("Points de vie par round"),
+    Bonito.Table(pv)
+>>>>>>> Stashed changes
 )
 
 ```
@@ -236,6 +280,7 @@ function interactive_pv_simulation()
     ydata_jed = Observable(Float64[])
     ydata_gob = Observable(Float64[])
 
+<<<<<<< Updated upstream
     # Figure principale
     fig = Figure(resolution = (900, 600))
     
@@ -344,11 +389,22 @@ function interactive_pv_simulation()
     # Graphique (ligne 1)
     ax = Axis(fig[1,1], title="Évolution des PV", xlabel="Round", ylabel="PV",
               limits=((0,3), (0, max(pv_jed[], pv_gob[])+50)))
+=======
+    # Figure principale avec un layout en 3 lignes, 1 colonne
+    fig = Figure(resolution = (900, 600), layout = GridLayout())
+    
+    # Graphique (ligne 1)
+    ax = Axis(fig[1,1], title="Évolution des PV", xlabel="Round", ylabel="PV")
+>>>>>>> Stashed changes
     
     # Lignes de PV
     line_jed = lines!(ax, xdata, ydata_jed; color=:blue, linewidth=2)
     line_gob = lines!(ax, xdata, ydata_gob; color=:red, linewidth=2)
+<<<<<<< Updated upstream
     
+=======
+
+>>>>>>> Stashed changes
     # Légende
     Legend(fig[1,2], [line_jed, line_gob], ["Jed (Archer)", "Gobelin"])
 
@@ -372,9 +428,12 @@ function interactive_pv_simulation()
         xdata[] = collect(rounds)
         ydata_jed[] = traj_jed
         ydata_gob[] = traj_gob
+<<<<<<< Updated upstream
         # Ajuster limites Y pour dézoom automatique
         new_max = max(max(traj_jed...), max(traj_gob...)) + 20
         ax.limits[] = ((0,3), (0, new_max))
+=======
+>>>>>>> Stashed changes
     end
 
     # SliderGrid pour Jed (ligne 2)
@@ -406,11 +465,15 @@ function interactive_pv_simulation()
 
     return Bonito.DOM.div(
         Bonito.DOM.h3("Simulateur : Jed vs Gobelin"),
+<<<<<<< Updated upstream
         fig,
         Bonito.DOM.h3("Paramètres Jed"),
         sg_jed,
         Bonito.DOM.h3("Paramètres Gobelin"),
         sg_gob
+=======
+        fig
+>>>>>>> Stashed changes
     )
 end
 
@@ -424,6 +487,7 @@ Bonito.DOM.div(
 using Bonito
 using WGLMakie
 using Observables
+<<<<<<< Updated upstream
 using Statistics
 using CSV, DataFrames
 
@@ -451,10 +515,28 @@ function interactive_pv_simulation()
     def_gob = Observable(gobelin.stats.DEFENSE)
 
     # Observables pour tracer
+=======
+
+WGLMakie.activate!(; resize_to_body=true)
+
+function interactive_pv_simulation()
+    # Observables pour Jed
+    pv_jed  = Observable(100)
+    atk_jed = Observable(30)
+    def_jed = Observable(10)
+
+    # Observables pour Gobelin
+    pv_gob  = Observable(120)
+    atk_gob = Observable(25)
+    def_gob = Observable(5)
+
+    # Observables pour les lignes
+>>>>>>> Stashed changes
     xdata = Observable(Float64[])
     ydata_jed = Observable(Float64[])
     ydata_gob = Observable(Float64[])
 
+<<<<<<< Updated upstream
     fig = Figure(resolution = (900, 600), layout = GridLayout())
 
     # Graphique PV
@@ -467,6 +549,45 @@ function interactive_pv_simulation()
     Legend(fig[1, 2], [line_jed, line_gob]; labels = ["Jed (Archer)", "Gobelin"])
 
     # Calcul trajectoire PV sur rounds
+=======
+    # Figure principale avec 1 ligne et 2 colonnes
+    fig = Figure(resolution=(1000,600), layout=GridLayout())
+    
+    # Colonne gauche : graphique
+    ax = Axis(fig[1,1], title="Évolution des PV", xlabel="Round", ylabel="PV",
+              limits=((0,3), (0, max(pv_jed[], pv_gob[])+50)))
+
+    # Lignes de PV avec labels pour la légende
+    line_jed = lines!(ax, xdata, ydata_jed; color=:blue, linewidth=2, label="Jed (Archer)")
+    line_gob = lines!(ax, xdata, ydata_gob; color=:red, linewidth=2, label="Gobelin")
+
+    # Légende automatique
+    axislegend(ax, position=:rt)  # à droite du graphique
+
+    # Colonne droite : sliders (stackés verticalement)
+    slider_col = GridLayout()
+    fig[1,2] = slider_col  # placer la grille des sliders dans la 2e colonne
+
+    # SliderGrid pour Jed
+    sg_jed = SliderGrid(
+        slider_col[1,1],
+        (label="Jed PV", range=0:500, startvalue=pv_jed[]),
+        (label="Jed ATK", range=0:100, startvalue=atk_jed[]),
+        (label="Jed DEF", range=0:100, startvalue=def_jed[])
+    )
+    sPV_jed, sATK_jed, sDEF_jed = sg_jed.sliders
+
+    # SliderGrid pour Gobelin
+    sg_gob = SliderGrid(
+        slider_col[2,1],
+        (label="Gob PV", range=0:500, startvalue=pv_gob[]),
+        (label="Gob ATK", range=0:100, startvalue=atk_gob[]),
+        (label="Gob DEF", range=0:100, startvalue=def_gob[])
+    )
+    sPV_gob, sATK_gob, sDEF_gob = sg_gob.sliders
+
+    # Fonction PV par round (3 rounds)
+>>>>>>> Stashed changes
     function compute_pv_traj(pv, atk, defn; rounds=3)
         traj = Float64[]
         current = pv
@@ -479,13 +600,18 @@ function interactive_pv_simulation()
         return 0:rounds, traj
     end
 
+<<<<<<< Updated upstream
     # Mise à jour graphique
+=======
+    # Mise à jour réactive
+>>>>>>> Stashed changes
     function update_lines!()
         rounds, traj_jed = compute_pv_traj(pv_jed[], atk_gob[], def_jed[], rounds=3)
         _, traj_gob = compute_pv_traj(pv_gob[], atk_jed[], def_gob[], rounds=3)
         xdata[] = collect(rounds)
         ydata_jed[] = traj_jed
         ydata_gob[] = traj_gob
+<<<<<<< Updated upstream
         new_max = max(maximum(traj_jed), maximum(traj_gob)) + 20
         ax.limits[] = ((0,3), (0, new_max))
     end
@@ -514,6 +640,22 @@ function interactive_pv_simulation()
     on(sATK_gob.value) do v atk_gob[] = v; update_lines!() end
     on(sDEF_gob.value) do v def_gob[] = v; update_lines!() end
 
+=======
+        # Ajuster limites Y pour dézoom automatique
+        new_max = max(max(traj_jed...), max(traj_gob...)) + 20
+        ax.limits[] = ((0,3), (0, new_max))
+    end
+
+    # Relier sliders aux observables
+    on(sPV_jed.value)  do v pv_jed[] = v; update_lines!() end
+    on(sATK_jed.value) do v atk_jed[] = v; update_lines!() end
+    on(sDEF_jed.value) do v def_jed[] = v; update_lines!() end
+    on(sPV_gob.value)  do v pv_gob[] = v; update_lines!() end
+    on(sATK_gob.value) do v atk_gob[] = v; update_lines!() end
+    on(sDEF_gob.value) do v def_gob[] = v; update_lines!() end
+
+    # Initialiser le graphique
+>>>>>>> Stashed changes
     update_lines!()
 
     return Bonito.DOM.div(
