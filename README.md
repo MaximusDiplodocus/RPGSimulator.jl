@@ -21,7 +21,7 @@ Chaque personnage dispose de plusieurs statistiques influençant le combat :
 
 ## Rôles disponibles
 
-Chaque personnage appartient à un rôle avec des caractéristiques propres qui sont modifiable :
+Chaque personnage appartient à un rôle avec des caractéristiques propres, qui sont modifiables dans le fichier `test.jl` :
 
 Archer : rapide et précis, inflige des dégâts physiques constants.
 - PV : 90
