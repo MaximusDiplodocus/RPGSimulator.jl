@@ -21,7 +21,7 @@ Chaque personnage dispose de plusieurs statistiques influençant le combat :
 
 ## Rôles disponibles
 
-Chaque personnage appartient à un rôle avec des caractéristiques propres :
+Chaque personnage appartient à un rôle avec des caractéristiques propres qui sont modifiable :
 
 Archer : rapide et précis, inflige des dégâts physiques constants.
 - PV : 90
