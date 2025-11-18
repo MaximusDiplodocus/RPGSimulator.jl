@@ -1,5 +1,4 @@
 struct AttackLog
-    time::DateTime
     round::Int
     actor::String
     action::String
@@ -20,8 +19,6 @@ choose_action(actor::Mage, defender::Role) = actor.stats.PM ≥ 10 ? (:skill, Fi
 
 choose_action(actor::Chevalier, defender::Role) = (actor.stats.PM ≥ 8 && rand() < 0.2) ? (:skill, PowerStrike(8, 20)) : (:attack, nothing)
 
-
-
 function combat(j1::Role, j2::Role; max_rounds=100, dmg_mat=Dict(), skill_usage=Dict())
     logs = AttackLog[]
     round = 1
@@ -41,7 +38,7 @@ function combat(j1::Role, j2::Role; max_rounds=100, dmg_mat=Dict(), skill_usage=
 
             if is_stunned
                 println("$(actor.nom) est étourdi et rate son tour.")
-                push!(logs, AttackLog(now(), round, actor.nom, "Stunned", "", 0, actor.stats.PV, defender.stats.PV))
+                push!(logs, AttackLog(round, actor.nom, "Stunned", "", 0, actor.stats.PV, defender.stats.PV))
                 continue
             end
 
@@ -53,7 +50,7 @@ function combat(j1::Role, j2::Role; max_rounds=100, dmg_mat=Dict(), skill_usage=
                 attaquer(actor, defender; shield=def_shield, dmg_mat=dmg_mat, skill_usage=skill_usage)
             end
             dmg = before - defender.stats.PV
-            push!(logs, AttackLog(now(), round, actor.nom, string(action), defender.nom, dmg, actor.stats.PV, defender.stats.PV))
+            push!(logs, AttackLog(round, actor.nom, string(action), defender.nom, dmg, actor.stats.PV, defender.stats.PV))
 
             afficher_stats(j1)
             afficher_stats(j2)
@@ -61,5 +58,5 @@ function combat(j1::Role, j2::Role; max_rounds=100, dmg_mat=Dict(), skill_usage=
         round += 1
     end
     winner = j1.stats.PV > 0 ? j1.nom : j2.nom
-    return  winner
+    return  winner, logs
 end
