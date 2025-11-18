@@ -66,6 +66,27 @@ end
     @test dmg == 0
 end
 
+# ------------------------------------------------------
+# Structures factices pour les tests de "effets"
+# ------------------------------------------------------
+mutable struct DummyStats
+    PV::Int
+    ATK::Int
+    DEFENSE::Int
+    PM::Int
+end
+
+mutable struct DummyRole <: RPGSimulator.Role
+    nom::String
+    stats::DummyStats
+    effects::Vector{RPGSimulator.StatusEffect}
+end
+
+# Helper pour créer un rôle factice
+function make_dummy_role(pv=100; name="Testeur", effects=RPGSimulator.StatusEffect[])
+    return DummyRole(name, DummyStats(pv, 10, 5, 20), effects)
+end
+
 # === TEST 7 : Poison ===
 @testset "Poison" begin
     c = make_dummy_role(100, effects=[RPGSimulator.Poison(2,8)])
