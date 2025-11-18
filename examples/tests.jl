@@ -24,3 +24,14 @@ rand(mage, chevalier)
 #2/ Tests automatiques - stats par défaut
 combat(Archer(), Gobelin())
 rand(Archer(), Gobelin())
+
+
+#3/ Test l'utilisation d'une compétence
+mage = Mage(nom="Jed")
+mage.stats = Stats(PV=100, PM=20, ATK=30, VITESSE=40, DEFENSE=10)
+
+chevalier = Chevalier(nom="Hussin")
+chevalier.stats = Stats(PV=120, PM=20, ATK=40, VITESSE=30, DEFENSE=15)
+
+use_skill(mage, Fireball(10, 30), chevalier)
+println("PV d'Hussin après la Fireball de Jed : ", mage.stats.PV)
