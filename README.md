@@ -113,7 +113,7 @@ Un combat se déroule en plusieurs tours successifs :
 La simulation permet d’exécuter plusieurs combats pour obtenir des statistiques globales :
 
 Exemple :
-"simulate_many!(Mage(), Gobelin(); N=100)"
+"rand(Mage(), Gobelin(), n_simulations=3)"
 
 N : nombre de combats à simuler.
 
