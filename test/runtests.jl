@@ -65,3 +65,41 @@ end
     dmg = use_skill(archer, dummy_skill, target)
     @test dmg == 0
 end
+
+# === TEST 7 : Poison ===
+@testset "Poison" begin
+    c = DummyRole(
+        "Testeur",
+        DummyStats(100, 10, 5, 20),
+        RPGSimulator.StatusEffect[RPGSimulator.Poison(2, 8)])
+    shield, stunned, regen, dmg = RPGSimulator.apply_effects_round!(c)
+    @test dmg == 8
+    @test c.stats.PV == 92
+    @test length(c.effects) == 1 
+end
+
+# === TEST 7 : Bleed ===
+@testset "Bleed" begin
+    c = DummyRole(
+        "Testeur",
+        DummyStats(100, 10, 5, 20),
+        RPGSimulator.StatusEffect[RPGSimulator.Bleed(3, 5)])
+    shield, stunned, regen, dmg = RPGSimulator.apply_effects_round!(c)
+    @test dmg == 5
+    @test c.stats.PV == 95
+    @test length(c.effects) == 1  
+end
+
+# === TEST 8 : Regen ===
+@testset "Regen" begin
+    c = DummyRole(
+        "Testeur",
+        DummyStats(50, 10, 5, 20),
+        RPGSimulator.StatusEffect[RPGSimulator.Regen(2, 10)]
+    )
+    shield, stunned, regen, dmg = RPGSimulator.apply_effects_round!(c)
+    @test regen == 10
+    @test dmg == 0
+    @test c.stats.PV == 60
+    @test length(c.effects) == 1  
+end
