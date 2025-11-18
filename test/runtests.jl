@@ -122,7 +122,7 @@ end
     @test shield == 15
     @test dmg == 0
     @test c.stats.PV == 100
-    @test length(c.effects) == 1  
+    @test length(c.effects) == 1 
 end
 
 # === TEST 11 : Stun ===
