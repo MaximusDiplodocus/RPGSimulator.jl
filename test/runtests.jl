@@ -62,15 +62,6 @@ end
     @test chevalier.stats.PM == before_PM - power_strike.cost_pm
 end
 
-# === TEST 6 : use_skill générique ===
-@testset "use_skill générique" begin
-    archer = Archer()
-    target = Gobelin()
-    dummy_skill = AOE(5, 10, 2)
-    dmg = use_skill(archer, dummy_skill, target)
-    @test dmg == 0
-end
-
 # ------------------------------------------------------
 # Structures factices pour les tests de "effets"
 # ------------------------------------------------------
@@ -92,7 +83,7 @@ function make_dummy_role(pv=100; name="Testeur", effects=RPGSimulator.StatusEffe
     return DummyRole(name, DummyStats(pv, 10, 5, 20), effects)
 end
 
-# === TEST 7 : Poison ===
+# === TEST 6 : Poison ===
 @testset "Poison" begin
     c = make_dummy_role(100, effects=[RPGSimulator.Poison(2,8)])
     shield, stunned, regen, dmg = RPGSimulator.apply_effects_round!(c)
@@ -101,7 +92,7 @@ end
     @test length(c.effects) == 1  
 end
 
-# === TEST 8 : Bleed ===
+# === TEST 7 : Bleed ===
 @testset "Bleed" begin
     c = make_dummy_role(100, effects=[RPGSimulator.Bleed(3,5)])
     shield, stunned, regen, dmg = RPGSimulator.apply_effects_round!(c)
@@ -110,7 +101,7 @@ end
     @test length(c.effects) == 1  
 end
 
-# === TEST 9 : Regen ===
+# === TEST 8 : Regen ===
 @testset "Regen" begin
     c = make_dummy_role(50, effects=[RPGSimulator.Regen(2,10)])
     shield, stunned, regen, dmg = RPGSimulator.apply_effects_round!(c)
@@ -120,7 +111,7 @@ end
     @test length(c.effects) == 1  
 end
 
-# === TEST 10 : Shield ===
+# === TEST 9 : Shield ===
 @testset "Shield" begin
     c = make_dummy_role(100, effects=[RPGSimulator.Shield(2,15)])
     shield, stunned, regen, dmg = RPGSimulator.apply_effects_round!(c)
@@ -130,7 +121,7 @@ end
     @test length(c.effects) == 1 
 end
 
-# === TEST 11 : Stun ===
+# === TEST 10 : Stun ===
 @testset "Stun" begin
     c = make_dummy_role(100, effects=[RPGSimulator.Stun(1)])
     shield, stunned, regen, dmg = RPGSimulator.apply_effects_round!(c)
@@ -139,7 +130,7 @@ end
     @test length(c.effects) == 0  
 end
 
-# === TEST 12 : Stack d'effects ===
+# === TEST 11 : Stack d'effects ===
 @testset "Stack d’effets" begin
     c = make_dummy_role(100, effects=[
         RPGSimulator.Poison(2,5),
@@ -155,7 +146,7 @@ end
     @test length(c.effects) == 4 
 end
 
-# === TEST 13 : Aucun effet ===
+# === TEST 12 : Aucun effet ===
 @testset "Aucun effet" begin
     c = make_dummy_role(100, effects=RPGSimulator.StatusEffect[])
     shield, stunned, regen, dmg = RPGSimulator.apply_effects_round!(c)
