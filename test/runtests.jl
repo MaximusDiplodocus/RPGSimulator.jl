@@ -24,11 +24,16 @@ end
 end
 
 # === TEST 3 : combat simple ===
-@testset "combat" begin
-    gandalf = Mage()
-    arthur = Chevalier()
-    winner = combat(gandalf, arthur; max_rounds=10)
+@testset "combat simple" begin
+    gandalf = RPGSimulator.Mage()
+    arthur = RPGSimulator.Chevalier()
+    # On fixe les champs VITESSE si nécessaire
+    gandalf.stats.VITESSE = 10
+    arthur.stats.VITESSE = 8
+    winner, logs = RPGSimulator.combat(gandalf, arthur; max_rounds=10)
     @test winner in [gandalf.nom, arthur.nom]
+    @test length(logs) ≥ 1    # au moins un tour effectué
+    @test all(log -> log.damage ≥ 0, logs)  # pas de dégâts négatifs
 end
 
 # === TEST 4 : use_skill Mage Fireball ===
