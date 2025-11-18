@@ -2,10 +2,10 @@ module RPGSimulator
 
 using Random, Dates, CSV, DataFrames, Distributions, StatsBase, Chain
 
-export  combat, attaquer, use_skill, afficher_stats,
-       compute_damage, apply_effects_round!, Poison, 
-       Stats, Role, Archer, Mage, Chevalier, Gobelin,
-       Skill, Fireball, PowerStrike, Heal, AOE
+export  combat, attaquer, use_skill, afficher_stats, 
+        compute_damage, apply_effects_round!, Poison, 
+        Shield, Stun, Regen, Bleed, Stats, Role, Archer,
+        Mage, Chevalier, Gobelin, Skill, Fireball, PowerStrike
 
 
 include("roles.jl")
