@@ -16,17 +16,7 @@ end
 
 choose_action(actor::Role, defender::Role) = (:attack, nothing)
 
-choose_action(actor::Mage, defender::Role) = begin
-    if actor.stats.PV <= 30
-        push!(actor.effects, Regen(remaining=3, heal_per_turn=10))
-        println("$(actor.nom) se régénère !")
-        return (:wait, nothing)  # action neutre
-    elseif actor.stats.PM >= 10
-        return (:skill, Fireball(10, 30))
-    else
-        return (:attack, nothing)
-    end
-end
+choose_action(actor::Mage, defender::Role) = actor.stats.PM ≥ 10 ? (:skill, Fireball(10, 30)) : (:attack, nothing)
 
 choose_action(actor::Chevalier, defender::Role) = (actor.stats.PM ≥ 8 && rand() < 0.2) ? (:skill, PowerStrike(8, 20)) : (:attack, nothing)
 
