@@ -15,10 +15,10 @@ println("Personnages en présence :")
 mage
 chevalier
 
-#Simulation d'un combat entre Jed le mage et Hussin le chevalier
+#Simulation d'un combat entre Jed le mage et Hussin le chevalier (renvoie le vainqueur)
 combat(mage,chevalier)
-#Simulation de 5 combats entre Jed le mage et Hussin le chevalier
-rand(mage, chevalier, n_simulations=5)
+#Simulation de 10 combats (n_simulations = 10) entre Jed le mage et Hussin le chevalier
+rand(mage, chevalier)
 
 
 #2/ Tests automatiques - stats par défaut
