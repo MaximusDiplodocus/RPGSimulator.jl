@@ -18,10 +18,10 @@ function Base.rand(j1::Role, j2::Role; n_simulations=10, max_rounds=100, dmg_mat
         fighter1.stats.PV = pv_init_j1
         fighter2.stats.PV = pv_init_j2
         
-        # Lancer le combat
-        winner_msg = combat(fighter1, fighter2; max_rounds=max_rounds, dmg_mat=dmg_mat, skill_usage=skill_usage)
+        # Lancer le combat - récupère maintenant un tuple (winner, logs)
+        winner, logs = combat(fighter1, fighter2; max_rounds=max_rounds, dmg_mat=dmg_mat, skill_usage=skill_usage)
         
-        println("\n" * winner_msg)
+        println("\n🏆 Vainqueur: $winner")
         
         # Déterminer le gagnant
         if fighter1.stats.PV > 0
@@ -38,5 +38,5 @@ function Base.rand(j1::Role, j2::Role; n_simulations=10, max_rounds=100, dmg_mat
     println("$(j1.nom): $(results[j1.nom]) victoires ($(round(results[j1.nom]/n_simulations*100, digits=1))%)")
     println("$(j2.nom): $(results[j2.nom]) victoires ($(round(results[j2.nom]/n_simulations*100, digits=1))%)")
     
-    return
+    return results
 end
