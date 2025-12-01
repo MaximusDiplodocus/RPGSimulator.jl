@@ -2,7 +2,7 @@ library(shiny)
 library(Rulia)
 
 # Initialisation de Julia et du package
-# jlrun('import Pkg; Pkg.activate("/Users/maximedesjobert/Documents/M1SSD/FormationJulia/Packages/RPGSimulator.jl")')
+jlrun('import Pkg; Pkg.activate("/Users/maximedesjobert/Documents/M1SSD/FormationJulia/Packages/RPGSimulator.jl")') # à personnaliser
 jlusing(RPGSimulator)
 
 ui <- fluidPage(
@@ -23,6 +23,17 @@ ui <- fluidPage(
                   choices = c("Mage", "Chevalier", "Gobelin", "Archer"),
                   selected = "Mage"),
       
+      checkboxInput("custom_stats1", "Personnaliser les statistiques", value = FALSE),
+      
+      conditionalPanel(
+        condition = "input.custom_stats1 == true",
+        numericInput("pv1", "Points de Vie (PV):", value = 100, min = 1, max = 500),
+        numericInput("pm1", "Points de Magie (PM):", value = 50, min = 0, max = 200),
+        numericInput("atk1", "Attaque:", value = 20, min = 1, max = 100),
+        numericInput("vitesse1", "Vitesse:", value = 15, min = 1, max = 50),
+        numericInput("defense1", "Défense:", value = 10, min = 0, max = 50)
+      ),
+      
       hr(),
       
       h5("Combattant 2"),
@@ -30,6 +41,17 @@ ui <- fluidPage(
       selectInput("classe2", "Classe:", 
                   choices = c("Mage", "Chevalier", "Gobelin", "Archer"),
                   selected = "Chevalier"),
+      
+      checkboxInput("custom_stats2", "Personnaliser les statistiques", value = FALSE),
+      
+      conditionalPanel(
+        condition = "input.custom_stats2 == true",
+        numericInput("pv2", "Points de Vie (PV):", value = 100, min = 1, max = 500),
+        numericInput("pm2", "Points de Magie (PM):", value = 50, min = 0, max = 200),
+        numericInput("atk2", "Attaque:", value = 20, min = 1, max = 100),
+        numericInput("vitesse2", "Vitesse:", value = 15, min = 1, max = 50),
+        numericInput("defense2", "Défense:", value = 10, min = 0, max = 50)
+      ),
       
       hr(),
       
@@ -46,10 +68,9 @@ ui <- fluidPage(
         
         tabPanel("📊 Résultat",
                  br(),
-                 uiOutput("vainqueur_ui"),
+                 uiOutput("vainqueur_combat"),
                  br(),
-                 verbatimTextOutput("combat_log"),
-                 value = "resultat"
+                 uiOutput("stats_combattants")
         ),
         
         tabPanel("📈 Analyse",
@@ -79,17 +100,34 @@ server <- function(input, output, session) {
   # Lancer le combat
   observeEvent(input$lancer_combat, {
     
-    # Créer les combattants avec jleval pour évaluer les commandes Julia
-    cmd1 <- sprintf('%s(nom="%s")', input$classe1, input$nom1)
-    cmd2 <- sprintf('%s(nom="%s")', input$classe2, input$nom2)
+    # Créer les combattants avec ou sans stats personnalisées
+    # Création du combattant 1
+    if (input$custom_stats1) {
+      cmd1 <- sprintf(
+        'c = %s(nom="%s"); c.stats.PV=%d; c.stats.PM=%d; c.stats.ATK=%d; c.stats.VITESSE=%d; c.stats.DEFENSE=%d; c',
+        input$classe1, input$nom1,
+        input$pv1, input$pm1, input$atk1, input$vitesse1, input$defense1
+      )
+    } else {
+      cmd1 <- sprintf('%s(nom="%s")', input$classe1, input$nom1)
+    }
+    
+    # Création du combattant 2
+    if (input$custom_stats2) {
+      cmd2 <- sprintf(
+        'c = %s(nom="%s"); c.stats.PV=%d; c.stats.PM=%d; c.stats.ATK=%d; c.stats.VITESSE=%d; c.stats.DEFENSE=%d; c',
+        input$classe2, input$nom2,
+        input$pv2, input$pm2, input$atk2, input$vitesse2, input$defense2
+      )
+    } else {
+      cmd2 <- sprintf('%s(nom="%s")', input$classe2, input$nom2)
+    }
     
     combattant1 <- jleval(cmd1)
     combattant2 <- jleval(cmd2)
     
     # Capturer le log du combat
-    combat_log <- capture.output({
-      fight <- jl(combat)(combattant1, combattant2)
-    })
+    fight <- jl(combat)(combattant1, combattant2)
     
     # Extraire les résultats
     vainqueur <- R( (fight[1]))
@@ -98,7 +136,7 @@ server <- function(input, output, session) {
     # Convertir la matrice en dataframe
     historique_df <- as.data.frame(t(historique_matrix), stringsAsFactors = FALSE)
     
-    # Convertir les colonnes numériques SANS décimales
+    # Convertir les colonnes numériques sans décimales
     cols_numeriques <- c("round", "damage", "actor_PV", "target_PV")
     for (col in cols_numeriques) {
       if (col %in% colnames(historique_df)) {
@@ -107,12 +145,11 @@ server <- function(input, output, session) {
     }
     
     # Renommer les colonnes en français
-    colnames(historique_df) <- c("Tour", "Attaquant", "Action", "Cible", "Dégâts", "PV_Attaquant", "PV_Cible")
+    colnames(historique_df) <- c("Tour", "Attaquant", "Action", "Cible", "Degats", "PV_Attaquant", "PV_Cible")
     
     # Stocker les résultats
     resultats_combat(list(
       vainqueur = vainqueur,
-      log = paste(combat_log, collapse = "\n"),
       historique = historique_df,
       nom1 = input$nom1,
       nom2 = input$nom2
@@ -120,7 +157,7 @@ server <- function(input, output, session) {
   })
   
   # Afficher le vainqueur
-  output$vainqueur_ui <- renderUI({
+  output$vainqueur_combat <- renderUI({
     req(resultats_combat())
     res <- resultats_combat()
     
@@ -141,93 +178,122 @@ server <- function(input, output, session) {
   # Graphique d'évolution des PV
   output$evolution_pv <- renderPlot({
     req(resultats_combat())
-    res <- resultats_combat()
-    hist <- res$historique
+    hist <- resultats_combat()$historique
     
-    # Préparer les données pour le graphique
-    pv_data <- data.frame()
+    # Construire pv_data depuis l'historique
+    pv_data <- data.frame(
+      round = hist$Tour,
+      personnage = as.character(hist$Cible),
+      PV = hist$PV_Cible,
+      degats = hist$Degats
+    )
     
-    for (i in 1:nrow(hist)) {
-      round_num <- hist$round[i]
-      actor <- hist$actor[i]
-      target <- hist$target[i]
-      
-      pv_data <- rbind(pv_data, data.frame(
-        round = round_num,
-        personnage = actor,
-        PV = hist$actor_PV[i],
-        moment = "après"
-      ))
-      
-      pv_data <- rbind(pv_data, data.frame(
-        round = round_num,
-        personnage = target,
-        PV = hist$target_PV[i],
-        moment = "après"
-      ))
-    }
+    # Ajout des PV initiaux
+    pv_base <- aggregate(
+      cbind(PV, degats) ~ personnage,
+      pv_data,
+      function(x) x[1]
+    )
     
-    # Retirer les doublons
-    pv_data <- unique(pv_data)
+    pv_base$PV <- pv_base$PV + pv_base$degats
+    pv_base$round <- 0 
+    pv_base$degats <- NULL
+    
+    # Ajouter à pv_data
+    pv_data <- rbind(pv_base, pv_data[, c("round","personnage","PV")])
     pv_data <- pv_data[order(pv_data$round), ]
     
-    # Créer le graphique
-    par(bg = "#1a1a1a", col.axis = "white", col.lab = "white", col.main = "white")
+    # Graphique
+    plot(
+      pv_data$round[pv_data$personnage == pv_data$personnage[1]],
+      pv_data$PV[pv_data$personnage == pv_data$personnage[1]],
+      type = "b", lwd = 3, pch = 19, col = "#FF6B6B",
+      xlab = "Tour",
+      ylab = "Points de Vie",
+      main = "Évolution des PV",
+      ylim = c(0, max(pv_data$PV) + 10),
+      xaxt = "n"
+    )
     
-    personnages <- unique(pv_data$personnage)
-    couleurs <- c("#FF6B6B", "#4ECDC4", "#45B7D1", "#FFA07A")
+    # Ajouter le 2ᵉ personnage
+    lines(
+      pv_data$round[pv_data$personnage == pv_data$personnage[2]],
+      pv_data$PV[pv_data$personnage == pv_data$personnage[2]],
+      type = "b", lwd = 3, pch = 19, col = "#4ECDC4"
+    )
     
-    plot(NULL, xlim = c(1, max(pv_data$round)), ylim = c(0, max(pv_data$PV, na.rm = TRUE)),
-         xlab = "Round", ylab = "Points de Vie", 
-         main = "Évolution des Points de Vie par Round",
-         cex.lab = 1.2, cex.main = 1.5)
+    # Ajouter l'axe X avec uniquement des entiers
+    axis(
+      1,
+      at = min(pv_data$round):max(pv_data$round),
+      labels = min(pv_data$round):max(pv_data$round)
+    )
     
-    grid(col = "gray30")
-    
-    for (i in seq_along(personnages)) {
-      perso_data <- pv_data[pv_data$personnage == personnages[i], ]
-      lines(perso_data$round, perso_data$PV, col = couleurs[i], lwd = 3, type = "b", pch = 19)
-    }
-    
-    legend("topright", legend = personnages, col = couleurs[1:length(personnages)], 
-           lwd = 3, pch = 19, bg = "#2a2a2a", text.col = "white", cex = 1.1)
+    # Ajouter la légende
+    legend(
+      "topright",
+      legend = pv_data$personnage[1:2],
+      col = c("#FF6B6B", "#4ECDC4"),
+      lwd = 3,
+      pch = 19
+    )
   })
   
-  # Graphique des dégâts par round
+  # Graphique du nombre de dégâts par tour
   output$degats_par_round <- renderPlot({
     req(resultats_combat())
-    res <- resultats_combat()
-    hist <- res$historique
+    hist <- resultats_combat()$historique
     
-    par(bg = "#1a1a1a", col.axis = "white", col.lab = "white", col.main = "white")
+    # Construire un data frame pour les dégâts
+    degats_data <- data.frame(
+      round = hist$Tour,
+      personnage = as.character(hist$Attaquant),
+      degats = hist$Degats
+    )
     
-    # Agréger les dégâts par round et par acteur
-    degats_agg <- aggregate(damage ~ round + actor, data = hist, FUN = sum)
+    # On suppose toujours 2 personnages
+    personnage1 <- unique(degats_data$personnage)[1]
+    personnage2 <- unique(degats_data$personnage)[2]
     
-    # Créer une matrice pour le graphique en barres
-    rounds <- sort(unique(degats_agg$round))
-    acteurs <- unique(degats_agg$actor)
+    # Couleurs
+    couleurs <- c("#4ECDC4", "#FF6B6B")
     
-    mat_degats <- matrix(0, nrow = length(acteurs), ncol = length(rounds))
-    rownames(mat_degats) <- acteurs
-    colnames(mat_degats) <- rounds
+    # Limites de l'axe Y
+    ylim_max <- max(degats_data$degats) + 5
     
-    for (i in 1:nrow(degats_agg)) {
-      acteur <- as.character(degats_agg$actor[i])
-      round_num <- degats_agg$round[i]
-      mat_degats[acteur, as.character(round_num)] <- degats_agg$damage[i]
-    }
+    # Graphique du premier personnage
+    plot(
+      degats_data$round[degats_data$personnage == personnage1],
+      degats_data$degats[degats_data$personnage == personnage1],
+      type = "b", lwd = 3, pch = 19, col = couleurs[1],
+      xlab = "Tour",
+      ylab = "Dégâts",
+      main = "Dégâts infligés par tour",
+      ylim = c(0, ylim_max),
+      xaxt = "n"
+    )
     
-    couleurs <- c("#FF6B6B", "#4ECDC4", "#45B7D1", "#FFA07A")
+    # Graphique du deuxième personnage
+    lines(
+      degats_data$round[degats_data$personnage == personnage2],
+      degats_data$degats[degats_data$personnage == personnage2],
+      type = "b", lwd = 3, pch = 19, col = couleurs[2]
+    )
     
-    barplot(mat_degats, beside = TRUE, col = couleurs[1:length(acteurs)],
-            xlab = "Round", ylab = "Dégâts Infligés",
-            main = "Dégâts Infligés par Round",
-            legend.text = rownames(mat_degats),
-            args.legend = list(bg = "#2a2a2a", text.col = "white", cex = 1.1))
+    # Axe X en entiers
+    axis(1, at = min(degats_data$round):max(degats_data$round),
+         labels = min(degats_data$round):max(degats_data$round))
     
-    grid(col = "gray30", ny = NULL)
+    # Légende
+    legend(
+      "topright",
+      legend = c(personnage1, personnage2),
+      col = couleurs,
+      lwd = 3,
+      pch = 19
+    )
   })
+  
 }
 
 shinyApp(ui = ui, server = server)
