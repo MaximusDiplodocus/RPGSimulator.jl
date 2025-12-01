@@ -64,7 +64,7 @@ function use_skill(att::Chevalier, skl::PowerStrike, def::Role; dmg_mat=Dict(), 
     # Puissance = skill + grosse partie de l'attaque du perso
     base_atk = skl.power + Int(round(att.stats.ATK*0.7))
 
-    dmg, crit = compute_damage(base_atk, def.stats.DEFENSE, sd_frac=0.03, crit_chance=0.18, crit_mult=1.7)
+    dmg, crit = compute_damage(base_atk, def.stats.DEFENSE, sd_frac=0.03, crit_chance=0.18, crit_mult=1.8)
 
     # Met à jour les PV
     def.stats.PV = max(def.stats.PV - dmg, 0)

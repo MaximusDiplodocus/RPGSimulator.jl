@@ -6,7 +6,7 @@ Règles du Jeu — RPG Simulator
 
 RPGSimulator est un moteur de simulation de combats tour par tour entre différents rôles de personnages (héros et monstres).
 Chaque combat se déroule selon des règles précises de statistiques, d’effets, de compétences et de probabilités critiques.
-L’objectif est d’évaluer les performances des rôles, d’équilibrer le système de jeu et de visualiser les résultats à travers des simulations massives.
+L’objectif est d’évaluer les performances des rôles, d’équilibrer le système de jeu et de visualiser les résultats à travers des simulations massives et sur Bonito comme RShiny.
 
 
 ## Statistiques de base
@@ -116,9 +116,3 @@ Exemple :
 "rand(Mage(), Gobelin(), n_simulations=3)"
 
 N : nombre de combats à simuler.
-
-Les résultats sont enregistrés dans deux fichiers :
-- data/combat_results.csv : journal complet des tours.
-- data/combat_summary.csv : vainqueur de chaque combat.
-
-Ces données peuvent ensuite être utilisées pour calculer les taux de victoire, les dégâts moyens ou l’équilibrage général.
