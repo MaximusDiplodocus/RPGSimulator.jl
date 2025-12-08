@@ -6,11 +6,13 @@
 <script src="presentation_files/libs/quarto-html/tippy.umd.min.js"></script>
 <link href="presentation_files/libs/quarto-html/tippy.css" rel="stylesheet">
 <link href="presentation_files/libs/quarto-html/light-border.css" rel="stylesheet">
-<link href="presentation_files/libs/quarto-html/quarto-syntax-highlighting-dc55a5b9e770e841cd82e46aadbfb9b0.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
+<link href="presentation_files/libs/quarto-html/quarto-syntax-highlighting-dark-b651517ce65839d647a86e2780455cfb.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
   <meta name="generator" content="quarto-1.8.24">
 
-  <meta name="author" content="John Doe">
-  <title>Habits</title>
+  <meta name="author" content="Maxime, Jed, Hussin et Simon">
+  <meta name="author" content="Équipe RPGSimulator">
+  <meta name="dcterms.date" content="2025-09-01">
+  <title>Projet RPGSimulator</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
@@ -28,8 +30,74 @@
       margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
       vertical-align: middle;
     }
+    /* CSS for syntax highlighting */
+    html { -webkit-text-size-adjust: 100%; }
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+      }
+    pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+    div.sourceCode
+      { color: #f8f8f2;  }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span { color: #f8f8f2; } /* Normal */
+    code span.al { color: #f07178; } /* Alert */
+    code span.an { color: #d4d0ab; } /* Annotation */
+    code span.at { color: #00e0e0; } /* Attribute */
+    code span.bn { color: #d4d0ab; } /* BaseN */
+    code span.bu { color: #abe338; } /* BuiltIn */
+    code span.cf { color: #ffa07a; font-weight: bold; } /* ControlFlow */
+    code span.ch { color: #abe338; } /* Char */
+    code span.cn { color: #ffd700; } /* Constant */
+    code span.co { color: #f8f8f2; font-style: italic; } /* Comment */
+    code span.cv { color: #ffd700; } /* CommentVar */
+    code span.do { color: #f8f8f2; } /* Documentation */
+    code span.dt { color: #ffa07a; } /* DataType */
+    code span.dv { color: #d4d0ab; } /* DecVal */
+    code span.er { color: #f07178; text-decoration: underline; } /* Error */
+    code span.ex { color: #00e0e0; font-weight: bold; } /* Extension */
+    code span.fl { color: #d4d0ab; } /* Float */
+    code span.fu { color: #ffa07a; } /* Function */
+    code span.im { color: #abe338; } /* Import */
+    code span.in { color: #d4d0ab; } /* Information */
+    code span.kw { color: #ffa07a; font-weight: bold; } /* Keyword */
+    code span.op { color: #ffa07a; } /* Operator */
+    code span.ot { color: #00e0e0; } /* Other */
+    code span.pp { color: #dcc6e0; } /* Preprocessor */
+    code span.re { color: #00e0e0; background-color: #f8f8f2; } /* RegionMarker */
+    code span.sc { color: #abe338; } /* SpecialChar */
+    code span.ss { color: #abe338; } /* SpecialString */
+    code span.st { color: #abe338; } /* String */
+    code span.va { color: #00e0e0; } /* Variable */
+    code span.vs { color: #abe338; } /* VerbatimString */
+    code span.wa { color: #dcc6e0; } /* Warning */
   </style>
-  <link rel="stylesheet" href="presentation_files/libs/revealjs/dist/theme/quarto-534cd8e3a96973385dffff3f4709048d.css">
+  <link rel="stylesheet" href="presentation_files/libs/revealjs/dist/theme/quarto-5550d6cea6c66cc8141f4ef589ce8c7a.css">
   <link href="presentation_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
   <link href="presentation_files/libs/revealjs/plugin/reveal-menu/menu.css" rel="stylesheet">
   <link href="presentation_files/libs/revealjs/plugin/reveal-menu/quarto-menu.css" rel="stylesheet">
@@ -122,35 +190,291 @@
     }
   </style>
 </head>
-<body class="quarto-light">
+<body class="quarto-dark">
   <div class="reveal">
     <div class="slides">
 
 <section id="title-slide" class="quarto-title-block center">
-  <h1 class="title">Habits</h1>
+  <h1 class="title">Projet RPGSimulator</h1>
 
 <div class="quarto-title-authors">
 <div class="quarto-title-author">
 <div class="quarto-title-author-name">
-John Doe 
+Maxime, Jed, Hussin et Simon 
+</div>
+</div>
+<div class="quarto-title-author">
+<div class="quarto-title-author-name">
+Équipe RPGSimulator 
 </div>
 </div>
 </div>
 
-</section>
-<section id="getting-up" class="slide level2">
-<h2>Getting up</h2>
+  <p class="date">2025-09-01</p>
+</section><section id="TOC">
+<nav role="doc-toc"> 
+<h2 id="toc-title">Table of contents</h2>
 <ul>
-<li>Turn off alarm</li>
-<li>Get out of bed</li>
+<li><a href="#/introduction" id="/toc-introduction">📘 Introduction</a></li>
+<li><a href="#/objectifs-du-projet" id="/toc-objectifs-du-projet">🎯 Objectifs du Projet</a>
+<ul>
+
+</ul></li>
+<li><a href="#/apprentissage-de-julia" id="/toc-apprentissage-de-julia">🧱 Apprentissage de Julia</a>
+<ul>
+
+</ul></li>
+<li><a href="#/construction-du-projet" id="/toc-construction-du-projet">🧩 Construction du Projet</a>
+<ul>
+<li><a href="#/fichier-stats.jl" id="/toc-fichier-stats.jl">Fichier : <code>stats.jl</code></a></li>
+<li><a href="#/fichier-roles.jl" id="/toc-fichier-roles.jl">Fichier : <code>roles.jl</code></a></li>
+
+</ul></li>
+<li><a href="#/attaques-multiple-dispatch" id="/toc-attaques-multiple-dispatch">⚔️ Attaques &amp; Multiple Dispatch</a>
+<ul>
+<li><a href="#/fonction-de-calcul-des-dégâts" id="/toc-fonction-de-calcul-des-dégâts">Fonction de calcul des dégâts</a></li>
+
+</ul></li>
+<li><a href="#/compétences-spécialisées" id="/toc-compétences-spécialisées">🔥 Compétences Spécialisées</a>
+<ul>
+<li><a href="#/exemple-clé-fireball-mage-ennemi" id="/toc-exemple-clé-fireball-mage-ennemi">Exemple clé : Fireball (Mage → Ennemi)</a></li>
+
+</ul></li>
+<li><a href="#/tests-unitaires" id="/toc-tests-unitaires">🧪 Tests Unitaires</a>
+<ul>
+<li><a href="#/test-sur-compute_damage" id="/toc-test-sur-compute_damage">Test sur compute_damage</a></li>
+<li><a href="#/test-sur-fireball" id="/toc-test-sur-fireball">Test sur Fireball</a></li>
+
+</ul></li>
+<li><a href="#/simulation-de-combats" id="/toc-simulation-de-combats">🤖 Simulation de Combats</a>
+<ul>
+
+</ul></li>
+<li><a href="#/visualisation-rshiny-bonitobook" id="/toc-visualisation-rshiny-bonitobook">📈 Visualisation (RShiny &amp; BonitoBook)</a>
+<ul>
+<li><a href="#/export-des-données" id="/toc-export-des-données">Export des données</a></li>
+
+</ul></li>
+<li><a href="#/conclusion" id="/toc-conclusion">🏁 Conclusion</a></li>
+</ul>
+</nav>
+</section>
+<section id="introduction" class="title-slide slide level1 center">
+<h1>📘 Introduction</h1>
+<p>Ce rapport présente l’intégralité de notre projet <strong>RPGSimulator</strong>, réalisé en <strong>Julia</strong>. Nous avons commencé <strong>sans aucune connaissance du langage</strong>, et avons progressivement appris grâce à :</p>
+<ul>
+<li>des recherches personnelles,</li>
+<li>des expérimentations successives,</li>
+<li>la documentation Julia,</li>
+<li><strong>le cours du CQLS</strong> : <a href="https://cqls.dyndoc.fr/julia">https://cqls.dyndoc.fr/julia</a>, qui nous a énormément aidés.</li>
+</ul>
+<p>Nous avons construit un moteur de combat tour par tour, structuré et modulable, en développant progressivement :</p>
+<ul>
+<li>la structure des personnages (rôles, stats),</li>
+<li>un système d’attaques et de compétences (skills),</li>
+<li>des combats simples puis simulés,</li>
+<li>l’utilisation du <strong>multiple dispatch</strong>, au cœur du design Julia,</li>
+<li>des <strong>tests unitaires</strong>,</li>
+<li>une <strong>visualisation</strong> des combats via <strong>RShiny</strong> et <strong>BonitoBook</strong>.</li>
+</ul>
+<p>Ce document est un <strong>rapport complet Quarto</strong>, comprenant notre démarche, nos objectifs et le code essentiel.</p>
+</section>
+
+<section>
+<section id="objectifs-du-projet" class="title-slide slide level1 center">
+<h1>🎯 Objectifs du Projet</h1>
+<p>Nos objectifs étaient les suivants :</p>
+<ol type="1">
+<li><strong>Apprendre Julia depuis zéro</strong>, comprendre sa philosophie et ses spécificités (performance, types, multiple dispatch).</li>
+<li>Développer un <strong>jeu RPG minimaliste</strong> mais complet : rôles, attaques, compétences, combats.</li>
+<li>Structurer le code proprement en <strong>plusieurs fichiers</strong> (modules, fonctions séparées).</li>
+<li>Mettre en place un système efficace utilisant <strong>le multiple dispatch</strong>.</li>
+<li>Tester et fiabiliser l’ensemble via <strong>tests unitaires</strong>.</li>
+<li>Simuler des combats nombreux et analyser les résultats.</li>
+<li>Créer une <strong>visualisation dynamique</strong> des combats via <strong>RShiny</strong> et <strong>BonitoBook</strong>.</li>
+</ol>
+</section>
+<section class="slide level2">
+
+</section></section>
+<section>
+<section id="apprentissage-de-julia" class="title-slide slide level1 center">
+<h1>🧱 Apprentissage de Julia</h1>
+<p>Nous avons procédé par étapes :</p>
+<ul>
+<li>apprentissage des types, structs, méthodes,</li>
+<li>compréhension du système de dispatch,</li>
+<li>tests simples de fonctions,</li>
+<li>manipulation des dictionnaires, modules, imports.</li>
+</ul>
+<p>Nous nous sommes beaucoup appuyés sur le cours : ➡️ <a href="https://cqls.dyndoc.fr/julia">https://cqls.dyndoc.fr/julia</a></p>
+</section>
+<section class="slide level2">
+
+</section></section>
+<section>
+<section id="construction-du-projet" class="title-slide slide level1 center">
+<h1>🧩 Construction du Projet</h1>
+
+</section>
+<section id="fichier-stats.jl" class="slide level2">
+<h2>Fichier : <code>stats.jl</code></h2>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb1-1"><a href=""></a><span class="kw">struct</span> Stats</span>
+<span id="cb1-2"><a href=""></a>    PV<span class="op">::</span><span class="dt">Int</span></span>
+<span id="cb1-3"><a href=""></a>    PM<span class="op">::</span><span class="dt">Int</span></span>
+<span id="cb1-4"><a href=""></a>    ATK<span class="op">::</span><span class="dt">Int</span></span>
+<span id="cb1-5"><a href=""></a>    DEFENSE<span class="op">::</span><span class="dt">Int</span></span>
+<span id="cb1-6"><a href=""></a>    VITESSE<span class="op">::</span><span class="dt">Int</span></span>
+<span id="cb1-7"><a href=""></a><span class="kw">end</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+<section id="fichier-roles.jl" class="slide level2">
+<h2>Fichier : <code>roles.jl</code></h2>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb2-1"><a href=""></a><span class="kw">abstract type</span> Role <span class="kw">end</span></span>
+<span id="cb2-2"><a href=""></a></span>
+<span id="cb2-3"><a href=""></a><span class="kw">struct</span> Archer <span class="op">&lt;:</span><span class="dt"> Role</span></span>
+<span id="cb2-4"><a href=""></a>    nom<span class="op">::</span><span class="dt">String</span></span>
+<span id="cb2-5"><a href=""></a>    stats<span class="op">::</span><span class="dt">Stats</span></span>
+<span id="cb2-6"><a href=""></a><span class="kw">end</span></span>
+<span id="cb2-7"><a href=""></a></span>
+<span id="cb2-8"><a href=""></a><span class="kw">struct</span> Mage <span class="op">&lt;:</span><span class="dt"> Role</span></span>
+<span id="cb2-9"><a href=""></a>    nom<span class="op">::</span><span class="dt">String</span></span>
+<span id="cb2-10"><a href=""></a>    stats<span class="op">::</span><span class="dt">Stats</span></span>
+<span id="cb2-11"><a href=""></a><span class="kw">end</span></span>
+<span id="cb2-12"><a href=""></a></span>
+<span id="cb2-13"><a href=""></a><span class="kw">struct</span> Chevalier <span class="op">&lt;:</span><span class="dt"> Role</span></span>
+<span id="cb2-14"><a href=""></a>    nom<span class="op">::</span><span class="dt">String</span></span>
+<span id="cb2-15"><a href=""></a>    stats<span class="op">::</span><span class="dt">Stats</span></span>
+<span id="cb2-16"><a href=""></a><span class="kw">end</span></span>
+<span id="cb2-17"><a href=""></a></span>
+<span id="cb2-18"><a href=""></a><span class="kw">struct</span> Gobelin <span class="op">&lt;:</span><span class="dt"> Role</span></span>
+<span id="cb2-19"><a href=""></a>    nom<span class="op">::</span><span class="dt">String</span></span>
+<span id="cb2-20"><a href=""></a>    stats<span class="op">::</span><span class="dt">Stats</span></span>
+<span id="cb2-21"><a href=""></a><span class="kw">end</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+<section class="slide level2">
+
+</section></section>
+<section>
+<section id="attaques-multiple-dispatch" class="title-slide slide level1 center">
+<h1>⚔️ Attaques &amp; Multiple Dispatch</h1>
+
+</section>
+<section id="fonction-de-calcul-des-dégâts" class="slide level2">
+<h2>Fonction de calcul des dégâts</h2>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb3-1"><a href=""></a><span class="kw">function</span> <span class="fu">compute_damage</span>(base_atk, def; sd_frac<span class="op">=</span><span class="fl">0.12</span>, crit_chance<span class="op">=</span><span class="fl">0.10</span>, crit_mult<span class="op">=</span><span class="fl">1.6</span>)</span>
+<span id="cb3-2"><a href=""></a>    sd <span class="op">=</span> base_atk <span class="op">*</span> sd_frac</span>
+<span id="cb3-3"><a href=""></a>    raw <span class="op">=</span> <span class="fu">round</span>(<span class="dt">Int</span>, <span class="fu">rand</span>(<span class="fu">Normal</span>(base_atk, sd)))</span>
+<span id="cb3-4"><a href=""></a>    dmg <span class="op">=</span> <span class="fu">max</span>(raw <span class="op">-</span> def, <span class="fl">0</span>)</span>
+<span id="cb3-5"><a href=""></a>    crit <span class="op">=</span> <span class="fu">rand</span>() <span class="op">&lt;</span> crit_chance</span>
+<span id="cb3-6"><a href=""></a>    <span class="cf">return</span> crit ? (<span class="fu">round</span>(<span class="dt">Int</span>, dmg <span class="op">*</span> crit_mult), <span class="cn">true</span>) <span class="op">:</span> (dmg, <span class="cn">false</span>)</span>
+<span id="cb3-7"><a href=""></a><span class="kw">end</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+<section class="slide level2">
+
+</section></section>
+<section>
+<section id="compétences-spécialisées" class="title-slide slide level1 center">
+<h1>🔥 Compétences Spécialisées</h1>
+
+</section>
+<section id="exemple-clé-fireball-mage-ennemi" class="slide level2">
+<h2>Exemple clé : Fireball (Mage → Ennemi)</h2>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb4-1"><a href=""></a><span class="kw">function</span> <span class="fu">use_skill</span>(att<span class="op">::</span><span class="dt">Mage</span>, skl<span class="op">::</span><span class="dt">Fireball</span>, def<span class="op">::</span><span class="dt">Role</span>; dmg_mat<span class="op">=</span><span class="fu">Dict</span>(), skill_usage<span class="op">=</span><span class="fu">Dict</span>())</span>
+<span id="cb4-2"><a href=""></a>    <span class="cf">if</span> att.stats.PM <span class="op">&lt;</span> skl.cost_pm</span>
+<span id="cb4-3"><a href=""></a>        <span class="fu">println</span>(<span class="st">"</span><span class="sc">$</span>(att.nom)<span class="st"> n'a pas assez de PM pour Fireball."</span>)</span>
+<span id="cb4-4"><a href=""></a>        <span class="cf">return</span> <span class="fl">0</span></span>
+<span id="cb4-5"><a href=""></a>    <span class="cf">end</span></span>
+<span id="cb4-6"><a href=""></a></span>
+<span id="cb4-7"><a href=""></a>    att.stats.PM <span class="op">-=</span> skl.cost_pm</span>
+<span id="cb4-8"><a href=""></a>    effective_def <span class="op">=</span> <span class="fu">Int</span>(<span class="fu">round</span>(def.stats.DEFENSE <span class="op">*</span> <span class="fl">0.7</span>))</span>
+<span id="cb4-9"><a href=""></a></span>
+<span id="cb4-10"><a href=""></a>    base_atk <span class="op">=</span> skl.power <span class="op">+</span> <span class="fu">Int</span>(<span class="fu">round</span>(att.stats.ATK <span class="op">*</span> <span class="fl">0.5</span>))</span>
+<span id="cb4-11"><a href=""></a></span>
+<span id="cb4-12"><a href=""></a>    dmg, crit <span class="op">=</span> <span class="fu">compute_damage</span>(base_atk, effective_def,</span>
+<span id="cb4-13"><a href=""></a>        sd_frac<span class="op">=</span><span class="fl">0.05</span>, crit_chance<span class="op">=</span><span class="fl">0.22</span>, crit_mult<span class="op">=</span><span class="fl">2.2</span>)</span>
+<span id="cb4-14"><a href=""></a></span>
+<span id="cb4-15"><a href=""></a>    def.stats.PV <span class="op">=</span> <span class="fu">max</span>(def.stats.PV <span class="op">-</span> dmg, <span class="fl">0</span>)</span>
+<span id="cb4-16"><a href=""></a></span>
+<span id="cb4-17"><a href=""></a>    <span class="fu">println</span>(<span class="st">"</span><span class="sc">$</span>(att.nom)<span class="st"> lance Fireball sur </span><span class="sc">$</span>(def.nom)<span class="st"> =&gt; </span><span class="sc">$</span>dmg<span class="st"> dégâts"</span> <span class="op">*</span> (crit ? <span class="st">" (CRIT!)"</span> <span class="op">:</span> <span class="st">""</span>))</span>
+<span id="cb4-18"><a href=""></a></span>
+<span id="cb4-19"><a href=""></a>    skill_usage[<span class="fu">string</span>(<span class="fu">typeof</span>(skl))] <span class="op">=</span> <span class="fu">get</span>(skill_usage,<span class="fu">string</span>(<span class="fu">typeof</span>(skl)),<span class="fl">0</span>) <span class="op">+</span> <span class="fl">1</span></span>
+<span id="cb4-20"><a href=""></a></span>
+<span id="cb4-21"><a href=""></a>    <span class="cf">return</span> dmg</span>
+<span id="cb4-22"><a href=""></a><span class="kw">end</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+<section class="slide level2">
+
+</section></section>
+<section>
+<section id="tests-unitaires" class="title-slide slide level1 center">
+<h1>🧪 Tests Unitaires</h1>
+
+</section>
+<h3 id="test-sur-compute_damage">Test sur compute_damage</h3>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb5-1"><a href=""></a><span class="pp">@testset</span> <span class="st">"Test compute_damage"</span> <span class="cf">begin</span></span>
+<span id="cb5-2"><a href=""></a>    dmg, crit <span class="op">=</span> <span class="fu">compute_damage</span>(<span class="fl">20</span>, <span class="fl">5</span>)</span>
+<span id="cb5-3"><a href=""></a>    <span class="pp">@test</span> dmg <span class="op">&gt;=</span> <span class="fl">0</span></span>
+<span id="cb5-4"><a href=""></a><span class="cf">end</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<h3 id="test-sur-fireball">Test sur Fireball</h3>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb6-1"><a href=""></a><span class="pp">@testset</span> <span class="st">"Test Fireball"</span> <span class="cf">begin</span></span>
+<span id="cb6-2"><a href=""></a>    m <span class="op">=</span> <span class="fu">Mage</span>(<span class="st">"Gandalf"</span>, <span class="fu">Stats</span>(<span class="fl">70</span>,<span class="fl">100</span>,<span class="fl">25</span>,<span class="fl">5</span>,<span class="fl">10</span>))</span>
+<span id="cb6-3"><a href=""></a>    g <span class="op">=</span> <span class="fu">Gobelin</span>(<span class="st">"Gob"</span>, <span class="fu">Stats</span>(<span class="fl">60</span>,<span class="fl">10</span>,<span class="fl">12</span>,<span class="fl">3</span>,<span class="fl">15</span>))</span>
+<span id="cb6-4"><a href=""></a>    fire <span class="op">=</span> <span class="fu">Fireball</span>(<span class="fl">30</span>, <span class="fl">10</span>)</span>
+<span id="cb6-5"><a href=""></a>    dmg <span class="op">=</span> <span class="fu">use_skill</span>(m, fire, g)</span>
+<span id="cb6-6"><a href=""></a>    <span class="pp">@test</span> dmg <span class="op">&gt;</span> <span class="fl">0</span></span>
+<span id="cb6-7"><a href=""></a><span class="cf">end</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<section class="slide level2">
+
+</section></section>
+<section>
+<section id="simulation-de-combats" class="title-slide slide level1 center">
+<h1>🤖 Simulation de Combats</h1>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb7-1"><a href=""></a><span class="kw">function</span> <span class="fu">simulate_battles</span>(att, def, n)</span>
+<span id="cb7-2"><a href=""></a>    results <span class="op">=</span> <span class="dt">Int</span>[]</span>
+<span id="cb7-3"><a href=""></a>    <span class="cf">for</span> i <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span>n</span>
+<span id="cb7-4"><a href=""></a>        att_copy <span class="op">=</span> <span class="fu">deepcopy</span>(att)</span>
+<span id="cb7-5"><a href=""></a>        def_copy <span class="op">=</span> <span class="fu">deepcopy</span>(def)</span>
+<span id="cb7-6"><a href=""></a>        <span class="fu">push!</span>(results, <span class="fu">battle</span>(att_copy, def_copy))</span>
+<span id="cb7-7"><a href=""></a>    <span class="cf">end</span></span>
+<span id="cb7-8"><a href=""></a>    <span class="cf">return</span> results</span>
+<span id="cb7-9"><a href=""></a><span class="kw">end</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+<section class="slide level2">
+
+</section></section>
+<section>
+<section id="visualisation-rshiny-bonitobook" class="title-slide slide level1 center">
+<h1>📈 Visualisation (RShiny &amp; BonitoBook)</h1>
+<p>Nous avons représenté graphiquement :</p>
+<ul>
+<li>l’évolution des PV,</li>
+<li>les dégâts par tour,</li>
+<li>les résultats de combats répétés.</li>
 </ul>
 </section>
-<section id="going-to-sleep" class="slide level2">
-<h2>Going to sleep</h2>
+<h3 id="export-des-données">Export des données</h3>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb8-1"><a href=""></a><span class="fu">open</span>(<span class="st">"combat_data.csv"</span>, <span class="st">"w"</span>) <span class="cf">do</span> io</span>
+<span id="cb8-2"><a href=""></a>    <span class="fu">println</span>(io, <span class="st">"round,pv_att,pv_def,dmg"</span>)</span>
+<span id="cb8-3"><a href=""></a>    <span class="cf">for</span> r <span class="kw">in</span> logs</span>
+<span id="cb8-4"><a href=""></a>        <span class="fu">println</span>(io, <span class="st">"</span><span class="sc">$</span>(r.round)<span class="st">,</span><span class="sc">$</span>(r.pv_att)<span class="st">,</span><span class="sc">$</span>(r.pv_def)<span class="st">,</span><span class="sc">$</span>(r.dmg)<span class="st">"</span>)</span>
+<span id="cb8-5"><a href=""></a>    <span class="cf">end</span></span>
+<span id="cb8-6"><a href=""></a><span class="cf">end</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<section class="slide level2">
+
+</section></section>
+<section id="conclusion" class="title-slide slide level1 center">
+<h1>🏁 Conclusion</h1>
+<p>En partant <strong>sans aucune notion en Julia</strong>, nous avons réussi à :</p>
 <ul>
-<li>Get in bed</li>
-<li>Count sheep</li>
+<li>comprendre les bases du langage,</li>
+<li>écrire un moteur RPG structuré et modulaire,</li>
+<li>implémenter un système complet de stats, attaques, compétences,</li>
+<li>exploiter le <strong>multiple dispatch</strong> de manière avancée,</li>
+<li>tester et valider le code,</li>
+<li>simuler de nombreux combats,</li>
+<li>visualiser nos résultats dans RShiny et BonitoBook.</li>
 </ul>
+<p>Ce projet fut une excellente introduction au langage Julia et à la programmation modulaire orientée performance.</p>
 
 </section>
     </div>
@@ -209,7 +533,7 @@ John Doe
         progress: true,
 
         // Display the page number of the current slide
-        slideNumber: false,
+        slideNumber: 'c/t',
 
         // 'all', 'print', or 'speaker'
         showSlideNumber: 'all',
@@ -314,7 +638,7 @@ John Doe
         previewLinks: false,
 
         // Transition style (none/fade/slide/convex/concave/zoom)
-        transition: 'none',
+        transition: 'fade',
 
         // Transition speed (default/fast/slow)
         transitionSpeed: 'default',

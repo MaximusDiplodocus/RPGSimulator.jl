@@ -1,18 +1,225 @@
 ---
-title: "Habits"
-author: "John Doe"
-format: revealjs
+title: "Projet RPGSimulator"
+author: 
+  - "Maxime, Jed, Hussin et Simon"
+  - "Équipe RPGSimulator"
+date: "Septembre à Décembre 2025"
+format: 
+  revealjs:
+    theme: [dracula, custom.scss]
+    slide-number: true
+    transition: fade
+toc: true
 ---
 
-## Getting up
+# 📘 Introduction
 
-- Turn off alarm
-- Get out of bed
+Ce rapport présente l'intégralité de notre projet **RPGSimulator**, réalisé en **Julia**.
+Nous avons commencé **sans aucune connaissance du langage**, et avons progressivement appris grâce à :
 
-## Going to sleep
+* des recherches personnelles,
+* des expérimentations successives,
+* la documentation Julia,
+* **le cours du CQLS** : [https://cqls.dyndoc.fr/julia](https://cqls.dyndoc.fr/julia), qui nous a énormément aidés.
 
-- Get in bed
-- Count sheep
+Nous avons construit un moteur de combat tour par tour, structuré et modulable, en développant progressivement :
+
+* la structure des personnages (rôles, stats),
+* un système d’attaques et de compétences (skills),
+* des combats simples puis simulés,
+* l’utilisation du **multiple dispatch**, au cœur du design Julia,
+* des **tests unitaires**,
+* une **visualisation** des combats via **RShiny** et **BonitoBook**.
+
+Ce document est un **rapport complet Quarto**, comprenant notre démarche, nos objectifs et le code essentiel.
+
+
+# 🎯 Objectifs du Projet
+
+Nos objectifs étaient les suivants :
+
+1. **Apprendre Julia depuis zéro**, comprendre sa philosophie et ses spécificités (performance, types, multiple dispatch).
+2. Développer un **jeu RPG minimaliste** mais complet : rôles, attaques, compétences, combats.
+3. Structurer le code proprement en **plusieurs fichiers** (modules, fonctions séparées).
+4. Mettre en place un système efficace utilisant **le multiple dispatch**.
+5. Tester et fiabiliser l’ensemble via **tests unitaires**.
+6. Simuler des combats nombreux et analyser les résultats.
+7. Créer une **visualisation dynamique** des combats via **RShiny** et **BonitoBook**.
+
+
+# 🧱 Apprentissage de Julia
+
+Nous avons procédé par étapes :
+
+* apprentissage des types, structs, méthodes,
+* compréhension du système de dispatch,
+* tests simples de fonctions,
+* manipulation des dictionnaires, modules, imports.
+
+Nous nous sommes beaucoup appuyés sur le cours :
+➡️ [https://cqls.dyndoc.fr/julia](https://cqls.dyndoc.fr/julia)
+
+
+# 🧩 Construction du Projet
+
+## Fichier : `stats.jl`
+
+```julia
+struct Stats
+    PV::Int
+    PM::Int
+    ATK::Int
+    DEFENSE::Int
+    VITESSE::Int
+end
+```
+
+
+## Fichier : `roles.jl`
+
+```julia
+abstract type Role end
+
+struct Archer <: Role
+    nom::String
+    stats::Stats
+end
+
+struct Mage <: Role
+    nom::String
+    stats::Stats
+end
+
+struct Chevalier <: Role
+    nom::String
+    stats::Stats
+end
+
+struct Gobelin <: Role
+    nom::String
+    stats::Stats
+end
+```
+
+
+# ⚔️ Attaques & Multiple Dispatch
+
+## Fonction de calcul des dégâts
+
+```julia
+function compute_damage(base_atk, def; sd_frac=0.12, crit_chance=0.10, crit_mult=1.6)
+    sd = base_atk * sd_frac
+    raw = round(Int, rand(Normal(base_atk, sd)))
+    dmg = max(raw - def, 0)
+    crit = rand() < crit_chance
+    return crit ? (round(Int, dmg * crit_mult), true) : (dmg, false)
+end
+```
+
+
+# 🔥 Compétences Spécialisées
+
+## Exemple clé : Fireball (Mage → Ennemi)
+
+```julia
+function use_skill(att::Mage, skl::Fireball, def::Role; dmg_mat=Dict(), skill_usage=Dict())
+    if att.stats.PM < skl.cost_pm
+        println("$(att.nom) n'a pas assez de PM pour Fireball.")
+        return 0
+    end
+
+    att.stats.PM -= skl.cost_pm
+    effective_def = Int(round(def.stats.DEFENSE * 0.7))
+
+    base_atk = skl.power + Int(round(att.stats.ATK * 0.5))
+
+    dmg, crit = compute_damage(base_atk, effective_def,
+        sd_frac=0.05, crit_chance=0.22, crit_mult=2.2)
+
+    def.stats.PV = max(def.stats.PV - dmg, 0)
+
+    println("$(att.nom) lance Fireball sur $(def.nom) => $dmg dégâts" * (crit ? " (CRIT!)" : ""))
+
+    skill_usage[string(typeof(skl))] = get(skill_usage,string(typeof(skl)),0) + 1
+
+    return dmg
+end
+```
+
+
+# 🧪 Tests Unitaires
+
+### Test sur compute_damage
+
+```julia
+@testset "Test compute_damage" begin
+    dmg, crit = compute_damage(20, 5)
+    @test dmg >= 0
+end
+```
+
+### Test sur Fireball
+
+```julia
+@testset "Test Fireball" begin
+    m = Mage("Gandalf", Stats(70,100,25,5,10))
+    g = Gobelin("Gob", Stats(60,10,12,3,15))
+    fire = Fireball(30, 10)
+    dmg = use_skill(m, fire, g)
+    @test dmg > 0
+end
+```
+
+
+# 🤖 Simulation de Combats
+
+```julia
+function simulate_battles(att, def, n)
+    results = Int[]
+    for i in 1:n
+        att_copy = deepcopy(att)
+        def_copy = deepcopy(def)
+        push!(results, battle(att_copy, def_copy))
+    end
+    return results
+end
+```
+
+
+# 📈 Visualisation (RShiny & BonitoBook)
+
+Nous avons représenté graphiquement :
+
+* l’évolution des PV,
+* les dégâts par tour,
+* les résultats de combats répétés.
+
+### Export des données
+
+```julia
+open("combat_data.csv", "w") do io
+    println(io, "round,pv_att,pv_def,dmg")
+    for r in logs
+        println(io, "$(r.round),$(r.pv_att),$(r.pv_def),$(r.dmg)")
+    end
+end
+```
+
+
+# 🏁 Conclusion
+
+En partant **sans aucune notion en Julia**, nous avons réussi à :
+
+* comprendre les bases du langage,
+* écrire un moteur RPG structuré et modulaire,
+* implémenter un système complet de stats, attaques, compétences,
+* exploiter le **multiple dispatch** de manière avancée,
+* tester et valider le code,
+* simuler de nombreux combats,
+* visualiser nos résultats dans RShiny et BonitoBook.
+
+Ce projet fut une excellente introduction au langage Julia et à la programmation modulaire orientée performance.
+
 
 
 
