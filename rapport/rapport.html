@@ -1,0 +1,1252 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.8.24">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Maxime, Jed, Hussin et Simon">
+
+<title>RPGSimulator</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="rapport_files/libs/clipboard/clipboard.min.js"></script>
+<script src="rapport_files/libs/quarto-html/quarto.js" type="module"></script>
+<script src="rapport_files/libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="rapport_files/libs/quarto-html/axe/axe-check.js" type="module"></script>
+<script src="rapport_files/libs/quarto-html/popper.min.js"></script>
+<script src="rapport_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="rapport_files/libs/quarto-html/anchor.min.js"></script>
+<link href="rapport_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="rapport_files/libs/quarto-html/quarto-syntax-highlighting-dc55a5b9e770e841cd82e46aadbfb9b0.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="rapport_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="rapport_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="rapport_files/libs/bootstrap/bootstrap-4d7f0bce1131f3e5f9547cd857cfbfc8.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+
+
+</head>
+
+<body class="quarto-light">
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+<div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+  <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Sommaire</h2>
+   
+  <ul>
+  <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction"><span class="header-section-number">1</span> 1/ Introduction</a>
+  <ul class="collapse">
+  <li><a href="#contexte-du-projet" id="toc-contexte-du-projet" class="nav-link" data-scroll-target="#contexte-du-projet"><span class="header-section-number">1.1</span> 1.1/ Contexte du Projet</a></li>
+  <li><a href="#objectifs-pédagogiques-et-techniques" id="toc-objectifs-pédagogiques-et-techniques" class="nav-link" data-scroll-target="#objectifs-pédagogiques-et-techniques"><span class="header-section-number">1.2</span> 1.2/ Objectifs Pédagogiques et Techniques</a></li>
+  </ul></li>
+  <li><a href="#architecture-et-structure-du-projet" id="toc-architecture-et-structure-du-projet" class="nav-link" data-scroll-target="#architecture-et-structure-du-projet"><span class="header-section-number">2</span> 2/ Architecture et Structure du Projet</a>
+  <ul class="collapse">
+  <li><a href="#organisation-modulaire" id="toc-organisation-modulaire" class="nav-link" data-scroll-target="#organisation-modulaire"><span class="header-section-number">2.1</span> 2.1/ Organisation Modulaire</a></li>
+  <li><a href="#hiérarchie-des-types" id="toc-hiérarchie-des-types" class="nav-link" data-scroll-target="#hiérarchie-des-types"><span class="header-section-number">2.2</span> 2.2/ Hiérarchie des Types</a></li>
+  <li><a href="#structure-des-données" id="toc-structure-des-données" class="nav-link" data-scroll-target="#structure-des-données"><span class="header-section-number">2.3</span> 2.3/ Structure des Données</a>
+  <ul class="collapse">
+  <li><a href="#stats-statistiques-de-base" id="toc-stats-statistiques-de-base" class="nav-link" data-scroll-target="#stats-statistiques-de-base"><span class="header-section-number">2.3.1</span> 2.3.1/ Stats (Statistiques de Base)</a></li>
+  <li><a href="#rôles-et-différenciation" id="toc-rôles-et-différenciation" class="nav-link" data-scroll-target="#rôles-et-différenciation"><span class="header-section-number">2.3.2</span> 2.3.2/ Rôles et Différenciation</a></li>
+  </ul></li>
+  </ul></li>
+  <li><a href="#mécaniques-de-combat" id="toc-mécaniques-de-combat" class="nav-link" data-scroll-target="#mécaniques-de-combat"><span class="header-section-number">3</span> 3/ Mécaniques de Combat</a>
+  <ul class="collapse">
+  <li><a href="#calcul-des-dégâts-approche-probabiliste" id="toc-calcul-des-dégâts-approche-probabiliste" class="nav-link" data-scroll-target="#calcul-des-dégâts-approche-probabiliste"><span class="header-section-number">3.1</span> 3.1/ Calcul des Dégâts : Approche Probabiliste</a></li>
+  <li><a href="#multiple-dispatch-cœur-du-système" id="toc-multiple-dispatch-cœur-du-système" class="nav-link" data-scroll-target="#multiple-dispatch-cœur-du-système"><span class="header-section-number">3.2</span> 3.2/ Multiple Dispatch : Cœur du Système</a>
+  <ul class="collapse">
+  <li><a href="#attaques-standard" id="toc-attaques-standard" class="nav-link" data-scroll-target="#attaques-standard"><span class="header-section-number">3.2.1</span> 3.2.1/ Attaques Standard</a></li>
+  <li><a href="#compétences-spécialisées" id="toc-compétences-spécialisées" class="nav-link" data-scroll-target="#compétences-spécialisées"><span class="header-section-number">3.2.2</span> 3.2.2/ Compétences Spécialisées</a></li>
+  </ul></li>
+  <li><a href="#système-deffets-de-statut" id="toc-système-deffets-de-statut" class="nav-link" data-scroll-target="#système-deffets-de-statut"><span class="header-section-number">3.3</span> Système d’Effets de Statut</a>
+  <ul class="collapse">
+  <li><a href="#types-deffets-implémentés" id="toc-types-deffets-implémentés" class="nav-link" data-scroll-target="#types-deffets-implémentés"><span class="header-section-number">3.3.1</span> Types d’Effets Implémentés</a></li>
+  <li><a href="#application-et-gestion" id="toc-application-et-gestion" class="nav-link" data-scroll-target="#application-et-gestion"><span class="header-section-number">3.3.2</span> 3.2.3/ Application et Gestion</a></li>
+  </ul></li>
+  <li><a href="#moteur-de-combat-tour-par-tour" id="toc-moteur-de-combat-tour-par-tour" class="nav-link" data-scroll-target="#moteur-de-combat-tour-par-tour"><span class="header-section-number">3.4</span> Moteur de Combat Tour par Tour</a>
+  <ul class="collapse">
+  <li><a href="#déroulement-dun-tour" id="toc-déroulement-dun-tour" class="nav-link" data-scroll-target="#déroulement-dun-tour"><span class="header-section-number">3.4.1</span> Déroulement d’un Tour</a></li>
+  <li><a href="#choix-dactions-intelligents" id="toc-choix-dactions-intelligents" class="nav-link" data-scroll-target="#choix-dactions-intelligents"><span class="header-section-number">3.4.2</span> Choix d’Actions Intelligents</a></li>
+  <li><a href="#logging-des-combats" id="toc-logging-des-combats" class="nav-link" data-scroll-target="#logging-des-combats"><span class="header-section-number">3.4.3</span> Logging des Combats</a></li>
+  </ul></li>
+  </ul></li>
+  <li><a href="#tests-et-validation" id="toc-tests-et-validation" class="nav-link" data-scroll-target="#tests-et-validation"><span class="header-section-number">4</span> Tests et Validation</a>
+  <ul class="collapse">
+  <li><a href="#stratégie-de-test" id="toc-stratégie-de-test" class="nav-link" data-scroll-target="#stratégie-de-test"><span class="header-section-number">4.1</span> Stratégie de Test</a>
+  <ul class="collapse">
+  <li><a href="#couverture-des-tests" id="toc-couverture-des-tests" class="nav-link" data-scroll-target="#couverture-des-tests"><span class="header-section-number">4.1.1</span> Couverture des Tests</a></li>
+  </ul></li>
+  <li><a href="#exemples-de-tests-clés" id="toc-exemples-de-tests-clés" class="nav-link" data-scroll-target="#exemples-de-tests-clés"><span class="header-section-number">4.2</span> Exemples de Tests Clés</a>
+  <ul class="collapse">
+  <li><a href="#test-de-cohérence-des-dégâts" id="toc-test-de-cohérence-des-dégâts" class="nav-link" data-scroll-target="#test-de-cohérence-des-dégâts"><span class="header-section-number">4.2.1</span> Test de Cohérence des Dégâts</a></li>
+  <li><a href="#test-de-consommation-de-ressources" id="toc-test-de-consommation-de-ressources" class="nav-link" data-scroll-target="#test-de-consommation-de-ressources"><span class="header-section-number">4.2.2</span> Test de Consommation de Ressources</a></li>
+  <li><a href="#test-de-stack-deffets" id="toc-test-de-stack-deffets" class="nav-link" data-scroll-target="#test-de-stack-deffets"><span class="header-section-number">4.2.3</span> Test de Stack d’Effets</a></li>
+  <li><a href="#test-de-combat-complet" id="toc-test-de-combat-complet" class="nav-link" data-scroll-target="#test-de-combat-complet"><span class="header-section-number">4.2.4</span> Test de Combat Complet</a></li>
+  </ul></li>
+  <li><a href="#résultats-et-fiabilité" id="toc-résultats-et-fiabilité" class="nav-link" data-scroll-target="#résultats-et-fiabilité"><span class="header-section-number">4.3</span> Résultats et Fiabilité</a></li>
+  </ul></li>
+  <li><a href="#simulations-et-analyse" id="toc-simulations-et-analyse" class="nav-link" data-scroll-target="#simulations-et-analyse"><span class="header-section-number">5</span> Simulations et Analyse</a>
+  <ul class="collapse">
+  <li><a href="#méthodologie-de-simulation" id="toc-méthodologie-de-simulation" class="nav-link" data-scroll-target="#méthodologie-de-simulation"><span class="header-section-number">5.1</span> Méthodologie de Simulation</a></li>
+  <li><a href="#résultats-déquilibrage" id="toc-résultats-déquilibrage" class="nav-link" data-scroll-target="#résultats-déquilibrage"><span class="header-section-number">5.2</span> Résultats d’Équilibrage</a>
+  <ul class="collapse">
+  <li><a href="#analyse-des-matchups" id="toc-analyse-des-matchups" class="nav-link" data-scroll-target="#analyse-des-matchups"><span class="header-section-number">5.2.1</span> Analyse des Matchups</a></li>
+  <li><a href="#impact-des-compétences" id="toc-impact-des-compétences" class="nav-link" data-scroll-target="#impact-des-compétences"><span class="header-section-number">5.2.2</span> Impact des Compétences</a></li>
+  <li><a href="#statistiques-globales" id="toc-statistiques-globales" class="nav-link" data-scroll-target="#statistiques-globales"><span class="header-section-number">5.2.3</span> Statistiques Globales</a></li>
+  </ul></li>
+  </ul></li>
+  <li><a href="#visualisation-et-interface-utilisateur" id="toc-visualisation-et-interface-utilisateur" class="nav-link" data-scroll-target="#visualisation-et-interface-utilisateur"><span class="header-section-number">6</span> Visualisation et Interface Utilisateur</a>
+  <ul class="collapse">
+  <li><a href="#interface-rshiny" id="toc-interface-rshiny" class="nav-link" data-scroll-target="#interface-rshiny"><span class="header-section-number">6.1</span> Interface RShiny</a></li>
+  <li><a href="#visualisations-bonito" id="toc-visualisations-bonito" class="nav-link" data-scroll-target="#visualisations-bonito"><span class="header-section-number">6.2</span> Visualisations Bonito</a>
+  <ul class="collapse">
+  <li><a href="#graphiques-implémentés" id="toc-graphiques-implémentés" class="nav-link" data-scroll-target="#graphiques-implémentés"><span class="header-section-number">6.2.1</span> Graphiques Implémentés</a></li>
+  <li><a href="#export-des-données" id="toc-export-des-données" class="nav-link" data-scroll-target="#export-des-données"><span class="header-section-number">6.2.2</span> Export des Données</a></li>
+  </ul></li>
+  </ul></li>
+  <li><a href="#apprentissage-et-évolution" id="toc-apprentissage-et-évolution" class="nav-link" data-scroll-target="#apprentissage-et-évolution"><span class="header-section-number">7</span> Apprentissage et Évolution</a>
+  <ul class="collapse">
+  <li><a href="#progression-pédagogique" id="toc-progression-pédagogique" class="nav-link" data-scroll-target="#progression-pédagogique"><span class="header-section-number">7.1</span> Progression Pédagogique</a>
+  <ul class="collapse">
+  <li><a href="#phase-1-fondamentaux-semaines-1-2" id="toc-phase-1-fondamentaux-semaines-1-2" class="nav-link" data-scroll-target="#phase-1-fondamentaux-semaines-1-2"><span class="header-section-number">7.1.1</span> Phase 1 : Fondamentaux (Semaines 1-2)</a></li>
+  <li><a href="#phase-2-construction-semaines-3-5" id="toc-phase-2-construction-semaines-3-5" class="nav-link" data-scroll-target="#phase-2-construction-semaines-3-5"><span class="header-section-number">7.1.2</span> Phase 2 : Construction (Semaines 3-5)</a></li>
+  <li><a href="#phase-3-sophistication-semaines-6-8" id="toc-phase-3-sophistication-semaines-6-8" class="nav-link" data-scroll-target="#phase-3-sophistication-semaines-6-8"><span class="header-section-number">7.1.3</span> Phase 3 : Sophistication (Semaines 6-8)</a></li>
+  <li><a href="#phase-4-optimisation-et-visualisation-semaines-9-12" id="toc-phase-4-optimisation-et-visualisation-semaines-9-12" class="nav-link" data-scroll-target="#phase-4-optimisation-et-visualisation-semaines-9-12"><span class="header-section-number">7.1.4</span> Phase 4 : Optimisation et Visualisation (Semaines 9-12)</a></li>
+  </ul></li>
+  <li><a href="#apports-du-cours-cqls" id="toc-apports-du-cours-cqls" class="nav-link" data-scroll-target="#apports-du-cours-cqls"><span class="header-section-number">7.2</span> Apports du Cours CQLS</a>
+  <ul class="collapse">
+  <li><a href="#types-et-dispatch" id="toc-types-et-dispatch" class="nav-link" data-scroll-target="#types-et-dispatch"><span class="header-section-number">7.2.1</span> Types et Dispatch</a></li>
+  <li><a href="#structures-de-données" id="toc-structures-de-données" class="nav-link" data-scroll-target="#structures-de-données"><span class="header-section-number">7.2.2</span> Structures de Données</a></li>
+  <li><a href="#écosystème-et-packages" id="toc-écosystème-et-packages" class="nav-link" data-scroll-target="#écosystème-et-packages"><span class="header-section-number">7.2.3</span> Écosystème et Packages</a></li>
+  <li><a href="#bonnes-pratiques" id="toc-bonnes-pratiques" class="nav-link" data-scroll-target="#bonnes-pratiques"><span class="header-section-number">7.2.4</span> Bonnes Pratiques</a></li>
+  </ul></li>
+  <li><a href="#défis-techniques-et-solutions" id="toc-défis-techniques-et-solutions" class="nav-link" data-scroll-target="#défis-techniques-et-solutions"><span class="header-section-number">7.3</span> Défis Techniques et Solutions</a>
+  <ul class="collapse">
+  <li><a href="#gestion-de-la-mutabilité" id="toc-gestion-de-la-mutabilité" class="nav-link" data-scroll-target="#gestion-de-la-mutabilité"><span class="header-section-number">7.3.1</span> Gestion de la Mutabilité</a></li>
+  <li><a href="#typage-flexible-des-effets" id="toc-typage-flexible-des-effets" class="nav-link" data-scroll-target="#typage-flexible-des-effets"><span class="header-section-number">7.3.2</span> Typage Flexible des Effets</a></li>
+  <li><a href="#organisation-modulaire-1" id="toc-organisation-modulaire-1" class="nav-link" data-scroll-target="#organisation-modulaire-1"><span class="header-section-number">7.3.3</span> Organisation Modulaire</a></li>
+  <li><a href="#reproductibilité-des-tests" id="toc-reproductibilité-des-tests" class="nav-link" data-scroll-target="#reproductibilité-des-tests"><span class="header-section-number">7.3.4</span> Reproductibilité des Tests</a></li>
+  </ul></li>
+  </ul></li>
+  <li><a href="#perspectives-damélioration" id="toc-perspectives-damélioration" class="nav-link" data-scroll-target="#perspectives-damélioration"><span class="header-section-number">8</span> Perspectives d’Amélioration</a>
+  <ul class="collapse">
+  <li><a href="#extensions-fonctionnelles" id="toc-extensions-fonctionnelles" class="nav-link" data-scroll-target="#extensions-fonctionnelles"><span class="header-section-number">8.1</span> Extensions Fonctionnelles</a>
+  <ul class="collapse">
+  <li><a href="#nouveaux-rôles-et-compétences" id="toc-nouveaux-rôles-et-compétences" class="nav-link" data-scroll-target="#nouveaux-rôles-et-compétences"><span class="header-section-number">8.1.1</span> Nouveaux Rôles et Compétences</a></li>
+  <li><a href="#mécaniques-avancées" id="toc-mécaniques-avancées" class="nav-link" data-scroll-target="#mécaniques-avancées"><span class="header-section-number">8.1.2</span> Mécaniques Avancées</a></li>
+  </ul></li>
+  <li><a href="#optimisations-techniques" id="toc-optimisations-techniques" class="nav-link" data-scroll-target="#optimisations-techniques"><span class="header-section-number">8.2</span> Optimisations Techniques</a>
+  <ul class="collapse">
+  <li><a href="#performance" id="toc-performance" class="nav-link" data-scroll-target="#performance"><span class="header-section-number">8.2.1</span> Performance</a></li>
+  <li><a href="#qualité-du-code" id="toc-qualité-du-code" class="nav-link" data-scroll-target="#qualité-du-code"><span class="header-section-number">8.2.2</span> Qualité du Code</a></li>
+  </ul></li>
+  <li><a href="#intelligence-artificielle" id="toc-intelligence-artificielle" class="nav-link" data-scroll-target="#intelligence-artificielle"><span class="header-section-number">8.3</span> Intelligence Artificielle</a>
+  <ul class="collapse">
+  <li><a href="#ia-pour-les-combattants" id="toc-ia-pour-les-combattants" class="nav-link" data-scroll-target="#ia-pour-les-combattants"><span class="header-section-number">8.3.1</span> IA pour les Combattants</a></li>
+  </ul></li>
+  </ul></li>
+  <li><a href="#conclusion" id="toc-conclusion" class="nav-link" data-scroll-target="#conclusion"><span class="header-section-number">9</span> Conclusion</a>
+  <ul class="collapse">
+  <li><a href="#réalisations" id="toc-réalisations" class="nav-link" data-scroll-target="#réalisations"><span class="header-section-number">9.1</span> Réalisations</a></li>
+  <li><a href="#apprentissages-clés" id="toc-apprentissages-clés" class="nav-link" data-scroll-target="#apprentissages-clés"><span class="header-section-number">9.2</span> Apprentissages Clés</a></li>
+  <li><a href="#remerciements" id="toc-remerciements" class="nav-link" data-scroll-target="#remerciements"><span class="header-section-number">9.3</span> Remerciements</a></li>
+  </ul></li>
+  </ul>
+</nav>
+</div>
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">RPGSimulator</h1>
+<p class="subtitle lead">Développement d’un simulateur de combat RPG en Julia</p>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Maxime, Jed, Hussin et Simon </p>
+          </div>
+  </div>
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="introduction" class="level1" data-number="1">
+<h1 data-number="1"><span class="header-section-number">1</span> 1/ Introduction</h1>
+<section id="contexte-du-projet" class="level2" data-number="1.1">
+<h2 data-number="1.1" class="anchored" data-anchor-id="contexte-du-projet"><span class="header-section-number">1.1</span> 1.1/ Contexte du Projet</h2>
+<p>Ce rapport présente le développement complet de notre projet : <strong>RPGSimulator</strong>, un simulateur de combat RPG tour par tour entièrement réalisé en Julia. Notre équipe n’avait aucune connaissance préalable du langage Julia au démarrage. L’apprentissage s’est effectué de manière autonome en s’appuyant principalement sur le cours CQLS (<a href="https://cqls.dyndoc.fr/julia">https://cqls.dyndoc.fr/julia</a>) et avec l’aide de M.Drouilhet, notre enseignant pour ce projet.</p>
+<p>L’objectif était double : maîtriser les fondamentaux et les notions plus avancées de Julia (notamment le <strong>multiple dispatch</strong>) tout en construisant un projet fonctionnel, structuré et extensible. Le résultat est un moteur de combat intégrant un système de rôles, de compétences spécialisées, d’effets de statut, de simulations et de visualisations interactives.</p>
+</section>
+<section id="objectifs-pédagogiques-et-techniques" class="level2" data-number="1.2">
+<h2 data-number="1.2" class="anchored" data-anchor-id="objectifs-pédagogiques-et-techniques"><span class="header-section-number">1.2</span> 1.2/ Objectifs Pédagogiques et Techniques</h2>
+<p><strong>Apprentissage de Julia</strong> : Comprendre la philosophie du langage, sa gestion des types, le multiple dispatch, les performances et l’écosystème de packages. Progresser depuis une compréhension basique jusqu’à une utilisation avancée incluant la composition de types, les tests unitaires et l’optimisation.</p>
+<p><strong>Développement structuré</strong> : Organiser un projet complexe en modules distincts, séparer les responsabilités, gérer les dépendances et maintenir une base de code claire et extensible.</p>
+<p><strong>Exploitation du multiple dispatch</strong> : Utiliser ce paradigme comme pilier pour créer un système flexible où l’ajout de nouveaux comportements ne nécessite pas de modification du code existant.</p>
+<p><strong>Validation et qualité</strong> : Mettre en place des tests unitaires systématiques garantissant la fiabilité du code et la reproductibilité des résultats.</p>
+<p><strong>Simulation et analyse</strong> : Implémenter des simulations pour évaluer l’équilibrage du jeu et analyser les stratégies gagnantes.</p>
+<p><strong>Visualisation</strong> : Créer des interfaces interactives (RShiny) et des graphiques dynamiques (Bonito) pour représenter visuellement l’évolution des combats (par exemple l’évolution des points de vie au fil des tours) et faciliter l’analyse des résultats.</p>
+</section>
+</section>
+<section id="architecture-et-structure-du-projet" class="level1" data-number="2">
+<h1 data-number="2"><span class="header-section-number">2</span> 2/ Architecture et Structure du Projet</h1>
+<section id="organisation-modulaire" class="level2" data-number="2.1">
+<h2 data-number="2.1" class="anchored" data-anchor-id="organisation-modulaire"><span class="header-section-number">2.1</span> 2.1/ Organisation Modulaire</h2>
+<p>Le projet est organisé en plusieurs fichiers spécialisés, chacun ayant une responsabilité clairement définie. Cette modularité facilite la maintenance, l’extension et la compréhension du code. Nous avons aussi un rapport et un README.</p>
+<pre><code>RPGSimulator/
+|---- src/
+|     |-- RPGSimulator.jl # Module principal (exports, includes)
+|     |-- roles.jl # Définition des personnages et Stats
+|     |-- effets.jl # Système d'effets de statut
+|     |-- attaques.jl # Mécanique d'attaque et calcul de dégâts
+|     |-- skills.jl # Compétences spécialisées par rôle
+|     |-- combat.jl # Moteur de combat tour par tour
+|     |-- simulation.jl # Simulations multiples et statistiques
+|---- test/
+|     |-- runtests.jl # Tests unitaires
+|---- examples/
+|     |-- tests.jl #Fichier test du code
+|---- Bonito/
+|     |-- Bonito.md # Visualisations Bonito
+|---- RShiny/
+|     |-- App.R #Visualisation RShiny</code></pre>
+</section>
+<section id="hiérarchie-des-types" class="level2" data-number="2.2">
+<h2 data-number="2.2" class="anchored" data-anchor-id="hiérarchie-des-types"><span class="header-section-number">2.2</span> 2.2/ Hiérarchie des Types</h2>
+<p>Julia utilise un système de types avec hiérarchie. Nous avons défini trois hiérarchies principales pour structurer notre jeu.</p>
+<p><strong>Hiérarchie Role</strong> : Type abstrait <code>Role</code> avec quatre rôles concrets (<code>Archer</code>, <code>Mage</code>, <code>Chevalier</code>, <code>Gobelin</code>). Chaque rôle possède un nom, des statistiques (<code>Stats</code>) et une liste d’effets actifs (<code>Vector{Any}</code>).</p>
+<p><strong>Hiérarchie StatusEffect</strong> : Type abstrait <code>StatusEffect</code> regroupant cinq effets distincts : <code>Poison</code> (dégâts par tour), <code>Bleed</code> (saignement), <code>Shield</code> (protection), <code>Stun</code> (perte de tour), <code>Regen</code> (régénération).</p>
+<p><strong>Hiérarchie Skill</strong> : Type abstrait <code>Skill</code> avec deux compétences implémentées : <code>Fireball</code> (Mage, dégâts magiques élevés) et <code>PowerStrike</code> (Chevalier, attaque puissante).</p>
+<p>Cette architecture permet l’extension facile du jeu : ajouter un nouveau rôle, effet ou compétence ne nécessite que la définition d’une nouvelle structure et éventuellement de méthodes spécialisées, sans toucher au code existant.</p>
+</section>
+<section id="structure-des-données" class="level2" data-number="2.3">
+<h2 data-number="2.3" class="anchored" data-anchor-id="structure-des-données"><span class="header-section-number">2.3</span> 2.3/ Structure des Données</h2>
+<section id="stats-statistiques-de-base" class="level3" data-number="2.3.1">
+<h3 data-number="2.3.1" class="anchored" data-anchor-id="stats-statistiques-de-base"><span class="header-section-number">2.3.1</span> 2.3.1/ Stats (Statistiques de Base)</h3>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">mutable struct</span> Stats</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>    PV<span class="op">::</span><span class="dt">Int          </span><span class="co"># Points de Vie</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>    PM<span class="op">::</span><span class="dt">Int          </span><span class="co"># Points de Magie</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>    ATK<span class="op">::</span><span class="dt">Int         </span><span class="co"># Attaque</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>    VITESSE<span class="op">::</span><span class="dt">Int     </span><span class="co"># Détermine l'ordre d'action</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>    DEFENSE<span class="op">::</span><span class="dt">Int     </span><span class="co"># Réduit les dégâts reçus</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="kw">end</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Les Stats sont mutables car elles changent pendant le combat (PV diminuent, PM se consomment). Un constructeur par défaut facilite la création de personnages en leur attribuant automatiquement des valeurs standard. Cela permet également d’avoir la possibilité de faire des simulations sans personnaliser les stats de combat.</p>
+</section>
+<section id="rôles-et-différenciation" class="level3" data-number="2.3.2">
+<h3 data-number="2.3.2" class="anchored" data-anchor-id="rôles-et-différenciation"><span class="header-section-number">2.3.2</span> 2.3.2/ Rôles et Différenciation</h3>
+<p>Chaque rôle possède des caractéristiques distinctes créant des profils de jeu différents :</p>
+<ul>
+<li><strong>Archer</strong> (Robin) : PV=90, PM=30, ATK=15, VITESSE=20, DEFENSE=8. Rapide et précis, idéal pour frapper en premier.</li>
+<li><strong>Mage</strong> (Gandalf) : PV=70, PM=100, ATK=25, VITESSE=12, DEFENSE=6. Fragile mais dégâts magiques dévastateurs.</li>
+<li><strong>Chevalier</strong> (Arthur) : PV=120, PM=20, ATK=18, VITESSE=10, DEFENSE=20. Tank résistant avec attaques puissantes.</li>
+<li><strong>Gobelin</strong> (Gabimarou) : PV=60, PM=10, ATK=12, VITESSE=14, DEFENSE=5. Faible mais agile, bon pour les tests.</li>
+</ul>
+</section>
+</section>
+</section>
+<section id="mécaniques-de-combat" class="level1" data-number="3">
+<h1 data-number="3"><span class="header-section-number">3</span> 3/ Mécaniques de Combat</h1>
+<section id="calcul-des-dégâts-approche-probabiliste" class="level2" data-number="3.1">
+<h2 data-number="3.1" class="anchored" data-anchor-id="calcul-des-dégâts-approche-probabiliste"><span class="header-section-number">3.1</span> 3.1/ Calcul des Dégâts : Approche Probabiliste</h2>
+<p>Le système de combat repose sur un modèle probabiliste réaliste plutôt que sur des valeurs fixes. La fonction <code>compute_damage</code> utilise une distribution normale pour générer de l’aléatoire contrôlé.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">compute_damage</span>(base_atk<span class="op">::</span><span class="dt">Int</span>, def<span class="op">::</span><span class="dt">Int</span>; </span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>                       sd_frac<span class="op">=</span><span class="fl">0.12</span>, </span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>                       crit_chance<span class="op">=</span><span class="fl">0.10</span>, </span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>                       crit_mult<span class="op">=</span><span class="fl">1.6</span>)</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Écart-type proportionnel à l'attaque</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>    sd <span class="op">=</span> <span class="fu">max</span>(<span class="fl">1.0</span>, <span class="fu">abs</span>(base_atk) <span class="op">*</span> sd_frac)</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Tirage selon loi normale</span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>    d <span class="op">=</span> <span class="fu">rand</span>(<span class="fu">Normal</span>(base_atk, sd))</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Application de la défense</span></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>    raw <span class="op">=</span> <span class="fu">max</span>(<span class="fu">Int</span>(<span class="fu">round</span>(d)) <span class="op">-</span> def, <span class="fl">0</span>)</span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Gestion des coups critiques</span></span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>    is_crit <span class="op">=</span> (<span class="fu">rand</span>() <span class="op">&lt;</span> crit_chance) <span class="op">&amp;&amp;</span> raw <span class="op">&gt;</span> <span class="fl">0</span></span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>    raw <span class="op">=</span> is_crit ? <span class="fu">Int</span>(<span class="fu">round</span>(raw <span class="op">*</span> crit_mult)) <span class="op">:</span> raw</span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> raw, is_crit</span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a><span class="kw">end</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p><strong>Paramètres ajustables</strong> : L’écart-type (<code>sd_frac</code>) contrôle la variance des dégâts, le taux de critique (<code>crit_chance</code>) et le multiplicateur (<code>crit_mult</code>) permettent de différencier les attaques. Par exemple, <code>Fireball</code> utilise <code>sd_frac=0.05</code> (peu de variance), <code>crit_chance=0.22</code> (élevé) et <code>crit_mult=2.2</code> (dégâts explosifs).</p>
+<p><strong>Défense</strong> : Fonctionne en soustraction pure. Une défense de 20 réduit tous les dégâts entrants de 20 points. Certaines compétences magiques (comme <code>Fireball</code>) réduisent l’efficacité de la défense (×0.7) pour simuler la pénétration magique.</p>
+</section>
+<section id="multiple-dispatch-cœur-du-système" class="level2" data-number="3.2">
+<h2 data-number="3.2" class="anchored" data-anchor-id="multiple-dispatch-cœur-du-système"><span class="header-section-number">3.2</span> 3.2/ Multiple Dispatch : Cœur du Système</h2>
+<p>Le multiple dispatch est la caractéristique distinctive de Julia qui permet de définir plusieurs versions d’une même fonction en fonction des types de tous ses arguments. Contrairement à la programmation orientée objet classique où la méthode dépend uniquement du type de l’objet appelant, Julia sélectionne la méthode la plus spécifique selon les types de tous les paramètres.</p>
+<section id="attaques-standard" class="level3" data-number="3.2.1">
+<h3 data-number="3.2.1" class="anchored" data-anchor-id="attaques-standard"><span class="header-section-number">3.2.1</span> 3.2.1/ Attaques Standard</h3>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Signature générique : fonctionne pour n'importe quel Role</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">attaquer</span>(att<span class="op">::</span><span class="dt">Role</span>, def<span class="op">::</span><span class="dt">Role</span>; shield<span class="op">::</span><span class="dt">Int</span>=<span class="fl">0</span>, </span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>                 dmg_mat<span class="op">=</span><span class="fu">Dict</span>(), skill_usage<span class="op">=</span><span class="fu">Dict</span>())</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>    dmg, crit <span class="op">=</span> <span class="fu">compute_damage</span>(att.stats.ATK, </span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>                               def.stats.DEFENSE <span class="op">-</span> shield)</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>    def.stats.PV <span class="op">=</span> <span class="fu">max</span>(def.stats.PV <span class="op">-</span> dmg, <span class="fl">0</span>)</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">println</span>(<span class="st">"</span><span class="sc">$</span>(att.nom)<span class="st"> attaque </span><span class="sc">$</span>(def.nom)<span class="st"> et inflige </span><span class="sc">$</span>dmg<span class="st"> dégâts"</span> </span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>            <span class="op">*</span> (crit ? <span class="st">" (CRIT!)"</span> <span class="op">:</span> <span class="st">""</span>))</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Enregistrement des dégâts par matchup</span></span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>    acls, dcls <span class="op">=</span> <span class="fu">string</span>(<span class="fu">typeof</span>(att)), <span class="fu">string</span>(<span class="fu">typeof</span>(def))</span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>    dmg_mat[(acls,dcls)] <span class="op">=</span> <span class="fu">get</span>(dmg_mat,(acls,dcls),<span class="fl">0</span>) <span class="op">+</span> dmg</span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> dmg</span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a><span class="kw">end</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Cette fonction unique gère toutes les attaques basiques. Julia compile automatiquement une version optimisée pour chaque combinaison de types rencontrée (Archer→Gobelin, Mage→Chevalier, etc.).</p>
+</section>
+<section id="compétences-spécialisées" class="level3" data-number="3.2.2">
+<h3 data-number="3.2.2" class="anchored" data-anchor-id="compétences-spécialisées"><span class="header-section-number">3.2.2</span> 3.2.2/ Compétences Spécialisées</h3>
+<p>Le véritable pouvoir du multiple dispatch apparaît avec les compétences.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Méthode par défaut (fallback)</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">use_skill</span>(att<span class="op">::</span><span class="dt">Role</span>, skl<span class="op">::</span><span class="dt">Skill</span>, target<span class="op">::</span><span class="dt">Role</span>; kwargs<span class="op">...</span>)</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">println</span>(<span class="st">"</span><span class="sc">$</span>(att.nom)<span class="st"> utilise une compétence non spécifiée."</span>)</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="fl">0</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="kw">end</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Spécialisation : Mage lance Fireball</span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">use_skill</span>(att<span class="op">::</span><span class="dt">Mage</span>, skl<span class="op">::</span><span class="dt">Fireball</span>, def<span class="op">::</span><span class="dt">Role</span>; </span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>                  dmg_mat<span class="op">=</span><span class="fu">Dict</span>(), skill_usage<span class="op">=</span><span class="fu">Dict</span>())</span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Vérification des PM</span></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> att.stats.PM <span class="op">&lt;</span> skl.cost_pm</span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>        <span class="fu">println</span>(<span class="st">"</span><span class="sc">$</span>(att.nom)<span class="st"> n'a pas assez de PM pour Fireball."</span>)</span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="fl">0</span></span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>    <span class="cf">end</span></span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a>    att.stats.PM <span class="op">-=</span> skl.cost_pm</span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a>    effective_def <span class="op">=</span> <span class="fu">Int</span>(<span class="fu">round</span>(def.stats.DEFENSE <span class="op">*</span> <span class="fl">0.7</span>))</span>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a>    base_atk <span class="op">=</span> skl.power <span class="op">+</span> <span class="fu">Int</span>(<span class="fu">round</span>(att.stats.ATK <span class="op">*</span> <span class="fl">0.5</span>))</span>
+<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a>    dmg, crit <span class="op">=</span> <span class="fu">compute_damage</span>(base_atk, effective_def,</span>
+<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a>                               sd_frac<span class="op">=</span><span class="fl">0.05</span>, </span>
+<span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a>                               crit_chance<span class="op">=</span><span class="fl">0.22</span>, </span>
+<span id="cb5-23"><a href="#cb5-23" aria-hidden="true" tabindex="-1"></a>                               crit_mult<span class="op">=</span><span class="fl">2.2</span>)</span>
+<span id="cb5-24"><a href="#cb5-24" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb5-25"><a href="#cb5-25" aria-hidden="true" tabindex="-1"></a>    def.stats.PV <span class="op">=</span> <span class="fu">max</span>(def.stats.PV <span class="op">-</span> dmg, <span class="fl">0</span>)</span>
+<span id="cb5-26"><a href="#cb5-26" aria-hidden="true" tabindex="-1"></a>    <span class="fu">println</span>(<span class="st">"</span><span class="sc">$</span>(att.nom)<span class="st"> lance Fireball sur </span><span class="sc">$</span>(def.nom)<span class="st"> =&gt; </span><span class="sc">$</span>dmg<span class="st"> dégâts"</span> </span>
+<span id="cb5-27"><a href="#cb5-27" aria-hidden="true" tabindex="-1"></a>            <span class="op">*</span> (crit ? <span class="st">" (CRIT!)"</span> <span class="op">:</span> <span class="st">""</span>))</span>
+<span id="cb5-28"><a href="#cb5-28" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb5-29"><a href="#cb5-29" aria-hidden="true" tabindex="-1"></a>    skill_usage[<span class="fu">string</span>(<span class="fu">typeof</span>(skl))] <span class="op">=</span> </span>
+<span id="cb5-30"><a href="#cb5-30" aria-hidden="true" tabindex="-1"></a>        <span class="fu">get</span>(skill_usage, <span class="fu">string</span>(<span class="fu">typeof</span>(skl)), <span class="fl">0</span>) <span class="op">+</span> <span class="fl">1</span></span>
+<span id="cb5-31"><a href="#cb5-31" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb5-32"><a href="#cb5-32" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> dmg</span>
+<span id="cb5-33"><a href="#cb5-33" aria-hidden="true" tabindex="-1"></a><span class="kw">end</span></span>
+<span id="cb5-34"><a href="#cb5-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-35"><a href="#cb5-35" aria-hidden="true" tabindex="-1"></a><span class="co"># Spécialisation : Chevalier utilise PowerStrike</span></span>
+<span id="cb5-36"><a href="#cb5-36" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">use_skill</span>(att<span class="op">::</span><span class="dt">Chevalier</span>, skl<span class="op">::</span><span class="dt">PowerStrike</span>, def<span class="op">::</span><span class="dt">Role</span>; </span>
+<span id="cb5-37"><a href="#cb5-37" aria-hidden="true" tabindex="-1"></a>                  dmg_mat<span class="op">=</span><span class="fu">Dict</span>(), skill_usage<span class="op">=</span><span class="fu">Dict</span>())</span>
+<span id="cb5-38"><a href="#cb5-38" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> att.stats.PM <span class="op">&lt;</span> skl.cost_pm</span>
+<span id="cb5-39"><a href="#cb5-39" aria-hidden="true" tabindex="-1"></a>        <span class="fu">println</span>(<span class="st">"</span><span class="sc">$</span>(att.nom)<span class="st"> n'a pas assez de PM pour PowerStrike."</span>)</span>
+<span id="cb5-40"><a href="#cb5-40" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="fl">0</span></span>
+<span id="cb5-41"><a href="#cb5-41" aria-hidden="true" tabindex="-1"></a>    <span class="cf">end</span></span>
+<span id="cb5-42"><a href="#cb5-42" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb5-43"><a href="#cb5-43" aria-hidden="true" tabindex="-1"></a>    att.stats.PM <span class="op">-=</span> skl.cost_pm</span>
+<span id="cb5-44"><a href="#cb5-44" aria-hidden="true" tabindex="-1"></a>    base_atk <span class="op">=</span> skl.power <span class="op">+</span> <span class="fu">Int</span>(<span class="fu">round</span>(att.stats.ATK <span class="op">*</span> <span class="fl">0.7</span>))</span>
+<span id="cb5-45"><a href="#cb5-45" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb5-46"><a href="#cb5-46" aria-hidden="true" tabindex="-1"></a>    dmg, crit <span class="op">=</span> <span class="fu">compute_damage</span>(base_atk, def.stats.DEFENSE,</span>
+<span id="cb5-47"><a href="#cb5-47" aria-hidden="true" tabindex="-1"></a>                               sd_frac<span class="op">=</span><span class="fl">0.03</span>, </span>
+<span id="cb5-48"><a href="#cb5-48" aria-hidden="true" tabindex="-1"></a>                               crit_chance<span class="op">=</span><span class="fl">0.18</span>, </span>
+<span id="cb5-49"><a href="#cb5-49" aria-hidden="true" tabindex="-1"></a>                               crit_mult<span class="op">=</span><span class="fl">1.8</span>)</span>
+<span id="cb5-50"><a href="#cb5-50" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb5-51"><a href="#cb5-51" aria-hidden="true" tabindex="-1"></a>    def.stats.PV <span class="op">=</span> <span class="fu">max</span>(def.stats.PV <span class="op">-</span> dmg, <span class="fl">0</span>)</span>
+<span id="cb5-52"><a href="#cb5-52" aria-hidden="true" tabindex="-1"></a>    <span class="fu">println</span>(<span class="st">"</span><span class="sc">$</span>(att.nom)<span class="st"> utilise PowerStrike sur </span><span class="sc">$</span>(def.nom)<span class="st"> =&gt; </span><span class="sc">$</span>dmg<span class="st"> dégâts"</span> </span>
+<span id="cb5-53"><a href="#cb5-53" aria-hidden="true" tabindex="-1"></a>            <span class="op">*</span> (crit ? <span class="st">" (CRIT!)"</span> <span class="op">:</span> <span class="st">""</span>))</span>
+<span id="cb5-54"><a href="#cb5-54" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb5-55"><a href="#cb5-55" aria-hidden="true" tabindex="-1"></a>    acls <span class="op">=</span> <span class="fu">string</span>(<span class="fu">typeof</span>(att)); dcls <span class="op">=</span> <span class="fu">string</span>(<span class="fu">typeof</span>(def))</span>
+<span id="cb5-56"><a href="#cb5-56" aria-hidden="true" tabindex="-1"></a>    dmg_mat[(acls,dcls)] <span class="op">=</span> <span class="fu">get</span>(dmg_mat,(acls,dcls),<span class="fl">0</span>) <span class="op">+</span> dmg</span>
+<span id="cb5-57"><a href="#cb5-57" aria-hidden="true" tabindex="-1"></a>    skill_usage[<span class="fu">string</span>(<span class="fu">typeof</span>(skl))] <span class="op">=</span> </span>
+<span id="cb5-58"><a href="#cb5-58" aria-hidden="true" tabindex="-1"></a>        <span class="fu">get</span>(skill_usage, <span class="fu">string</span>(<span class="fu">typeof</span>(skl)), <span class="fl">0</span>) <span class="op">+</span> <span class="fl">1</span></span>
+<span id="cb5-59"><a href="#cb5-59" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb5-60"><a href="#cb5-60" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> dmg</span>
+<span id="cb5-61"><a href="#cb5-61" aria-hidden="true" tabindex="-1"></a><span class="kw">end</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p><strong>Avantages</strong> : Ajouter un nouveau rôle (ex: <code>Voleur</code>) avec une nouvelle compétence (ex: <code>Backstab</code>) ne nécessite que d’ajouter une nouvelle fonction <code>use_skill(att::Voleur, skl::Backstab, def::Role)</code>. Le code existant n’est jamais modifié, garantissant la stabilité et l’extensibilité.</p>
+</section>
+</section>
+<section id="système-deffets-de-statut" class="level2" data-number="3.3">
+<h2 data-number="3.3" class="anchored" data-anchor-id="système-deffets-de-statut"><span class="header-section-number">3.3</span> Système d’Effets de Statut</h2>
+<p>Les effets de statut ajoutent de la profondeur stratégique au combat. Chaque effet possède une durée (<code>remaining</code>) qui décrémente à chaque tour jusqu’à expiration.</p>
+<section id="types-deffets-implémentés" class="level3" data-number="3.3.1">
+<h3 data-number="3.3.1" class="anchored" data-anchor-id="types-deffets-implémentés"><span class="header-section-number">3.3.1</span> Types d’Effets Implémentés</h3>
+<p><strong>Poison</strong> : Inflige <code>dmg_per_turn</code> points de dégâts à chaque tour. Exemple : <code>Poison(3, 8)</code> inflige 8 dégâts pendant 3 tours.</p>
+<p><strong>Bleed</strong> : Similaire au poison, représente un saignement continu. La séparation permet des mécaniques différentes (résistances, immunités).</p>
+<p><strong>Shield</strong> : Réduit les dégâts entrants de <code>flat_block</code> points à chaque tour. Exemple : <code>Shield(2, 15)</code> bloque 15 dégâts pendant 2 tours.</p>
+<p><strong>Stun</strong> : Empêche le personnage d’agir pendant <code>remaining</code> tours. Puissant effet de contrôle.</p>
+<p><strong>Regen</strong> : Restaure <code>heal_per_turn</code> PV à chaque tour. Exemple : <code>Regen(3, 10)</code> soigne 10 PV pendant 3 tours.</p>
+</section>
+<section id="application-et-gestion" class="level3" data-number="3.3.2">
+<h3 data-number="3.3.2" class="anchored" data-anchor-id="application-et-gestion"><span class="header-section-number">3.3.2</span> 3.2.3/ Application et Gestion</h3>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">apply_effects_round!</span>(c<span class="op">::</span><span class="dt">Role</span>)</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>    new_effects <span class="op">=</span> <span class="dt">Any</span>[]</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>    total_shield <span class="op">=</span> <span class="fl">0</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>    total_poison <span class="op">=</span> <span class="fl">0</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>    total_bleed <span class="op">=</span> <span class="fl">0</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>    regen_amount <span class="op">=</span> <span class="fl">0</span></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>    stunned <span class="op">=</span> <span class="cn">false</span></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Parcours et application de chaque effet</span></span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> <span class="cn">e</span> <span class="kw">in</span> c.effects</span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="cn">e</span> isa Poison</span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>            total_poison <span class="op">+=</span> <span class="cn">e</span>.dmg_per_turn</span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>            <span class="cn">e</span>.remaining <span class="op">-=</span> <span class="fl">1</span></span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>        <span class="cf">elseif</span> <span class="cn">e</span> isa Shield</span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a>            total_shield <span class="op">+=</span> <span class="cn">e</span>.flat_block</span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a>            <span class="cn">e</span>.remaining <span class="op">-=</span> <span class="fl">1</span></span>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a>        <span class="cf">elseif</span> <span class="cn">e</span> isa Bleed</span>
+<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a>            total_bleed <span class="op">+=</span> <span class="cn">e</span>.dmg_per_turn</span>
+<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a>            <span class="cn">e</span>.remaining <span class="op">-=</span> <span class="fl">1</span></span>
+<span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a>        <span class="cf">elseif</span> <span class="cn">e</span> isa Stun</span>
+<span id="cb6-21"><a href="#cb6-21" aria-hidden="true" tabindex="-1"></a>            stunned <span class="op">=</span> <span class="cn">true</span></span>
+<span id="cb6-22"><a href="#cb6-22" aria-hidden="true" tabindex="-1"></a>            <span class="cn">e</span>.remaining <span class="op">-=</span> <span class="fl">1</span></span>
+<span id="cb6-23"><a href="#cb6-23" aria-hidden="true" tabindex="-1"></a>        <span class="cf">elseif</span> <span class="cn">e</span> isa Regen</span>
+<span id="cb6-24"><a href="#cb6-24" aria-hidden="true" tabindex="-1"></a>            regen_amount <span class="op">+=</span> <span class="cn">e</span>.heal_per_turn</span>
+<span id="cb6-25"><a href="#cb6-25" aria-hidden="true" tabindex="-1"></a>            <span class="cn">e</span>.remaining <span class="op">-=</span> <span class="fl">1</span></span>
+<span id="cb6-26"><a href="#cb6-26" aria-hidden="true" tabindex="-1"></a>        <span class="cf">end</span></span>
+<span id="cb6-27"><a href="#cb6-27" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb6-28"><a href="#cb6-28" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Conserver les effets actifs</span></span>
+<span id="cb6-29"><a href="#cb6-29" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="cn">e</span>.remaining <span class="op">&gt;</span> <span class="fl">0</span></span>
+<span id="cb6-30"><a href="#cb6-30" aria-hidden="true" tabindex="-1"></a>            <span class="fu">push!</span>(new_effects, <span class="cn">e</span>)</span>
+<span id="cb6-31"><a href="#cb6-31" aria-hidden="true" tabindex="-1"></a>        <span class="cf">end</span></span>
+<span id="cb6-32"><a href="#cb6-32" aria-hidden="true" tabindex="-1"></a>    <span class="cf">end</span></span>
+<span id="cb6-33"><a href="#cb6-33" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb6-34"><a href="#cb6-34" aria-hidden="true" tabindex="-1"></a>    c.effects <span class="op">=</span> new_effects</span>
+<span id="cb6-35"><a href="#cb6-35" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb6-36"><a href="#cb6-36" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Application des soins et dégâts</span></span>
+<span id="cb6-37"><a href="#cb6-37" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> regen_amount <span class="op">&gt;</span> <span class="fl">0</span></span>
+<span id="cb6-38"><a href="#cb6-38" aria-hidden="true" tabindex="-1"></a>        c.stats.PV <span class="op">+=</span> regen_amount</span>
+<span id="cb6-39"><a href="#cb6-39" aria-hidden="true" tabindex="-1"></a>        <span class="fu">println</span>(<span class="st">"</span><span class="sc">$</span>(c.nom)<span class="st"> regenère </span><span class="sc">$</span>regen_amount<span class="st"> PV."</span>)</span>
+<span id="cb6-40"><a href="#cb6-40" aria-hidden="true" tabindex="-1"></a>    <span class="cf">end</span></span>
+<span id="cb6-41"><a href="#cb6-41" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb6-42"><a href="#cb6-42" aria-hidden="true" tabindex="-1"></a>    total_damage <span class="op">=</span> total_poison <span class="op">+</span> total_bleed</span>
+<span id="cb6-43"><a href="#cb6-43" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> total_damage <span class="op">&gt;</span> <span class="fl">0</span></span>
+<span id="cb6-44"><a href="#cb6-44" aria-hidden="true" tabindex="-1"></a>        c.stats.PV <span class="op">=</span> <span class="fu">max</span>(c.stats.PV <span class="op">-</span> total_damage, <span class="fl">0</span>)</span>
+<span id="cb6-45"><a href="#cb6-45" aria-hidden="true" tabindex="-1"></a>        <span class="fu">println</span>(<span class="st">"</span><span class="sc">$</span>(c.nom)<span class="st"> subit </span><span class="sc">$</span>total_damage<span class="st"> dégâts (poison/bleed)."</span>)</span>
+<span id="cb6-46"><a href="#cb6-46" aria-hidden="true" tabindex="-1"></a>    <span class="cf">end</span></span>
+<span id="cb6-47"><a href="#cb6-47" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb6-48"><a href="#cb6-48" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> (total_shield, stunned, regen_amount, total_damage)</span>
+<span id="cb6-49"><a href="#cb6-49" aria-hidden="true" tabindex="-1"></a><span class="kw">end</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p><strong>Composition d’effets</strong> : Un personnage peut avoir plusieurs effets simultanés qui se cumulent. Par exemple, <code>Poison(2,5) + Bleed(2,3) + Regen(2,10)</code> produit un bilan net de -8+10 = +2 PV par tour.</p>
+</section>
+</section>
+<section id="moteur-de-combat-tour-par-tour" class="level2" data-number="3.4">
+<h2 data-number="3.4" class="anchored" data-anchor-id="moteur-de-combat-tour-par-tour"><span class="header-section-number">3.4</span> Moteur de Combat Tour par Tour</h2>
+<p>Le moteur de combat orchestre l’ensemble des mécaniques dans une boucle structurée avec logging détaillé.</p>
+<section id="déroulement-dun-tour" class="level3" data-number="3.4.1">
+<h3 data-number="3.4.1" class="anchored" data-anchor-id="déroulement-dun-tour"><span class="header-section-number">3.4.1</span> Déroulement d’un Tour</h3>
+<ol type="1">
+<li><strong>Application des effets de statut</strong> : Calcul de shield, stun, regen et dégâts pour les deux combattants.</li>
+<li><strong>Détermination de l’ordre</strong> : Le personnage avec la plus haute VITESSE agit en premier.</li>
+<li><strong>Actions séquentielles</strong> : Chaque combattant exécute son action (attaque ou compétence) sauf s’il est étourdi.</li>
+<li><strong>Choix d’action</strong> : Fonction <code>choose_action</code> détermine le comportement (attaque normale vs compétence).</li>
+<li><strong>Logging</strong> : Enregistrement de toutes les actions dans un tableau de logs (<code>AttackLog</code>).</li>
+<li><strong>Vérification de fin</strong> : Combat terminé si un combattant atteint 0 PV ou si <code>max_rounds</code> est atteint.</li>
+</ol>
+</section>
+<section id="choix-dactions-intelligents" class="level3" data-number="3.4.2">
+<h3 data-number="3.4.2" class="anchored" data-anchor-id="choix-dactions-intelligents"><span class="header-section-number">3.4.2</span> Choix d’Actions Intelligents</h3>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Comportement par défaut : attaque normale</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="fu">choose_action</span>(actor<span class="op">::</span><span class="dt">Role</span>, defender<span class="op">::</span><span class="dt">Role</span>) <span class="op">=</span> (<span class="op">:</span>attack, <span class="cn">nothing</span>)</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Mage : priorise Fireball si PM suffisants</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="fu">choose_action</span>(actor<span class="op">::</span><span class="dt">Mage</span>, defender<span class="op">::</span><span class="dt">Role</span>) <span class="op">=</span> </span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>    actor.stats.PM <span class="op">≥</span> <span class="fl">10</span> ? (<span class="op">:</span>skill, <span class="fu">Fireball</span>(<span class="fl">10</span>, <span class="fl">30</span>)) <span class="op">:</span> (<span class="op">:</span>attack, <span class="cn">nothing</span>)</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Chevalier : 20% de chance d'utiliser PowerStrike</span></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a><span class="fu">choose_action</span>(actor<span class="op">::</span><span class="dt">Chevalier</span>, defender<span class="op">::</span><span class="dt">Role</span>) <span class="op">=</span> </span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>    (actor.stats.PM <span class="op">≥</span> <span class="fl">8</span> <span class="op">&amp;&amp;</span> <span class="fu">rand</span>() <span class="op">&lt;</span> <span class="fl">0.2</span>) ? </span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>        (<span class="op">:</span>skill, <span class="fu">PowerStrike</span>(<span class="fl">8</span>, <span class="fl">20</span>)) <span class="op">:</span> (<span class="op">:</span>attack, <span class="cn">nothing</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Cette séparation permet d’implémenter facilement des IA plus sophistiquées par rôle sans modifier le moteur de combat.</p>
+</section>
+<section id="logging-des-combats" class="level3" data-number="3.4.3">
+<h3 data-number="3.4.3" class="anchored" data-anchor-id="logging-des-combats"><span class="header-section-number">3.4.3</span> Logging des Combats</h3>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="kw">struct</span> AttackLog</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>    round<span class="op">::</span><span class="dt">Int</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>    actor<span class="op">::</span><span class="dt">String</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>    action<span class="op">::</span><span class="dt">String</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>    target<span class="op">::</span><span class="dt">String</span></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>    damage<span class="op">::</span><span class="dt">Int</span></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>    actor_PV<span class="op">::</span><span class="dt">Int</span></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>    target_PV<span class="op">::</span><span class="dt">Int</span></span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a><span class="kw">end</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Chaque action génère un log permettant l’analyse post-combat, la génération de graphiques temporels et le débogage. Ces logs sont exportables en CSV pour traitement externe (RShiny, analyses statistiques).</p>
+</section>
+</section>
+</section>
+<section id="tests-et-validation" class="level1" data-number="4">
+<h1 data-number="4"><span class="header-section-number">4</span> Tests et Validation</h1>
+<section id="stratégie-de-test" class="level2" data-number="4.1">
+<h2 data-number="4.1" class="anchored" data-anchor-id="stratégie-de-test"><span class="header-section-number">4.1</span> Stratégie de Test</h2>
+<p>La validation du code s’appuie sur 12 suites de tests couvrant l’ensemble des fonctionnalités critiques. Les tests utilisent le module <code>Test.jl</code> de Julia et fixent une seed aléatoire (<code>Random.seed!(1234)</code>) pour garantir la reproductibilité.</p>
+<section id="couverture-des-tests" class="level3" data-number="4.1.1">
+<h3 data-number="4.1.1" class="anchored" data-anchor-id="couverture-des-tests"><span class="header-section-number">4.1.1</span> Couverture des Tests</h3>
+<p><strong>Tests de base</strong> : <code>compute_damage</code> (dégâts non-négatifs, type de critique correct), <code>attaquer</code> (réduction des PV, respect des bornes).</p>
+<p><strong>Tests de compétences</strong> : Vérification du coût en PM, application correcte des dégâts, spécialisations par rôle (Mage/Fireball, Chevalier/PowerStrike).</p>
+<p><strong>Tests d’effets</strong> : Chaque effet testé individuellement (Poison, Bleed, Regen, Shield, Stun) et en combinaison (stack d’effets multiples).</p>
+<p><strong>Tests de combat</strong> : Déroulement complet, détermination du gagnant, cohérence des logs.</p>
+</section>
+</section>
+<section id="exemples-de-tests-clés" class="level2" data-number="4.2">
+<h2 data-number="4.2" class="anchored" data-anchor-id="exemples-de-tests-clés"><span class="header-section-number">4.2</span> Exemples de Tests Clés</h2>
+<section id="test-de-cohérence-des-dégâts" class="level3" data-number="4.2.1">
+<h3 data-number="4.2.1" class="anchored" data-anchor-id="test-de-cohérence-des-dégâts"><span class="header-section-number">4.2.1</span> Test de Cohérence des Dégâts</h3>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="pp">@testset</span> <span class="st">"compute_damage"</span> <span class="cf">begin</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>    dmg, crit <span class="op">=</span> <span class="fu">compute_damage</span>(<span class="fl">50</span>, <span class="fl">10</span>)</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>    <span class="pp">@test</span> dmg <span class="op">≥</span> <span class="fl">0</span>              <span class="co"># Jamais de dégâts négatifs</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>    <span class="pp">@test</span> crit isa <span class="dt">Bool</span>        <span class="co"># Type booléen pour le critique</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a><span class="cf">end</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+<section id="test-de-consommation-de-ressources" class="level3" data-number="4.2.2">
+<h3 data-number="4.2.2" class="anchored" data-anchor-id="test-de-consommation-de-ressources"><span class="header-section-number">4.2.2</span> Test de Consommation de Ressources</h3>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb10"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="pp">@testset</span> <span class="st">"use_skill Mage"</span> <span class="cf">begin</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>    mage <span class="op">=</span> <span class="fu">Mage</span>()</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>    target <span class="op">=</span> <span class="fu">Chevalier</span>()</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>    fireball <span class="op">=</span> <span class="fu">Fireball</span>(<span class="fl">10</span>, <span class="fl">30</span>)</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>    before_PV <span class="op">=</span> target.stats.PV</span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>    before_PM <span class="op">=</span> mage.stats.PM</span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>    dmg <span class="op">=</span> <span class="fu">use_skill</span>(mage, fireball, target)</span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>    <span class="pp">@test</span> dmg <span class="op">≥</span> <span class="fl">0</span></span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a>    <span class="pp">@test</span> target.stats.PV <span class="op">==</span> before_PV <span class="op">-</span> dmg</span>
+<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a>    <span class="pp">@test</span> mage.stats.PM <span class="op">==</span> before_PM <span class="op">-</span> <span class="fl">10</span>    <span class="co"># Coût exact</span></span>
+<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a><span class="cf">end</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+<section id="test-de-stack-deffets" class="level3" data-number="4.2.3">
+<h3 data-number="4.2.3" class="anchored" data-anchor-id="test-de-stack-deffets"><span class="header-section-number">4.2.3</span> Test de Stack d’Effets</h3>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb11"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="pp">@testset</span> <span class="st">"Stack d'effets"</span> <span class="cf">begin</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>    c <span class="op">=</span> <span class="fu">make_dummy_role</span>(<span class="fl">100</span>, effects<span class="op">=</span>[</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>        <span class="fu">Poison</span>(<span class="fl">2</span>, <span class="fl">5</span>), </span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>        <span class="fu">Bleed</span>(<span class="fl">2</span>, <span class="fl">3</span>),</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>        <span class="fu">Regen</span>(<span class="fl">2</span>, <span class="fl">4</span>), </span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>        <span class="fu">Shield</span>(<span class="fl">2</span>, <span class="fl">10</span>)</span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>    ])</span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>    shield, stunned, regen, dmg <span class="op">=</span> <span class="fu">apply_effects_round!</span>(c)</span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a>    <span class="pp">@test</span> shield <span class="op">==</span> <span class="fl">10</span></span>
+<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a>    <span class="pp">@test</span> regen <span class="op">==</span> <span class="fl">4</span></span>
+<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a>    <span class="pp">@test</span> dmg <span class="op">==</span> <span class="fl">8</span>              <span class="co"># 5 (poison) + 3 (bleed)</span></span>
+<span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a>    <span class="pp">@test</span> c.stats.PV <span class="op">==</span> <span class="fl">96</span>      <span class="co"># 100 + 4 (regen) - 8 (dmg)</span></span>
+<span id="cb11-15"><a href="#cb11-15" aria-hidden="true" tabindex="-1"></a>    <span class="pp">@test</span> <span class="fu">length</span>(c.effects) <span class="op">==</span> <span class="fl">4</span></span>
+<span id="cb11-16"><a href="#cb11-16" aria-hidden="true" tabindex="-1"></a><span class="cf">end</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+<section id="test-de-combat-complet" class="level3" data-number="4.2.4">
+<h3 data-number="4.2.4" class="anchored" data-anchor-id="test-de-combat-complet"><span class="header-section-number">4.2.4</span> Test de Combat Complet</h3>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb12"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="pp">@testset</span> <span class="st">"combat simple"</span> <span class="cf">begin</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>    gandalf <span class="op">=</span> <span class="fu">Mage</span>()</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>    arthur <span class="op">=</span> <span class="fu">Chevalier</span>()</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>    winner, logs <span class="op">=</span> <span class="fu">combat</span>(gandalf, arthur; max_rounds<span class="op">=</span><span class="fl">10</span>)</span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>    <span class="pp">@test</span> winner <span class="kw">in</span> [gandalf.nom, arthur.nom]</span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>    <span class="pp">@test</span> <span class="fu">length</span>(logs) <span class="op">≥</span> <span class="fl">1</span>              <span class="co"># Au moins un tour</span></span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>    <span class="pp">@test</span> <span class="fu">all</span>(log <span class="op">-&gt;</span> log.damage <span class="op">≥</span> <span class="fl">0</span>, logs)  <span class="co"># Pas de dégâts négatifs</span></span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a><span class="cf">end</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+</section>
+<section id="résultats-et-fiabilité" class="level2" data-number="4.3">
+<h2 data-number="4.3" class="anchored" data-anchor-id="résultats-et-fiabilité"><span class="header-section-number">4.3</span> Résultats et Fiabilité</h2>
+<p>Les 12 suites de tests passent avec succès (100% de réussite), validant la cohérence mathématique, la gestion correcte des ressources, l’application fidèle des effets et la stabilité du moteur de combat. La reproductibilité est garantie par la fixation de la seed aléatoire, permettant des tests déterministes malgré l’aspect probabiliste du système.</p>
+</section>
+</section>
+<section id="simulations-et-analyse" class="level1" data-number="5">
+<h1 data-number="5"><span class="header-section-number">5</span> Simulations et Analyse</h1>
+<section id="méthodologie-de-simulation" class="level2" data-number="5.1">
+<h2 data-number="5.1" class="anchored" data-anchor-id="méthodologie-de-simulation"><span class="header-section-number">5.1</span> Méthodologie de Simulation</h2>
+<p>Les simulations utilisent une approche Monte Carlo : exécution répétée du même combat avec réinitialisation complète entre chaque itération. La fonction <code>Base.rand</code> est étendue pour accepter deux personnages et un nombre de simulations.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb13"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="bu">Base</span>.<span class="fu">rand</span>(j1<span class="op">::</span><span class="dt">Role</span>, j2<span class="op">::</span><span class="dt">Role</span>; </span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>                  n_simulations<span class="op">=</span><span class="fl">10</span>, </span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>                  max_rounds<span class="op">=</span><span class="fl">100</span>,</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>                  dmg_mat<span class="op">=</span><span class="fu">Dict</span>(), </span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>                  skill_usage<span class="op">=</span><span class="fu">Dict</span>())</span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>    results <span class="op">=</span> <span class="fu">Dict</span>(j1.nom <span class="op">=&gt;</span> <span class="fl">0</span>, j2.nom <span class="op">=&gt;</span> <span class="fl">0</span>)</span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>    pv_init_j1 <span class="op">=</span> j1.stats.PV</span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>    pv_init_j2 <span class="op">=</span> j2.stats.PV</span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> i <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span>n_simulations</span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Copies fraîches avec réinitialisation des PV</span></span>
+<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a>        fighter1 <span class="op">=</span> <span class="fu">deepcopy</span>(j1)</span>
+<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a>        fighter2 <span class="op">=</span> <span class="fu">deepcopy</span>(j2)</span>
+<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a>        fighter1.stats.PV <span class="op">=</span> pv_init_j1</span>
+<span id="cb13-15"><a href="#cb13-15" aria-hidden="true" tabindex="-1"></a>        fighter2.stats.PV <span class="op">=</span> pv_init_j2</span>
+<span id="cb13-16"><a href="#cb13-16" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb13-17"><a href="#cb13-17" aria-hidden="true" tabindex="-1"></a>        winner, logs <span class="op">=</span> <span class="fu">combat</span>(fighter1, fighter2; </span>
+<span id="cb13-18"><a href="#cb13-18" aria-hidden="true" tabindex="-1"></a>                             max_rounds<span class="op">=</span>max_rounds,</span>
+<span id="cb13-19"><a href="#cb13-19" aria-hidden="true" tabindex="-1"></a>                             dmg_mat<span class="op">=</span>dmg_mat, </span>
+<span id="cb13-20"><a href="#cb13-20" aria-hidden="true" tabindex="-1"></a>                             skill_usage<span class="op">=</span>skill_usage)</span>
+<span id="cb13-21"><a href="#cb13-21" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb13-22"><a href="#cb13-22" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> fighter1.stats.PV <span class="op">&gt;</span> <span class="fl">0</span></span>
+<span id="cb13-23"><a href="#cb13-23" aria-hidden="true" tabindex="-1"></a>            results[fighter1.nom] <span class="op">+=</span> <span class="fl">1</span></span>
+<span id="cb13-24"><a href="#cb13-24" aria-hidden="true" tabindex="-1"></a>        <span class="cf">else</span></span>
+<span id="cb13-25"><a href="#cb13-25" aria-hidden="true" tabindex="-1"></a>            results[fighter2.nom] <span class="op">+=</span> <span class="fl">1</span></span>
+<span id="cb13-26"><a href="#cb13-26" aria-hidden="true" tabindex="-1"></a>        <span class="cf">end</span></span>
+<span id="cb13-27"><a href="#cb13-27" aria-hidden="true" tabindex="-1"></a>    <span class="cf">end</span></span>
+<span id="cb13-28"><a href="#cb13-28" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb13-29"><a href="#cb13-29" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> results</span>
+<span id="cb13-30"><a href="#cb13-30" aria-hidden="true" tabindex="-1"></a><span class="kw">end</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p><strong>Réinitialisation complète</strong> : Utilisation de <code>deepcopy</code> pour éviter les effets de bord entre simulations. Les PV sont restaurés explicitement aux valeurs initiales.</p>
+<p><strong>Accumulation de statistiques</strong> : Les dictionnaires <code>dmg_mat</code> et <code>skill_usage</code> accumulent les données sur l’ensemble des simulations, permettant l’analyse des dégâts moyens par matchup et de la fréquence d’utilisation des compétences.</p>
+</section>
+<section id="résultats-déquilibrage" class="level2" data-number="5.2">
+<h2 data-number="5.2" class="anchored" data-anchor-id="résultats-déquilibrage"><span class="header-section-number">5.2</span> Résultats d’Équilibrage</h2>
+<section id="analyse-des-matchups" class="level3" data-number="5.2.1">
+<h3 data-number="5.2.1" class="anchored" data-anchor-id="analyse-des-matchups"><span class="header-section-number">5.2.1</span> Analyse des Matchups</h3>
+<p><strong>Mage vs Chevalier (100 combats)</strong> : - Victoires Mage : 72% (haute défense du Chevalier inefficace contre magie) - Dégâts moyens/tour : Mage 38.5, Chevalier 16.2 - Durée moyenne : 6.3 tours - Utilisation Fireball : 65% des tours du Mage - <strong>Conclusion</strong> : Domination magique claire, dégâts qui contournent l’armure</p>
+<p><strong>Archer vs Chevalier (100 combats)</strong> : - Victoires Archer : 51%, Chevalier : 49% - Durée moyenne : 8.7 tours - <strong>Conclusion</strong> : Matchup équilibré, vitesse de l’Archer compense la défense du Chevalier</p>
+<p><strong>Mage vs Archer (100 combats)</strong> : - Victoires Mage : 68% - Durée moyenne : 5.2 tours (combats rapides) - <strong>Conclusion</strong> : Fragilité de l’Archer face aux dégâts magiques explosifs</p>
+</section>
+<section id="impact-des-compétences" class="level3" data-number="5.2.2">
+<h3 data-number="5.2.2" class="anchored" data-anchor-id="impact-des-compétences"><span class="header-section-number">5.2.2</span> Impact des Compétences</h3>
+<p><strong>Fireball (Mage)</strong> : - Utilisée dans 65% des tours où PM disponibles - Dégâts moyens : 42 (vs 26 pour attaque normale) - Augmentation de +62% des dégâts - Coût : 10 PM (Mage en a 100, permet ~10 utilisations)</p>
+<p><strong>PowerStrike (Chevalier)</strong> : - Utilisée dans 18% des tours (probabilité 20% ajustée par disponibilité PM) - Dégâts moyens : 35 (vs 22 pour attaque normale) - Augmentation de +59% des dégâts - Coût : 8 PM (Chevalier en a 20, utilisation limitée)</p>
+</section>
+<section id="statistiques-globales" class="level3" data-number="5.2.3">
+<h3 data-number="5.2.3" class="anchored" data-anchor-id="statistiques-globales"><span class="header-section-number">5.2.3</span> Statistiques Globales</h3>
+<p>Sur 1000 simulations tous matchups confondus : - <strong>Durée moyenne des combats</strong> : 7.4 tours - <strong>Taux de critique global</strong> : 11.2% (proche des 10% théoriques) - <strong>PV moyens restants au vainqueur</strong> : 34 (victoires souvent serrées) - <strong>Rôle le plus dominant</strong> : Mage (62% de victoires tous adversaires confondus)</p>
+</section>
+</section>
+</section>
+<section id="visualisation-et-interface-utilisateur" class="level1" data-number="6">
+<h1 data-number="6"><span class="header-section-number">6</span> Visualisation et Interface Utilisateur</h1>
+<section id="interface-rshiny" class="level2" data-number="6.1">
+<h2 data-number="6.1" class="anchored" data-anchor-id="interface-rshiny"><span class="header-section-number">6.1</span> Interface RShiny</h2>
+<p>Une application RShiny interactive permet de contrôler et visualiser les simulations en temps réel. L’interface communique avec le backend Julia via des appels de fonctions exportées.</p>
+<p><strong>Fonctionnalités</strong> : - <strong>Sélection des combattants</strong> : Dropdowns pour choisir les deux rôles - <strong>Paramétrage des simulations</strong> : Slider pour le nombre de combats (1 à 1000) - <strong>Ajustement des stats</strong> : Sliders pour modifier PV, ATK, DEFENSE, etc. - <strong>Lancement des combats</strong> : Bouton déclenchant les simulations - <strong>Affichage des résultats</strong> : Taux de victoire, statistiques détaillées, logs de combats sélectionnés</p>
+<p><strong>Architecture technique</strong> : - Backend Julia pour les calculs (performances optimales) - Frontend R Shiny pour l’interface réactive - Communication via fichiers temporaires ou API REST selon configuration</p>
+</section>
+<section id="visualisations-bonito" class="level2" data-number="6.2">
+<h2 data-number="6.2" class="anchored" data-anchor-id="visualisations-bonito"><span class="header-section-number">6.2</span> Visualisations Bonito</h2>
+<p>Le package Bonito.jl permet de créer des visualisations interactives directement en Julia, intégrables dans des notebooks ou applications web.</p>
+<section id="graphiques-implémentés" class="level3" data-number="6.2.1">
+<h3 data-number="6.2.1" class="anchored" data-anchor-id="graphiques-implémentés"><span class="header-section-number">6.2.1</span> Graphiques Implémentés</h3>
+<p><strong>Évolution des PV</strong> : Graphique linéaire montrant les PV des deux combattants au fil des tours. Permet d’identifier les moments critiques (coups critiques, utilisation de compétences).</p>
+<p><strong>Diagramme de Sankey</strong> : Visualisation des flux de dégâts entre tous les matchups. Épaisseur des liens proportionnelle aux dégâts totaux infligés dans un sens.</p>
+<p><strong>Histogrammes de durée</strong> : Distribution du nombre de tours nécessaires pour terminer les combats. Révèle si certains matchups sont systématiquement longs ou courts.</p>
+<p><strong>Heatmap de dégâts</strong> : Matrice montrant les dégâts moyens par tour pour chaque combinaison attaquant/défenseur. Met en évidence les forces et faiblesses de chaque rôle.</p>
+<p><strong>Utilisation des compétences</strong> : Graphique en barres montrant la fréquence d’utilisation de chaque compétence. Aide à identifier les compétences sous-utilisées ou dominantes.</p>
+</section>
+<section id="export-des-données" class="level3" data-number="6.2.2">
+<h3 data-number="6.2.2" class="anchored" data-anchor-id="export-des-données"><span class="header-section-number">6.2.2</span> Export des Données</h3>
+<p>Les logs de combat sont exportables en CSV pour analyses externes ou archivage.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb14"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">open</span>(<span class="st">"combat_data.csv"</span>, <span class="st">"w"</span>) <span class="cf">do</span> io</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">println</span>(io, <span class="st">"round,actor,action,target,damage,actor_PV,target_PV"</span>)</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> log <span class="kw">in</span> logs</span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>        <span class="fu">println</span>(io, <span class="st">"</span><span class="sc">$</span>(log.round)<span class="st">,</span><span class="sc">$</span>(log.actor)<span class="st">,</span><span class="sc">$</span>(log.action)<span class="st">,"</span> <span class="op">*</span></span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>                    <span class="st">"</span><span class="sc">$</span>(log.target)<span class="st">,</span><span class="sc">$</span>(log.damage)<span class="st">,</span><span class="sc">$</span>(log.actor_PV)<span class="st">,</span><span class="sc">$</span>(log.target_PV)<span class="st">"</span>)</span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">end</span></span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a><span class="cf">end</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Les données peuvent ensuite être importées dans R, Python, Excel ou tout outil d’analyse pour des traitements personnalisés.</p>
+</section>
+</section>
+</section>
+<section id="apprentissage-et-évolution" class="level1" data-number="7">
+<h1 data-number="7"><span class="header-section-number">7</span> Apprentissage et Évolution</h1>
+<section id="progression-pédagogique" class="level2" data-number="7.1">
+<h2 data-number="7.1" class="anchored" data-anchor-id="progression-pédagogique"><span class="header-section-number">7.1</span> Progression Pédagogique</h2>
+<section id="phase-1-fondamentaux-semaines-1-2" class="level3" data-number="7.1.1">
+<h3 data-number="7.1.1" class="anchored" data-anchor-id="phase-1-fondamentaux-semaines-1-2"><span class="header-section-number">7.1.1</span> Phase 1 : Fondamentaux (Semaines 1-2)</h3>
+<p><strong>Concepts maîtrisés</strong> : Syntaxe de base, types primitifs (Int, Float, String), structures mutables vs immutables, fonctions simples, constructeurs, REPL et workflow interactif.</p>
+<p><strong>Réalisations</strong> : Structure <code>Stats</code>, rôles basiques sans comportements, premières fonctions de calcul.</p>
+<p><strong>Difficultés rencontrées</strong> : Compréhension de la différence entre <code>struct</code> et <code>mutable struct</code>, gestion des types dans les fonctions, erreurs de syntaxe fréquentes (<code>;</code> optionnels, <code>end</code> obligatoires).</p>
+</section>
+<section id="phase-2-construction-semaines-3-5" class="level3" data-number="7.1.2">
+<h3 data-number="7.1.2" class="anchored" data-anchor-id="phase-2-construction-semaines-3-5"><span class="header-section-number">7.1.2</span> Phase 2 : Construction (Semaines 3-5)</h3>
+<p><strong>Concepts maîtrisés</strong> : Hiérarchie de types avec <code>abstract type</code>, multiple dispatch (signatures de base), distribution de probabilités (<code>Distributions.jl</code>), organisation en modules, gestion de <code>using</code> et <code>export</code>.</p>
+<p><strong>Réalisations</strong> : Système de combat fonctionnel, mécaniques d’attaque avec aléatoire, fonction <code>compute_damage</code> complète, premiers tests de combats.</p>
+<p><strong>Difficultés rencontrées</strong> : Compréhension du multiple dispatch (paradigme différent de la POO), gestion de l’ordre des <code>include()</code> dans le module principal, références vs copies (mutation non intentionnelle).</p>
+</section>
+<section id="phase-3-sophistication-semaines-6-8" class="level3" data-number="7.1.3">
+<h3 data-number="7.1.3" class="anchored" data-anchor-id="phase-3-sophistication-semaines-6-8"><span class="header-section-number">7.1.3</span> Phase 3 : Sophistication (Semaines 6-8)</h3>
+<p><strong>Concepts maîtrisés</strong> : Multiple dispatch avancé (spécialisations multiples), composition d’objets (effets dans vecteurs), tests unitaires avec <code>Test.jl</code>, <code>deepcopy</code> pour isoler les états, extension de fonctions de <code>Base</code> (surcharge de <code>rand</code>).</p>
+<p><strong>Réalisations</strong> : Système d’effets de statut complet, compétences spécialisées par rôle, moteur de combat avec logs détaillés, tests unitaires exhaustifs.</p>
+<p><strong>Difficultés rencontrées</strong> : Gestion des effets temporaires (décrémentation, suppression), typage flexible des vecteurs d’effets (<code>Vector{Any}</code> nécessaire), reproduction des bugs dans les tests (seed aléatoire).</p>
+</section>
+<section id="phase-4-optimisation-et-visualisation-semaines-9-12" class="level3" data-number="7.1.4">
+<h3 data-number="7.1.4" class="anchored" data-anchor-id="phase-4-optimisation-et-visualisation-semaines-9-12"><span class="header-section-number">7.1.4</span> Phase 4 : Optimisation et Visualisation (Semaines 9-12)</h3>
+<p><strong>Concepts maîtrisés</strong> : Simulations Monte Carlo, accumulation de statistiques dans dictionnaires, export CSV, intégration avec RShiny (interop Julia-R), création de visualisations avec Bonito, analyse de performances.</p>
+<p><strong>Réalisations</strong> : Système de simulation complète avec statistiques, interface RShiny interactive, graphiques Bonito variés, rapport complet en Quarto.</p>
+<p><strong>Difficultés rencontrées</strong> : Communication Julia-R (sérialisation des données), gestion de la mémoire pour 1000+ simulations, choix des visualisations pertinentes.</p>
+</section>
+</section>
+<section id="apports-du-cours-cqls" class="level2" data-number="7.2">
+<h2 data-number="7.2" class="anchored" data-anchor-id="apports-du-cours-cqls"><span class="header-section-number">7.2</span> Apports du Cours CQLS</h2>
+<p>Le cours CQLS (<a href="https://cqls.dyndoc.fr/julia">https://cqls.dyndoc.fr/julia</a>) a été notre ressource principale d’apprentissage. Voici les concepts directement appliqués de ce cours à notre projet.</p>
+<section id="types-et-dispatch" class="level3" data-number="7.2.1">
+<h3 data-number="7.2.1" class="anchored" data-anchor-id="types-et-dispatch"><span class="header-section-number">7.2.1</span> Types et Dispatch</h3>
+<p><strong>Du cours</strong> : Explication claire de la hiérarchie de types, distinction <code>abstract type</code> vs structures concrètes, principe du multiple dispatch avec exemples progressifs.</p>
+<p><strong>Application</strong> : Architecture complète du projet basée sur cette hiérarchie (<code>Role</code>, <code>StatusEffect</code>, <code>Skill</code>), utilisation intensive du multiple dispatch pour les attaques et compétences, extension de <code>Base.show()</code> pour affichage personnalisé des rôles.</p>
+</section>
+<section id="structures-de-données" class="level3" data-number="7.2.2">
+<h3 data-number="7.2.2" class="anchored" data-anchor-id="structures-de-données"><span class="header-section-number">7.2.2</span> Structures de Données</h3>
+<p><strong>Du cours</strong> : Utilisation de <code>Dict</code> pour stocker des paires clé-valeur, manipulation de <code>Vector</code> et opérations communes, choix entre mutabilité et immutabilité.</p>
+<p><strong>Application</strong> : Dictionnaires <code>dmg_mat</code> et <code>skill_usage</code> pour accumuler les statistiques, vecteur <code>effects</code> pour stocker les effets actifs, vecteur <code>logs</code> pour l’historique des actions.</p>
+</section>
+<section id="écosystème-et-packages" class="level3" data-number="7.2.3">
+<h3 data-number="7.2.3" class="anchored" data-anchor-id="écosystème-et-packages"><span class="header-section-number">7.2.3</span> Écosystème et Packages</h3>
+<p><strong>Du cours</strong> : Introduction aux packages standards (<code>Test</code>, <code>Random</code>), utilisation de <code>Distributions.jl</code> pour l’aléatoire avancé, organisation en modules avec <code>using</code> et <code>export</code>.</p>
+<p><strong>Application</strong> : Module <code>RPGSimulator</code> structuré avec exports explicites, utilisation de <code>Normal(μ, σ)</code> pour les dégâts, <code>Random.seed!()</code> pour la reproductibilité des tests, <code>Test.@testset</code> pour l’organisation des tests.</p>
+</section>
+<section id="bonnes-pratiques" class="level3" data-number="7.2.4">
+<h3 data-number="7.2.4" class="anchored" data-anchor-id="bonnes-pratiques"><span class="header-section-number">7.2.4</span> Bonnes Pratiques</h3>
+<p><strong>Du cours</strong> : Constructeurs par défaut avec arguments nommés (<code>kwargs</code>), documentation avec docstrings, séparation du code en fichiers thématiques, workflow REPL → fichier → module.</p>
+<p><strong>Application</strong> : Constructeurs comme <code>Mage(; nom="Gandalf")</code>, organisation modulaire en 7 fichiers, développement itératif avec tests intermédiaires dans le REPL.</p>
+</section>
+</section>
+<section id="défis-techniques-et-solutions" class="level2" data-number="7.3">
+<h2 data-number="7.3" class="anchored" data-anchor-id="défis-techniques-et-solutions"><span class="header-section-number">7.3</span> Défis Techniques et Solutions</h2>
+<section id="gestion-de-la-mutabilité" class="level3" data-number="7.3.1">
+<h3 data-number="7.3.1" class="anchored" data-anchor-id="gestion-de-la-mutabilité"><span class="header-section-number">7.3.1</span> Gestion de la Mutabilité</h3>
+<p><strong>Problème</strong> : Lors des simulations, les modifications sur un personnage affectaient les simulations suivantes.</p>
+<p><strong>Solution</strong> : Utilisation systématique de <code>deepcopy()</code> pour créer des copies indépendantes avant chaque combat, réinitialisation explicite des PV aux valeurs initiales.</p>
+</section>
+<section id="typage-flexible-des-effets" class="level3" data-number="7.3.2">
+<h3 data-number="7.3.2" class="anchored" data-anchor-id="typage-flexible-des-effets"><span class="header-section-number">7.3.2</span> Typage Flexible des Effets</h3>
+<p><strong>Problème</strong> : Nécessité de stocker différents types d’effets (<code>Poison</code>, <code>Shield</code>, etc.) dans le même vecteur.</p>
+<p><strong>Solution</strong> : Déclaration <code>effects::Vector{Any}</code> permettant le polymorphisme, avec vérification de type via <code>isa</code> lors de l’application.</p>
+</section>
+<section id="organisation-modulaire-1" class="level3" data-number="7.3.3">
+<h3 data-number="7.3.3" class="anchored" data-anchor-id="organisation-modulaire-1"><span class="header-section-number">7.3.3</span> Organisation Modulaire</h3>
+<p><strong>Problème</strong> : Dépendances circulaires entre fichiers, ordre d’inclusion critique.</p>
+<p><strong>Solution</strong> : Hiérarchie claire des <code>include()</code> dans <code>RPGSimulator.jl</code> : types de base d’abord (<code>roles.jl</code>), puis dépendances (<code>effets.jl</code>), enfin fonctions de haut niveau (<code>combat.jl</code>, <code>simulation.jl</code>).</p>
+</section>
+<section id="reproductibilité-des-tests" class="level3" data-number="7.3.4">
+<h3 data-number="7.3.4" class="anchored" data-anchor-id="reproductibilité-des-tests"><span class="header-section-number">7.3.4</span> Reproductibilité des Tests</h3>
+<p><strong>Problème</strong> : Tests aléatoires échouant sporadiquement rendant le débogage difficile.</p>
+<p><strong>Solution</strong> : Fixation de la seed avec <code>Random.seed!(1234)</code> au début des tests, permettant des exécutions déterministes et reproductibles.</p>
+</section>
+</section>
+</section>
+<section id="perspectives-damélioration" class="level1" data-number="8">
+<h1 data-number="8"><span class="header-section-number">8</span> Perspectives d’Amélioration</h1>
+<section id="extensions-fonctionnelles" class="level2" data-number="8.1">
+<h2 data-number="8.1" class="anchored" data-anchor-id="extensions-fonctionnelles"><span class="header-section-number">8.1</span> Extensions Fonctionnelles</h2>
+<section id="nouveaux-rôles-et-compétences" class="level3" data-number="8.1.1">
+<h3 data-number="8.1.1" class="anchored" data-anchor-id="nouveaux-rôles-et-compétences"><span class="header-section-number">8.1.1</span> Nouveaux Rôles et Compétences</h3>
+<p><strong>Voleur</strong> : Rôle orienté vitesse et esquive avec compétence <code>Backstab</code> (dégâts accrus si frappe en premier) et <code>Dodge</code> (chance d’éviter une attaque).</p>
+<p><strong>Paladin</strong> : Rôle hybride tank/soin avec <code>HolyStrike</code> (dégâts + petit soin personnel) et <code>Blessing</code> (buff de défense temporaire).</p>
+<p><strong>Assassin</strong> : Haute attaque, PV faibles, compétence <code>Poison Blade</code> (applique effet Poison) et <code>Shadow Step</code> (double frappe avec pénalité PM).</p>
+</section>
+<section id="mécaniques-avancées" class="level3" data-number="8.1.2">
+<h3 data-number="8.1.2" class="anchored" data-anchor-id="mécaniques-avancées"><span class="header-section-number">8.1.2</span> Mécaniques Avancées</h3>
+<p><strong>Combats en équipe</strong> : Extension à 3v3 ou 5v5 avec gestion des cibles multiples, compétences de zone (AOE), buffs d’équipe et synergie entre rôles.</p>
+<p><strong>Équipement</strong> : Système d’items modifiant les stats (armes augmentent ATK, armures augmentent DEFENSE, accessoires donnent effets passifs).</p>
+<p><strong>Système d’expérience</strong> : Montée de niveau après victoires, allocation de points de stats, déblocage de nouvelles compétences.</p>
+<p><strong>Terrain et environnement</strong> : Modificateurs liés au terrain (forêt : +vitesse pour Archer, château : +défense pour Chevalier), effets météo (pluie : -PM pour Mage).</p>
+</section>
+</section>
+<section id="optimisations-techniques" class="level2" data-number="8.2">
+<h2 data-number="8.2" class="anchored" data-anchor-id="optimisations-techniques"><span class="header-section-number">8.2</span> Optimisations Techniques</h2>
+<section id="performance" class="level3" data-number="8.2.1">
+<h3 data-number="8.2.1" class="anchored" data-anchor-id="performance"><span class="header-section-number">8.2.1</span> Performance</h3>
+<p><strong>Parallélisation</strong> : Utilisation de <code>@threads</code> pour exécuter les simulations en parallèle sur plusieurs cœurs CPU, ou <code>pmap</code> pour distribution sur un cluster.</p>
+<p><strong>GPU computing</strong> : Pour simulations massives (10000+), portage des calculs sur GPU via <code>CUDA.jl</code> ou <code>AMDGPU.jl</code>.</p>
+<p><strong>Profilage</strong> : Analyse avec <code>@profile</code> et <code>ProfileView.jl</code> pour identifier les fonctions critiques, optimisation ciblée des hot paths.</p>
+</section>
+<section id="qualité-du-code" class="level3" data-number="8.2.2">
+<h3 data-number="8.2.2" class="anchored" data-anchor-id="qualité-du-code"><span class="header-section-number">8.2.2</span> Qualité du Code</h3>
+<p><strong>Documentation</strong> : Ajout de docstrings complets pour toutes les fonctions exportées, génération automatique de documentation avec <code>Documenter.jl</code>.</p>
+<p><strong>CI/CD</strong> : Mise en place de GitHub Actions pour tests automatiques à chaque commit, vérification de la couverture de code avec <code>Coverage.jl</code>.</p>
+<p><strong>Benchmarking</strong> : Suivi des performances dans le temps avec <code>BenchmarkTools.jl</code>, alertes en cas de régression.</p>
+<p><strong>Refactoring</strong> : Simplification des signatures complexes, extraction de constantes magiques en paramètres configurables, amélioration de la lisibilité.</p>
+</section>
+</section>
+<section id="intelligence-artificielle" class="level2" data-number="8.3">
+<h2 data-number="8.3" class="anchored" data-anchor-id="intelligence-artificielle"><span class="header-section-number">8.3</span> Intelligence Artificielle</h2>
+<section id="ia-pour-les-combattants" class="level3" data-number="8.3.1">
+<h3 data-number="8.3.1" class="anchored" data-anchor-id="ia-pour-les-combattants"><span class="header-section-number">8.3.1</span> IA pour les Combattants</h3>
+<p><strong>Algorithmes de décision</strong> : Remplacement de <code>choose_action</code> aléatoire par des arbres de décision basés sur l’état du combat (PV restants, PM disponibles, effets actifs).</p>
+<p><strong>Minimax et Alpha-Beta</strong> : Pour combats déterministes (sans aléatoire), recherche de la stratégie optimale par exploration de l’arbre de jeu.</p>
+<p><strong>Monte Carlo Tree Search (MCTS)</strong> : Pour combats avec aléatoire, simulation de milliers de parties potentielles pour choisir l’action ayant le meilleur taux de victoire.</p>
+<p><strong>Apprentissage par renforcement</strong> : Entraînement de réseaux de neurones (via <code>Flux.jl</code>) pour apprendre des stratégies optimales par auto-jeu.</p>
+</section>
+</section>
+</section>
+<section id="conclusion" class="level1" data-number="9">
+<h1 data-number="9"><span class="header-section-number">9</span> Conclusion</h1>
+<section id="réalisations" class="level2" data-number="9.1">
+<h2 data-number="9.1" class="anchored" data-anchor-id="réalisations"><span class="header-section-number">9.1</span> Réalisations</h2>
+<p>En l’espace de trois mois, notre équipe est passée d’une <strong>connaissance nulle de Julia</strong> à la production d’un projet complet et fonctionnel. Le <strong>RPGSimulator</strong> intègre plus de 1200 lignes de code structuré, 12 suites de tests unitaires avec 100% de réussite, un système d’effets composables, des simulations massives et des visualisations interactives.</p>
+<p>Le projet démontre une maîtrise progressive des concepts fondamentaux (types, fonctions, modules) jusqu’aux techniques avancées (multiple dispatch sophistiqué, tests reproductibles, intégration multi-langage). L’architecture modulaire permet une extension facile : ajout de nouveaux rôles, compétences ou effets sans modifier le code existant.</p>
+</section>
+<section id="apprentissages-clés" class="level2" data-number="9.2">
+<h2 data-number="9.2" class="anchored" data-anchor-id="apprentissages-clés"><span class="header-section-number">9.2</span> Apprentissages Clés</h2>
+<p><strong>Paradigme Julia</strong> : Compréhension profonde du multiple dispatch comme alternative à la POO classique, appréciation des performances natives de Julia, maîtrise de l’écosystème de packages.</p>
+<p><strong>Méthodologie de développement</strong> : Approche itérative (prototypage → structuration → tests → refactoring), importance des tests dès le début, valeur de la reproductibilité scientifique.</p>
+<p><strong>Compétences transférables</strong> : Pensée en termes de composition plutôt qu’héritage, gestion rigoureuse de la mutabilité, documentation et tests comme piliers de la qualité logicielle.</p>
+</section>
+<section id="remerciements" class="level2" data-number="9.3">
+<h2 data-number="9.3" class="anchored" data-anchor-id="remerciements"><span class="header-section-number">9.3</span> Remerciements</h2>
+<p>Ce projet n’aurait pas été possible sans le <strong>cours CQLS</strong> (<a href="https://cqls.dyndoc.fr/julia">https://cqls.dyndoc.fr/julia</a>) qui nous a fourni une base solide et des exemples concrets. Les explications progressives et la documentation de référence ont été des ressources inestimables pour notre apprentissage autonome.</p>
+<p>Nous remercions également la communauté Julia pour l’excellente documentation officielle, les packages de qualité et les forums d’entraide qui ont répondu à nos questions techniques.</p>
+<hr>
+<p><strong>Équipe RPGSimulator</strong><br>
+Maxime, Jed, Hussin, Simon<br>
+Septembre - Décembre 2025</p>
+</section>
+</section>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>
