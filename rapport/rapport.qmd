@@ -238,7 +238,7 @@ end
 
 ## Système d'Effets de Statut
 
-Les effets de statut ajoutent de la profondeur stratégique au combat. Chaque effet possède une durée (`remaining`) qui décrémente à chaque tour jusqu'à expiration.
+Les effets de statut ajoutent un point stratégique au combat. Chaque effet possède une durée (`remaining`) qui décrémente à chaque tour jusqu'à expiration.
 
 ### Types d'Effets Implémentés
 
@@ -248,7 +248,7 @@ Les effets de statut ajoutent de la profondeur stratégique au combat. Chaque ef
 
 **Shield** : Réduit les dégâts entrants de `flat_block` points à chaque tour. Exemple : `Shield(2, 15)` bloque 15 dégâts pendant 2 tours.
 
-**Stun** : Empêche le personnage d'agir pendant `remaining` tours. Puissant effet de contrôle.
+**Stun** : Empêche le personnage d'agir pendant `remaining` tours. Puissant effet de contrôle l'adversaire se retrouve étourdi.
 
 **Regen** : Restaure `heal_per_turn` PV à chaque tour. Exemple : `Regen(3, 10)` soigne 10 PV pendant 3 tours.
 
@@ -306,7 +306,7 @@ function apply_effects_round!(c::Role)
 end
 ```
 
-**Composition d'effets** : Un personnage peut avoir plusieurs effets simultanés qui se cumulent. Par exemple, `Poison(2,5) + Bleed(2,3) + Regen(2,10)` produit un bilan net de -8+10 = +2 PV par tour.
+**Composition d'effets** : Un personnage peut avoir plusieurs effets simultanés qui se cumulent. Par exemple, `Poison(2,5) + Bleed(2,3) + Regen(2,10)` produit un bilan net de -8+10 = +2 PV par tour. Le joueur qui reçoit ces effets va donc regagner 2 points de vie par tour malgré le poison et le saignement.
 
 ## Moteur de Combat Tour par Tour
 
@@ -315,8 +315,8 @@ Le moteur de combat orchestre l'ensemble des mécaniques dans une boucle structu
 ### Déroulement d'un Tour
 
 1. **Application des effets de statut** : Calcul de shield, stun, regen et dégâts pour les deux combattants.
-2. **Détermination de l'ordre** : Le personnage avec la plus haute VITESSE agit en premier.
-3. **Actions séquentielles** : Chaque combattant exécute son action (attaque ou compétence) sauf s'il est étourdi.
+2. **Détermination de l'ordre** : Le personnage avec la plus haute vitesse agit en premier.
+3. **Actions réalisées** : Chaque combattant exécute son action (attaque ou compétence) sauf s'il est étourdi.
 4. **Choix d'action** : Fonction `choose_action` détermine le comportement (attaque normale vs compétence).
 5. **Logging** : Enregistrement de toutes les actions dans un tableau de logs (`AttackLog`).
 6. **Vérification de fin** : Combat terminé si un combattant atteint 0 PV ou si `max_rounds` est atteint.
@@ -337,7 +337,7 @@ choose_action(actor::Chevalier, defender::Role) =
         (:skill, PowerStrike(8, 20)) : (:attack, nothing)
 ```
 
-Cette séparation permet d'implémenter facilement des IA plus sophistiquées par rôle sans modifier le moteur de combat.
+Cette séparation permet de définir facilement un comportement différent pour chaque rôle, sans toucher au moteur de combat.
 
 ### Logging des Combats
 
@@ -353,13 +353,13 @@ struct AttackLog
 end
 ```
 
-Chaque action génère un log permettant l'analyse post-combat, la génération de graphiques temporels et le débogage. Ces logs sont exportables en CSV pour traitement externe (RShiny, analyses statistiques).
+Chaque action génère un log permettant l'analyse post-combat. Ces logs sont exportables pour un traitement externe (RShiny, analyses statistiques).
 
 # Tests et Validation
 
 ## Stratégie de Test
 
-La validation du code s'appuie sur 12 suites de tests couvrant l'ensemble des fonctionnalités critiques. Les tests utilisent le module `Test.jl` de Julia et fixent une seed aléatoire (`Random.seed!(1234)`) pour garantir la reproductibilité.
+La validation du code s'appuie sur 12 suites de tests couvrant l'ensemble des fonctionnalités de notre projet. Les tests utilisent le module `Test.jl` de Julia et fixent une seed aléatoire (`Random.seed!(1234)`) pour garantir la reproductibilité.
 
 ### Couverture des Tests
 
@@ -440,13 +440,13 @@ end
 
 ## Résultats et Fiabilité
 
-Les 12 suites de tests passent avec succès (100% de réussite), validant la cohérence mathématique, la gestion correcte des ressources, l'application fidèle des effets et la stabilité du moteur de combat. La reproductibilité est garantie par la fixation de la seed aléatoire, permettant des tests déterministes malgré l'aspect probabiliste du système.
+Les 12 suites de tests passent avec succès (100% de réussite), validant la cohérence de nos fonctions, l'application fidèle des effets et la stabilité du moteur de combat. La reproductibilité est garantie par la fixation de la seed aléatoire.
 
 # Simulations et Analyse
 
 ## Méthodologie de Simulation
 
-Les simulations utilisent une approche Monte Carlo : exécution répétée du même combat avec réinitialisation complète entre chaque itération. La fonction `Base.rand` est étendue pour accepter deux personnages et un nombre de simulations.
+Les simulations sont des exécutions répétées du même combat avec réinitialisation complète entre chaque itération. La fonction `Base.rand` est étendue pour accepter deux personnages et un nombre de simulations.
 
 ```julia
 function Base.rand(j1::Role, j2::Role; 
@@ -506,27 +506,20 @@ end
 - Durée moyenne : 5.2 tours (combats rapides)
 - **Conclusion** : Fragilité de l'Archer face aux dégâts magiques explosifs
 
+Le gobelin, également présent est le personnage le plus faible comme mentionné dans la partie "Rôles".
+
 ### Impact des Compétences
 
 **Fireball (Mage)** :
 - Utilisée dans 65% des tours où PM disponibles
 - Dégâts moyens : 42 (vs 26 pour attaque normale)
-- Augmentation de +62% des dégâts
 - Coût : 10 PM (Mage en a 100, permet ~10 utilisations)
 
 **PowerStrike (Chevalier)** :
 - Utilisée dans 18% des tours (probabilité 20% ajustée par disponibilité PM)
 - Dégâts moyens : 35 (vs 22 pour attaque normale)
-- Augmentation de +59% des dégâts
 - Coût : 8 PM (Chevalier en a 20, utilisation limitée)
 
-### Statistiques Globales
-
-Sur 1000 simulations tous matchups confondus :
-- **Durée moyenne des combats** : 7.4 tours
-- **Taux de critique global** : 11.2% (proche des 10% théoriques)
-- **PV moyens restants au vainqueur** : 34 (victoires souvent serrées)
-- **Rôle le plus dominant** : Mage (62% de victoires tous adversaires confondus)
 
 # Visualisation et Interface Utilisateur
 
@@ -535,11 +528,11 @@ Sur 1000 simulations tous matchups confondus :
 Une application RShiny interactive permet de contrôler et visualiser les simulations en temps réel. L'interface communique avec le backend Julia via des appels de fonctions exportées.
 
 **Fonctionnalités** :
-- **Sélection des combattants** : Dropdowns pour choisir les deux rôles
-- **Paramétrage des simulations** : Slider pour le nombre de combats (1 à 1000)
-- **Ajustement des stats** : Sliders pour modifier PV, ATK, DEFENSE, etc.
-- **Lancement des combats** : Bouton déclenchant les simulations
-- **Affichage des résultats** : Taux de victoire, statistiques détaillées, logs de combats sélectionnés
+- **Sélection des combattants** : L'utilisateur peut choisir 2 personnages qui s'affrontent.
+- **Paramétrage des simulations** : Possibilité de choisir le nombre de simulations.
+- **Ajustement des stats** : Modification des PV, ATK, DEFENSE, etc.
+- **Lancement des combats** : Bouton déclenchant les simulations.
+- **Affichage des résultats** : Trois onglets disponibles, la partie résumé des combats, évolution des points de vie au fil des tours et des dégâts d'attaque.
 
 **Architecture technique** :
 - Backend Julia pour les calculs (performances optimales)
