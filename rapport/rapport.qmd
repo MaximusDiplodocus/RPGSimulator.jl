@@ -528,10 +528,10 @@ Le gobelin, également présent est le personnage le plus faible comme mentionn�
 Une application RShiny interactive permet de contrôler et visualiser des **combats** en temps réel. L'interface communique avec le backend Julia via des appels de fonctions exportées.
 
 **Fonctionnalités** :
-- **Sélection des combattants** : L'utilisateur peut choisir 2 personnages qui s'affrontent. L'utilisateur à la possibilité de choisir un rôle et de lui donner un nom.
-- **Ajustement des stats** : Modification des PV, ATK, DEFENSE, etc. En cochant la case "Personnaliser les statistiques".
-- **Lancement des combats** : Bouton déclenchant les simulations.
-- **Affichage des résultats** : Trois onglets disponibles, la partie résumé du combat (détails) ou l'on retrouve le combattant qui attaque, celui qui subit l'attaque (cible), les points de vie de l'attaquant et de la cible, mais aussi l'action (si l'attaque est l'utilisation d'une compétence ou d'une attaque basique). On retrouve aussi l'évolution des points de vieet des dégâts d'attaque au fil des tours (Analyse). Enfin, notre application RShiny nous permet de connaître le vainqueur du combat (Résultat).
+**Sélection des combattants** : L'utilisateur peut choisir 2 personnages qui s'affrontent. L'utilisateur à la possibilité de choisir un rôle et de lui donner un nom.
+**Ajustement des stats** : Modification des PV, ATK, DEFENSE, etc. En cochant la case "Personnaliser les statistiques".
+**Lancement des combats** : Bouton déclenchant les simulations.
+**Affichage des résultats** : Trois onglets disponibles, la partie résumé du combat (détails) ou l'on retrouve le combattant qui attaque, celui qui subit l'attaque (cible), les points de vie de l'attaquant et de la cible, mais aussi l'action (si l'attaque est l'utilisation d'une compétence ou d'une attaque basique). On retrouve aussi l'évolution des points de vieet des dégâts d'attaque au fil des tours (Analyse). Enfin, notre application RShiny nous permet de connaître le vainqueur du combat (Résultat).
 
 **Architecture technique** :
 - Backend Julia pour les calculs (performances optimales).
