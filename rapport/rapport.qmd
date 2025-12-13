@@ -18,7 +18,7 @@ format:
 
 ## Contexte du Projet
 
-Ce rapport présente le développement complet de notre projet : **RPGSimulator**, un simulateur de combat RPG tour par tour entièrement réalisé en Julia. Notre équipe n'avait aucune connaissance préalable du langage Julia au démarrage. L'apprentissage s'est effectué de manière autonome en s'appuyant principalement sur le cours CQLS ([https://cqls.dyndoc.fr/julia](https://cqls.dyndoc.fr/julia)) et avec l'aide de M.Drouilhet, notre enseignant pour ce projet.
+Ce rapport présente le développement complet de notre projet : **RPGSimulator**, un simulateur de combat RPG tour par tour entièrement réalisé en Julia. Notre équipe n'avait aucune connaissance préalable du langage Julia au démarrage. L'apprentissage s'est effectué de manière autonome en s'appuyant principalement sur le cours CQLS ([https://cqls.dyndoc.fr/julia]) et avec l'aide de M.Drouilhet, notre enseignant pour ce projet.
 
 L'objectif était double : maîtriser les fondamentaux et les notions plus avancées de Julia (notamment le **multiple dispatch**) tout en construisant un projet fonctionnel, structuré et extensible. Le résultat est un moteur de combat intégrant un système de rôles, de compétences spécialisées, d'effets de statut, de simulations et de visualisations interactives.
 
@@ -525,57 +525,35 @@ Le gobelin, également présent est le personnage le plus faible comme mentionn�
 
 ## Interface RShiny
 
-Une application RShiny interactive permet de contrôler et visualiser les simulations en temps réel. L'interface communique avec le backend Julia via des appels de fonctions exportées.
+Une application RShiny interactive permet de contrôler et visualiser des **combats** en temps réel. L'interface communique avec le backend Julia via des appels de fonctions exportées.
 
 **Fonctionnalités** :
-- **Sélection des combattants** : L'utilisateur peut choisir 2 personnages qui s'affrontent.
-- **Paramétrage des simulations** : Possibilité de choisir le nombre de simulations.
-- **Ajustement des stats** : Modification des PV, ATK, DEFENSE, etc.
+- **Sélection des combattants** : L'utilisateur peut choisir 2 personnages qui s'affrontent. L'utilisateur à la possibilité de choisir un rôle et de lui donner un nom.
+- **Ajustement des stats** : Modification des PV, ATK, DEFENSE, etc. En cochant la case "Personnaliser les statistiques".
 - **Lancement des combats** : Bouton déclenchant les simulations.
-- **Affichage des résultats** : Trois onglets disponibles, la partie résumé des combats, évolution des points de vie au fil des tours et des dégâts d'attaque.
+- **Affichage des résultats** : Trois onglets disponibles, la partie résumé du combat (détails) ou l'on retrouve le combattant qui attaque, celui qui subit l'attaque (cible), les points de vie de l'attaquant et de la cible, mais aussi l'action (si l'attaque est l'utilisation d'une compétence ou d'une attaque basique). On retrouve aussi l'évolution des points de vieet des dégâts d'attaque au fil des tours (Analyse). Enfin, notre application RShiny nous permet de connaître le vainqueur du combat (Résultat).
 
 **Architecture technique** :
-- Backend Julia pour les calculs (performances optimales)
-- Frontend R Shiny pour l'interface réactive
-- Communication via fichiers temporaires ou API REST selon configuration
+- Backend Julia pour les calculs (performances optimales).
+- Frontend RShiny pour l'interface réactive avec l'utilisation du package Rulia pour utiliser nos fonctions du projet codées en Julia.
 
 ## Visualisations Bonito
 
-Le package Bonito.jl permet de créer des visualisations interactives directement en Julia, intégrables dans des notebooks ou applications web.
+Notre fichier Bonito.md permet également de créer des visualisations interactives mais directement en Julia.
 
 ### Graphiques Implémentés
 
-**Évolution des PV** : Graphique linéaire montrant les PV des deux combattants au fil des tours. Permet d'identifier les moments critiques (coups critiques, utilisation de compétences).
-
-**Diagramme de Sankey** : Visualisation des flux de dégâts entre tous les matchups. Épaisseur des liens proportionnelle aux dégâts totaux infligés dans un sens.
-
-**Histogrammes de durée** : Distribution du nombre de tours nécessaires pour terminer les combats. Révèle si certains matchups sont systématiquement longs ou courts.
-
-**Heatmap de dégâts** : Matrice montrant les dégâts moyens par tour pour chaque combinaison attaquant/défenseur. Met en évidence les forces et faiblesses de chaque rôle.
-
-**Utilisation des compétences** : Graphique en barres montrant la fréquence d'utilisation de chaque compétence. Aide à identifier les compétences sous-utilisées ou dominantes.
-
-### Export des Données
-
-Les logs de combat sont exportables en CSV pour analyses externes ou archivage.
-
-```julia
-open("combat_data.csv", "w") do io
-    println(io, "round,actor,action,target,damage,actor_PV,target_PV")
-    for log in logs
-        println(io, "$(log.round),$(log.actor),$(log.action)," *
-                    "$(log.target),$(log.damage),$(log.actor_PV),$(log.target_PV)")
-    end
-end
-```
-
-Les données peuvent ensuite être importées dans R, Python, Excel ou tout outil d'analyse pour des traitements personnalisés.
+**Résumé des combats** : Nous pouvons visualiser pour n combats qui est le vainqueur.
+**Points de vie par round** : Tableau qui résume l'évolution des PV des deux combattants tour par tour.
+**Défense par round** : Tableau qui résume l'évolution de la défense des deux combattants tour par tour.
+**Graphique des PV par round** : Evolution graphique des points de vie des deux combattants par tour.
+**Simulation des PV interactive** : Possibilité d'ajuster les stats des deux combattants, PV, Attaque et Défense, cela modifie le graphique qui représente les points de vie tour par tour. Si par exemple, on augmente fortement les stats d'attaques du combattant 1, le combattant 2 va voir ses points de vie diminuer drastiquement.
 
 # Apprentissage et Évolution
 
 ## Progression Pédagogique
 
-### Phase 1 : Fondamentaux (Semaines 1-2)
+### Phase 1 : Fondamentaux
 
 **Concepts maîtrisés** : Syntaxe de base, types primitifs (Int, Float, String), structures mutables vs immutables, fonctions simples, constructeurs, REPL et workflow interactif.
 
@@ -583,33 +561,33 @@ Les données peuvent ensuite être importées dans R, Python, Excel ou tout outi
 
 **Difficultés rencontrées** : Compréhension de la différence entre `struct` et `mutable struct`, gestion des types dans les fonctions, erreurs de syntaxe fréquentes (`;` optionnels, `end` obligatoires).
 
-### Phase 2 : Construction (Semaines 3-5)
+### Phase 2 : Construction
 
-**Concepts maîtrisés** : Hiérarchie de types avec `abstract type`, multiple dispatch (signatures de base), distribution de probabilités (`Distributions.jl`), organisation en modules, gestion de `using` et `export`.
+**Concepts maîtrisés** : Hiérarchie de types avec `abstract type`, multiple dispatch (signatures de base), distribution de probabilités (`Distributions.jl`), organisation en modules.
 
 **Réalisations** : Système de combat fonctionnel, mécaniques d'attaque avec aléatoire, fonction `compute_damage` complète, premiers tests de combats.
 
-**Difficultés rencontrées** : Compréhension du multiple dispatch (paradigme différent de la POO), gestion de l'ordre des `include()` dans le module principal, références vs copies (mutation non intentionnelle).
+**Difficultés rencontrées** : Compréhension du multiple dispatch, gestion de l'ordre des `include()` dans le module principal.
 
-### Phase 3 : Sophistication (Semaines 6-8)
+### Phase 3 : Amélioration technique du projet
 
-**Concepts maîtrisés** : Multiple dispatch avancé (spécialisations multiples), composition d'objets (effets dans vecteurs), tests unitaires avec `Test.jl`, `deepcopy` pour isoler les états, extension de fonctions de `Base` (surcharge de `rand`).
+**Concepts maîtrisés** : Multiple dispatch avancé (spécialisations multiples), composition d'objets (effets dans vecteurs), tests unitaires avec `Test.jl`, `deepcopy` pour isoler les états, extension de fonctions de `Base`.
 
 **Réalisations** : Système d'effets de statut complet, compétences spécialisées par rôle, moteur de combat avec logs détaillés, tests unitaires exhaustifs.
 
 **Difficultés rencontrées** : Gestion des effets temporaires (décrémentation, suppression), typage flexible des vecteurs d'effets (`Vector{Any}` nécessaire), reproduction des bugs dans les tests (seed aléatoire).
 
-### Phase 4 : Optimisation et Visualisation (Semaines 9-12)
+### Phase 4 : Optimisation et Visualisation
 
-**Concepts maîtrisés** : Simulations Monte Carlo, accumulation de statistiques dans dictionnaires, export CSV, intégration avec RShiny (interop Julia-R), création de visualisations avec Bonito, analyse de performances.
+**Concepts maîtrisés** : Intégration avec RShiny (implémentation du package Rulia), création de visualisations avec Bonito.
 
 **Réalisations** : Système de simulation complète avec statistiques, interface RShiny interactive, graphiques Bonito variés, rapport complet en Quarto.
 
-**Difficultés rencontrées** : Communication Julia-R (sérialisation des données), gestion de la mémoire pour 1000+ simulations, choix des visualisations pertinentes.
+**Difficultés rencontrées** : Communication Julia-R, choix des visualisations pertinentes.
 
 ## Apports du Cours CQLS
 
-Le cours CQLS ([https://cqls.dyndoc.fr/julia](https://cqls.dyndoc.fr/julia)) a été notre ressource principale d'apprentissage. Voici les concepts directement appliqués de ce cours à notre projet.
+Le cours CQLS ([https://cqls.dyndoc.fr/julia]) a été notre ressource principale d'apprentissage. Voici les concepts directement appliqués de ce cours à notre projet.
 
 ### Types et Dispatch
 
@@ -631,7 +609,7 @@ Le cours CQLS ([https://cqls.dyndoc.fr/julia](https://cqls.dyndoc.fr/julia)) a �
 
 ### Bonnes Pratiques
 
-**Du cours** : Constructeurs par défaut avec arguments nommés (`kwargs`), documentation avec docstrings, séparation du code en fichiers thématiques, workflow REPL → fichier → module.
+**Du cours** : Constructeurs par défaut avec arguments, documentation avec docstrings, séparation du code en fichiers thématiques.
 
 **Application** : Constructeurs comme `Mage(; nom="Gandalf")`, organisation modulaire en 7 fichiers, développement itératif avec tests intermédiaires dans le REPL.
 
@@ -665,77 +643,39 @@ Le cours CQLS ([https://cqls.dyndoc.fr/julia](https://cqls.dyndoc.fr/julia)) a �
 
 ## Extensions Fonctionnelles
 
+Nous avons également réfléchi pour développer d'avantage notre projet, en ajoutant des rôles supplémentaires, des compétences supplémentaires, des extensions de combats. Voici des idées d'améliorations:
+
 ### Nouveaux Rôles et Compétences
 
 **Voleur** : Rôle orienté vitesse et esquive avec compétence `Backstab` (dégâts accrus si frappe en premier) et `Dodge` (chance d'éviter une attaque).
 
 **Paladin** : Rôle hybride tank/soin avec `HolyStrike` (dégâts + petit soin personnel) et `Blessing` (buff de défense temporaire).
 
-**Assassin** : Haute attaque, PV faibles, compétence `Poison Blade` (applique effet Poison) et `Shadow Step` (double frappe avec pénalité PM).
+**Assassin** : Haute attaque, PV faibles, compétence `Poison Blade` (applique effet Poison) et `Shadow Step` (double frappe avec pénalité PM)...
 
 ### Mécaniques Avancées
 
-**Combats en équipe** : Extension à 3v3 ou 5v5 avec gestion des cibles multiples, compétences de zone (AOE), buffs d'équipe et synergie entre rôles.
+**Combats en équipe** : Extension à 3v3 ou 5v5 avec gestion des cibles multiples, compétences de zone, buffs d'équipe et synergie entre rôles.
 
 **Équipement** : Système d'items modifiant les stats (armes augmentent ATK, armures augmentent DEFENSE, accessoires donnent effets passifs).
 
-**Système d'expérience** : Montée de niveau après victoires, allocation de points de stats, déblocage de nouvelles compétences.
-
-**Terrain et environnement** : Modificateurs liés au terrain (forêt : +vitesse pour Archer, château : +défense pour Chevalier), effets météo (pluie : -PM pour Mage).
-
-## Optimisations Techniques
-
-### Performance
-
-**Parallélisation** : Utilisation de `@threads` pour exécuter les simulations en parallèle sur plusieurs cœurs CPU, ou `pmap` pour distribution sur un cluster.
-
-**GPU computing** : Pour simulations massives (10000+), portage des calculs sur GPU via `CUDA.jl` ou `AMDGPU.jl`.
-
-**Profilage** : Analyse avec `@profile` et `ProfileView.jl` pour identifier les fonctions critiques, optimisation ciblée des hot paths.
-
-### Qualité du Code
-
-**Documentation** : Ajout de docstrings complets pour toutes les fonctions exportées, génération automatique de documentation avec `Documenter.jl`.
-
-**CI/CD** : Mise en place de GitHub Actions pour tests automatiques à chaque commit, vérification de la couverture de code avec `Coverage.jl`.
-
-**Benchmarking** : Suivi des performances dans le temps avec `BenchmarkTools.jl`, alertes en cas de régression.
-
-**Refactoring** : Simplification des signatures complexes, extraction de constantes magiques en paramètres configurables, amélioration de la lisibilité.
-
-## Intelligence Artificielle
-
-### IA pour les Combattants
-
-**Algorithmes de décision** : Remplacement de `choose_action` aléatoire par des arbres de décision basés sur l'état du combat (PV restants, PM disponibles, effets actifs).
-
-**Minimax et Alpha-Beta** : Pour combats déterministes (sans aléatoire), recherche de la stratégie optimale par exploration de l'arbre de jeu.
-
-**Monte Carlo Tree Search (MCTS)** : Pour combats avec aléatoire, simulation de milliers de parties potentielles pour choisir l'action ayant le meilleur taux de victoire.
-
-**Apprentissage par renforcement** : Entraînement de réseaux de neurones (via `Flux.jl`) pour apprendre des stratégies optimales par auto-jeu.
 
 # Conclusion
 
 ## Réalisations
 
-En l'espace de trois mois, notre équipe est passée d'une **connaissance nulle de Julia** à la production d'un projet complet et fonctionnel. Le **RPGSimulator** intègre plus de 1200 lignes de code structuré, 12 suites de tests unitaires avec 100% de réussite, un système d'effets composables, des simulations massives et des visualisations interactives.
+En l'espace de trois mois, notre équipe est passée d'une **connaissance nulle de Julia** à la production d'un projet complet et fonctionnel. Le **RPGSimulator** intègre plus de 1200 lignes de code structuré, 12 suites de tests unitaires avec 100% de réussite, un système d'effets composables, des simulations et des visualisations interactives.
 
-Le projet démontre une maîtrise progressive des concepts fondamentaux (types, fonctions, modules) jusqu'aux techniques avancées (multiple dispatch sophistiqué, tests reproductibles, intégration multi-langage). L'architecture modulaire permet une extension facile : ajout de nouveaux rôles, compétences ou effets sans modifier le code existant.
+Le projet démontre une maîtrise progressive des concepts fondamentaux (types, fonctions, modules) jusqu'aux techniques avancées (multiple dispatch, tests reproductibles, intégration multi-langage). L'architecture modulaire permet une extension facile : ajout de nouveaux rôles, compétences ou effets sans modifier le code existant.
 
-## Apprentissages Clés
-
-**Paradigme Julia** : Compréhension profonde du multiple dispatch comme alternative à la POO classique, appréciation des performances natives de Julia, maîtrise de l'écosystème de packages.
-
-**Méthodologie de développement** : Approche itérative (prototypage → structuration → tests → refactoring), importance des tests dès le début, valeur de la reproductibilité scientifique.
-
-**Compétences transférables** : Pensée en termes de composition plutôt qu'héritage, gestion rigoureuse de la mutabilité, documentation et tests comme piliers de la qualité logicielle.
 
 ## Remerciements
 
-Ce projet n'aurait pas été possible sans le **cours CQLS** ([https://cqls.dyndoc.fr/julia](https://cqls.dyndoc.fr/julia)) qui nous a fourni une base solide et des exemples concrets. Les explications progressives et la documentation de référence ont été des ressources inestimables pour notre apprentissage autonome.
+Ce projet n'aurait pas été possible sans le **cours CQLS** ([https://cqls.dyndoc.fr/julia]) qui nous a fourni une base solide et des exemples concrets. Les explications progressives et la documentation de référence ont été des ressources importantes pour notre apprentissage autonome.
 
 Nous remercions également la communauté Julia pour l'excellente documentation officielle, les packages de qualité et les forums d'entraide qui ont répondu à nos questions techniques.
+
+Enfin, nous remercions M. Drouilhet pour sa disponibilité constante et son écoute attentive face aux difficultés que nous avons rencontrées.
 
 ---
 
