@@ -39,7 +39,7 @@ L'objectif était double : maîtriser les fondamentaux et les notions plus avanc
 
 
 
-# rchitecture et Structure du Projet
+# Architecture et Structure du Projet
 
 ## Organisation Modulaire
 
