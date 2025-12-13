@@ -70,7 +70,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="rapport_files/libs/quarto-html/quarto-syntax-highlighting-dc55a5b9e770e841cd82e46aadbfb9b0.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="rapport_files/libs/bootstrap/bootstrap.min.js"></script>
 <link href="rapport_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="rapport_files/libs/bootstrap/bootstrap-4d7f0bce1131f3e5f9547cd857cfbfc8.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="rapport_files/libs/bootstrap/bootstrap-a74871fe4945b66d259aafc266475145.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 
 
 </head>
@@ -127,21 +127,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#exemples-de-tests-clés" id="toc-exemples-de-tests-clés" class="nav-link" data-scroll-target="#exemples-de-tests-clés"><span class="header-section-number">4.2</span> Exemples de Tests Clés</a>
   <ul class="collapse">
   <li><a href="#test-de-cohérence-des-dégâts" id="toc-test-de-cohérence-des-dégâts" class="nav-link" data-scroll-target="#test-de-cohérence-des-dégâts"><span class="header-section-number">4.2.1</span> Test de Cohérence des Dégâts</a></li>
-  <li><a href="#test-de-consommation-de-ressources" id="toc-test-de-consommation-de-ressources" class="nav-link" data-scroll-target="#test-de-consommation-de-ressources"><span class="header-section-number">4.2.2</span> Test de Consommation de Ressources</a></li>
-  <li><a href="#test-de-stack-deffets" id="toc-test-de-stack-deffets" class="nav-link" data-scroll-target="#test-de-stack-deffets"><span class="header-section-number">4.2.3</span> Test de Stack d’Effets</a></li>
+  <li><a href="#test-de-consommation-de-point-de-magie-pm" id="toc-test-de-consommation-de-point-de-magie-pm" class="nav-link" data-scroll-target="#test-de-consommation-de-point-de-magie-pm"><span class="header-section-number">4.2.2</span> Test de Consommation de Point de Magie (PM)</a></li>
+  <li><a href="#test-daccumulation-deffets" id="toc-test-daccumulation-deffets" class="nav-link" data-scroll-target="#test-daccumulation-deffets"><span class="header-section-number">4.2.3</span> Test d’Accumulation d’Effets</a></li>
   <li><a href="#test-de-combat-complet" id="toc-test-de-combat-complet" class="nav-link" data-scroll-target="#test-de-combat-complet"><span class="header-section-number">4.2.4</span> Test de Combat Complet</a></li>
   </ul></li>
   <li><a href="#résultats-et-fiabilité" id="toc-résultats-et-fiabilité" class="nav-link" data-scroll-target="#résultats-et-fiabilité"><span class="header-section-number">4.3</span> Résultats et Fiabilité</a></li>
   </ul></li>
-  <li><a href="#simulations-et-analyse" id="toc-simulations-et-analyse" class="nav-link" data-scroll-target="#simulations-et-analyse"><span class="header-section-number">5</span> Simulations et Analyse</a>
-  <ul class="collapse">
-  <li><a href="#méthodologie-de-simulation" id="toc-méthodologie-de-simulation" class="nav-link" data-scroll-target="#méthodologie-de-simulation"><span class="header-section-number">5.1</span> Méthodologie de Simulation</a></li>
-  <li><a href="#résultats-déquilibrage" id="toc-résultats-déquilibrage" class="nav-link" data-scroll-target="#résultats-déquilibrage"><span class="header-section-number">5.2</span> Résultats d’Équilibrage</a>
-  <ul class="collapse">
-  <li><a href="#analyse-des-matchups" id="toc-analyse-des-matchups" class="nav-link" data-scroll-target="#analyse-des-matchups"><span class="header-section-number">5.2.1</span> Analyse des Matchups</a></li>
-  <li><a href="#impact-des-compétences" id="toc-impact-des-compétences" class="nav-link" data-scroll-target="#impact-des-compétences"><span class="header-section-number">5.2.2</span> Impact des Compétences</a></li>
-  </ul></li>
-  </ul></li>
+  <li><a href="#simulations" id="toc-simulations" class="nav-link" data-scroll-target="#simulations"><span class="header-section-number">5</span> Simulations</a></li>
   <li><a href="#visualisation-et-interface-utilisateur" id="toc-visualisation-et-interface-utilisateur" class="nav-link" data-scroll-target="#visualisation-et-interface-utilisateur"><span class="header-section-number">6</span> Visualisation et Interface Utilisateur</a>
   <ul class="collapse">
   <li><a href="#interface-rshiny" id="toc-interface-rshiny" class="nav-link" data-scroll-target="#interface-rshiny"><span class="header-section-number">6.1</span> Interface RShiny</a></li>
@@ -539,8 +531,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>    <span class="pp">@test</span> crit isa <span class="dt">Bool</span>        <span class="co"># Type booléen pour le critique</span></span>
 <span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a><span class="cf">end</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </section>
-<section id="test-de-consommation-de-ressources" class="level3" data-number="4.2.2">
-<h3 data-number="4.2.2" class="anchored" data-anchor-id="test-de-consommation-de-ressources"><span class="header-section-number">4.2.2</span> Test de Consommation de Ressources</h3>
+<section id="test-de-consommation-de-point-de-magie-pm" class="level3" data-number="4.2.2">
+<h3 data-number="4.2.2" class="anchored" data-anchor-id="test-de-consommation-de-point-de-magie-pm"><span class="header-section-number">4.2.2</span> Test de Consommation de Point de Magie (PM)</h3>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb10"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="pp">@testset</span> <span class="st">"use_skill Mage"</span> <span class="cf">begin</span></span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>    mage <span class="op">=</span> <span class="fu">Mage</span>()</span>
 <span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>    target <span class="op">=</span> <span class="fu">Chevalier</span>()</span>
@@ -556,8 +548,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a>    <span class="pp">@test</span> mage.stats.PM <span class="op">==</span> before_PM <span class="op">-</span> <span class="fl">10</span>    <span class="co"># Coût exact</span></span>
 <span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a><span class="cf">end</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </section>
-<section id="test-de-stack-deffets" class="level3" data-number="4.2.3">
-<h3 data-number="4.2.3" class="anchored" data-anchor-id="test-de-stack-deffets"><span class="header-section-number">4.2.3</span> Test de Stack d’Effets</h3>
+<section id="test-daccumulation-deffets" class="level3" data-number="4.2.3">
+<h3 data-number="4.2.3" class="anchored" data-anchor-id="test-daccumulation-deffets"><span class="header-section-number">4.2.3</span> Test d’Accumulation d’Effets</h3>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb11"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="pp">@testset</span> <span class="st">"Stack d'effets"</span> <span class="cf">begin</span></span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>    c <span class="op">=</span> <span class="fu">make_dummy_role</span>(<span class="fl">100</span>, effects<span class="op">=</span>[</span>
 <span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>        <span class="fu">Poison</span>(<span class="fl">2</span>, <span class="fl">5</span>), </span>
@@ -594,10 +586,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>Les 12 suites de tests passent avec succès (100% de réussite), validant la cohérence de nos fonctions, l’application fidèle des effets et la stabilité du moteur de combat. La reproductibilité est garantie par la fixation de la seed aléatoire.</p>
 </section>
 </section>
-<section id="simulations-et-analyse" class="level1" data-number="5">
-<h1 data-number="5"><span class="header-section-number">5</span> Simulations et Analyse</h1>
-<section id="méthodologie-de-simulation" class="level2" data-number="5.1">
-<h2 data-number="5.1" class="anchored" data-anchor-id="méthodologie-de-simulation"><span class="header-section-number">5.1</span> Méthodologie de Simulation</h2>
+<section id="simulations" class="level1" data-number="5">
+<h1 data-number="5"><span class="header-section-number">5</span> Simulations</h1>
 <p>Les simulations sont des exécutions répétées du même combat avec réinitialisation complète entre chaque itération. La fonction <code>Base.rand</code> est étendue pour accepter deux personnages et un nombre de simulations.</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb13"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="bu">Base</span>.<span class="fu">rand</span>(j1<span class="op">::</span><span class="dt">Role</span>, j2<span class="op">::</span><span class="dt">Role</span>; </span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>                  n_simulations<span class="op">=</span><span class="fl">10</span>, </span>
@@ -632,36 +622,32 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p><strong>Réinitialisation complète</strong> : Utilisation de <code>deepcopy</code> pour éviter les effets de bord entre simulations. Les PV sont restaurés explicitement aux valeurs initiales.</p>
 <p><strong>Accumulation de statistiques</strong> : Les dictionnaires <code>dmg_mat</code> et <code>skill_usage</code> accumulent les données sur l’ensemble des simulations, permettant l’analyse des dégâts moyens par matchup et de la fréquence d’utilisation des compétences.</p>
 </section>
-<section id="résultats-déquilibrage" class="level2" data-number="5.2">
-<h2 data-number="5.2" class="anchored" data-anchor-id="résultats-déquilibrage"><span class="header-section-number">5.2</span> Résultats d’Équilibrage</h2>
-<section id="analyse-des-matchups" class="level3" data-number="5.2.1">
-<h3 data-number="5.2.1" class="anchored" data-anchor-id="analyse-des-matchups"><span class="header-section-number">5.2.1</span> Analyse des Matchups</h3>
-<p><strong>Mage vs Chevalier (100 combats)</strong> : - Victoires Mage : 72% (haute défense du Chevalier inefficace contre magie) - Dégâts moyens/tour : Mage 38.5, Chevalier 16.2 - Durée moyenne : 6.3 tours - Utilisation Fireball : 65% des tours du Mage - <strong>Conclusion</strong> : Domination magique claire, dégâts qui contournent l’armure</p>
-<p><strong>Archer vs Chevalier (100 combats)</strong> : - Victoires Archer : 51%, Chevalier : 49% - Durée moyenne : 8.7 tours - <strong>Conclusion</strong> : Matchup équilibré, vitesse de l’Archer compense la défense du Chevalier</p>
-<p><strong>Mage vs Archer (100 combats)</strong> : - Victoires Mage : 68% - Durée moyenne : 5.2 tours (combats rapides) - <strong>Conclusion</strong> : Fragilité de l’Archer face aux dégâts magiques explosifs</p>
-<p>Le gobelin, également présent est le personnage le plus faible comme mentionné dans la partie “Rôles”.</p>
-</section>
-<section id="impact-des-compétences" class="level3" data-number="5.2.2">
-<h3 data-number="5.2.2" class="anchored" data-anchor-id="impact-des-compétences"><span class="header-section-number">5.2.2</span> Impact des Compétences</h3>
-<p><strong>Fireball (Mage)</strong> : - Utilisée dans 65% des tours où PM disponibles - Dégâts moyens : 42 (vs 26 pour attaque normale) - Coût : 10 PM (Mage en a 100, permet ~10 utilisations)</p>
-<p><strong>PowerStrike (Chevalier)</strong> : - Utilisée dans 18% des tours (probabilité 20% ajustée par disponibilité PM) - Dégâts moyens : 35 (vs 22 pour attaque normale) - Coût : 8 PM (Chevalier en a 20, utilisation limitée)</p>
-</section>
-</section>
-</section>
 <section id="visualisation-et-interface-utilisateur" class="level1" data-number="6">
 <h1 data-number="6"><span class="header-section-number">6</span> Visualisation et Interface Utilisateur</h1>
 <section id="interface-rshiny" class="level2" data-number="6.1">
 <h2 data-number="6.1" class="anchored" data-anchor-id="interface-rshiny"><span class="header-section-number">6.1</span> Interface RShiny</h2>
-<p>Une application RShiny interactive permet de contrôler et visualiser des <strong>combats</strong> en temps réel. L’interface communique avec le backend Julia via des appels de fonctions exportées.</p>
-<p><strong>Fonctionnalités</strong> : - <strong>Sélection des combattants</strong> : L’utilisateur peut choisir 2 personnages qui s’affrontent. L’utilisateur à la possibilité de choisir un rôle et de lui donner un nom. - <strong>Ajustement des stats</strong> : Modification des PV, ATK, DEFENSE, etc. En cochant la case “Personnaliser les statistiques”. - <strong>Lancement des combats</strong> : Bouton déclenchant les simulations. - <strong>Affichage des résultats</strong> : Trois onglets disponibles, la partie résumé du combat (détails) ou l’on retrouve le combattant qui attaque, celui qui subit l’attaque (cible), les points de vie de l’attaquant et de la cible, mais aussi l’action (si l’attaque est l’utilisation d’une compétence ou d’une attaque basique). On retrouve aussi l’évolution des points de vieet des dégâts d’attaque au fil des tours (Analyse). Enfin, notre application RShiny nous permet de connaître le vainqueur du combat (Résultat).</p>
-<p><strong>Architecture technique</strong> : - Backend Julia pour les calculs (performances optimales). - Frontend RShiny pour l’interface réactive avec l’utilisation du package Rulia pour utiliser nos fonctions du projet codées en Julia.</p>
+<p>Une application RShiny interactive permet de contrôler et visualiser des <strong>combats</strong> en temps réel. L’interface communique avec le backend Julia via des appels de fonctions exportées (Package Rulia).</p>
+<p><strong>Fonctionnalités</strong> :</p>
+<p><strong>Sélection des combattants</strong> : L’utilisateur peut choisir 2 personnages qui s’affrontent. L’utilisateur à la possibilité de choisir un rôle et de lui donner un nom.</p>
+<p><strong>Ajustement des stats</strong> : Modification des PV, ATK, DEFENSE, etc. En cochant la case “Personnaliser les statistiques”.</p>
+<p><strong>Lancement des combats</strong> : Bouton déclenchant les simulations.</p>
+<p><strong>Affichage des résultats</strong> : Trois onglets disponibles, la partie résumé du combat (détails) ou l’on retrouve le combattant qui attaque, celui qui subit l’attaque (cible), les points de vie de l’attaquant et de la cible, mais aussi l’action (si l’attaque est l’utilisation d’une compétence ou d’une attaque basique). On retrouve aussi l’évolution des points de vieet des dégâts d’attaque au fil des tours (Analyse). Enfin, notre application RShiny nous permet de connaître le vainqueur du combat (Résultat).</p>
+<p><strong>Architecture technique</strong> :</p>
+<ul>
+<li><p>Backend Julia pour les calculs (performances optimales).</p></li>
+<li><p>Frontend RShiny pour l’interface réactive avec l’utilisation du package Rulia pour utiliser nos fonctions du projet codées en Julia.</p></li>
+</ul>
 </section>
 <section id="visualisations-bonito" class="level2" data-number="6.2">
 <h2 data-number="6.2" class="anchored" data-anchor-id="visualisations-bonito"><span class="header-section-number">6.2</span> Visualisations Bonito</h2>
 <p>Notre fichier Bonito.md permet également de créer des visualisations interactives mais directement en Julia.</p>
 <section id="graphiques-implémentés" class="level3" data-number="6.2.1">
 <h3 data-number="6.2.1" class="anchored" data-anchor-id="graphiques-implémentés"><span class="header-section-number">6.2.1</span> Graphiques Implémentés</h3>
-<p><strong>Résumé des combats</strong> : Nous pouvons visualiser pour n combats qui est le vainqueur. <strong>Points de vie par round</strong> : Tableau qui résume l’évolution des PV des deux combattants tour par tour. <strong>Défense par round</strong> : Tableau qui résume l’évolution de la défense des deux combattants tour par tour. <strong>Graphique des PV par round</strong> : Evolution graphique des points de vie des deux combattants par tour. <strong>Simulation des PV interactive</strong> : Possibilité d’ajuster les stats des deux combattants, PV, Attaque et Défense, cela modifie le graphique qui représente les points de vie tour par tour. Si par exemple, on augmente fortement les stats d’attaques du combattant 1, le combattant 2 va voir ses points de vie diminuer drastiquement.</p>
+<p><strong>Résumé des combats</strong> : Nous pouvons visualiser pour n combats qui est le vainqueur.</p>
+<p><strong>Points de vie par round</strong> : Tableau qui résume l’évolution des PV des deux combattants tour par tour.</p>
+<p><strong>Défense par round</strong> : Tableau qui résume l’évolution de la défense des deux combattants tour par tour.</p>
+<p><strong>Graphique des PV par round</strong> : Evolution graphique des points de vie des deux combattants par tour.</p>
+<p><strong>Simulation des PV interactive</strong> : Possibilité d’ajuster les stats des deux combattants, PV, Attaque et Défense, cela modifie le graphique qui représente les points de vie tour par tour. Si par exemple, on augmente fortement les stats d’attaques du combattant 1, le combattant 2 va voir ses points de vie diminuer drastiquement.</p>
 </section>
 </section>
 </section>

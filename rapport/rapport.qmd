@@ -383,7 +383,7 @@ La validation du code s'appuie sur 12 suites de tests couvrant l'ensemble des fo
 end
 ```
 
-### Test de Consommation de Ressources
+### Test de Consommation de Point de Magie (PM)
 
 ```julia
 @testset "use_skill Mage" begin
@@ -402,7 +402,7 @@ end
 end
 ```
 
-### Test de Stack d'Effets
+### Test d'Accumulation d'Effets
 
 ```julia
 @testset "Stack d'effets" begin
@@ -442,9 +442,7 @@ end
 
 Les 12 suites de tests passent avec succès (100% de réussite), validant la cohérence de nos fonctions, l'application fidèle des effets et la stabilité du moteur de combat. La reproductibilité est garantie par la fixation de la seed aléatoire.
 
-# Simulations et Analyse
-
-## Méthodologie de Simulation
+# Simulations
 
 Les simulations sont des exécutions répétées du même combat avec réinitialisation complète entre chaque itération. La fonction `Base.rand` est étendue pour accepter deux personnages et un nombre de simulations.
 
@@ -485,56 +483,27 @@ end
 
 **Accumulation de statistiques** : Les dictionnaires `dmg_mat` et `skill_usage` accumulent les données sur l'ensemble des simulations, permettant l'analyse des dégâts moyens par matchup et de la fréquence d'utilisation des compétences.
 
-## Résultats d'Équilibrage
-
-### Analyse des Matchups
-
-**Mage vs Chevalier (100 combats)** :
-- Victoires Mage : 72% (haute défense du Chevalier inefficace contre magie)
-- Dégâts moyens/tour : Mage 38.5, Chevalier 16.2
-- Durée moyenne : 6.3 tours
-- Utilisation Fireball : 65% des tours du Mage
-- **Conclusion** : Domination magique claire, dégâts qui contournent l'armure
-
-**Archer vs Chevalier (100 combats)** :
-- Victoires Archer : 51%, Chevalier : 49%
-- Durée moyenne : 8.7 tours
-- **Conclusion** : Matchup équilibré, vitesse de l'Archer compense la défense du Chevalier
-
-**Mage vs Archer (100 combats)** :
-- Victoires Mage : 68%
-- Durée moyenne : 5.2 tours (combats rapides)
-- **Conclusion** : Fragilité de l'Archer face aux dégâts magiques explosifs
-
-Le gobelin, également présent est le personnage le plus faible comme mentionné dans la partie "Rôles".
-
-### Impact des Compétences
-
-**Fireball (Mage)** :
-- Utilisée dans 65% des tours où PM disponibles
-- Dégâts moyens : 42 (vs 26 pour attaque normale)
-- Coût : 10 PM (Mage en a 100, permet ~10 utilisations)
-
-**PowerStrike (Chevalier)** :
-- Utilisée dans 18% des tours (probabilité 20% ajustée par disponibilité PM)
-- Dégâts moyens : 35 (vs 22 pour attaque normale)
-- Coût : 8 PM (Chevalier en a 20, utilisation limitée)
-
 
 # Visualisation et Interface Utilisateur
 
 ## Interface RShiny
 
-Une application RShiny interactive permet de contrôler et visualiser des **combats** en temps réel. L'interface communique avec le backend Julia via des appels de fonctions exportées.
+Une application RShiny interactive permet de contrôler et visualiser des **combats** en temps réel. L'interface communique avec le backend Julia via des appels de fonctions exportées (Package Rulia).
 
 **Fonctionnalités** :
+
 **Sélection des combattants** : L'utilisateur peut choisir 2 personnages qui s'affrontent. L'utilisateur à la possibilité de choisir un rôle et de lui donner un nom.
+
 **Ajustement des stats** : Modification des PV, ATK, DEFENSE, etc. En cochant la case "Personnaliser les statistiques".
+
 **Lancement des combats** : Bouton déclenchant les simulations.
+
 **Affichage des résultats** : Trois onglets disponibles, la partie résumé du combat (détails) ou l'on retrouve le combattant qui attaque, celui qui subit l'attaque (cible), les points de vie de l'attaquant et de la cible, mais aussi l'action (si l'attaque est l'utilisation d'une compétence ou d'une attaque basique). On retrouve aussi l'évolution des points de vieet des dégâts d'attaque au fil des tours (Analyse). Enfin, notre application RShiny nous permet de connaître le vainqueur du combat (Résultat).
 
 **Architecture technique** :
+
 - Backend Julia pour les calculs (performances optimales).
+
 - Frontend RShiny pour l'interface réactive avec l'utilisation du package Rulia pour utiliser nos fonctions du projet codées en Julia.
 
 ## Visualisations Bonito
@@ -544,9 +513,13 @@ Notre fichier Bonito.md permet également de créer des visualisations interacti
 ### Graphiques Implémentés
 
 **Résumé des combats** : Nous pouvons visualiser pour n combats qui est le vainqueur.
+
 **Points de vie par round** : Tableau qui résume l'évolution des PV des deux combattants tour par tour.
+
 **Défense par round** : Tableau qui résume l'évolution de la défense des deux combattants tour par tour.
+
 **Graphique des PV par round** : Evolution graphique des points de vie des deux combattants par tour.
+
 **Simulation des PV interactive** : Possibilité d'ajuster les stats des deux combattants, PV, Attaque et Défense, cela modifie le graphique qui représente les points de vie tour par tour. Si par exemple, on augmente fortement les stats d'attaques du combattant 1, le combattant 2 va voir ses points de vie diminuer drastiquement.
 
 # Apprentissage et Évolution
