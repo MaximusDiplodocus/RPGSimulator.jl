@@ -1,225 +1,219 @@
 ---
-title: "Projet RPGSimulator"
-author: 
-  - "Maxime, Jed, Hussin et Simon"
-  - "Équipe RPGSimulator"
-date: "Septembre à Décembre 2025"
+title: "RPGSimulator"
+subtitle: "Notre voyage d'apprentissage en Julia"
+author: "Maxime, Jed, Hussin & Simon"
 format: 
   revealjs:
-    theme: [dracula, custom.scss]
+    theme: dracula
+    css: custom.css
     slide-number: true
-    transition: fade
-toc: true
+    transition: slide
+    incremental: false
 ---
 
-# 📘 Introduction
+# Le Point de Départ
 
-Ce rapport présente l'intégralité de notre projet **RPGSimulator**, réalisé en **Julia**.
-Nous avons commencé **sans aucune connaissance du langage**, et avons progressivement appris grâce à :
+:::: {.columns}
+::: {.column width="50%"}
+**Septembre 2025**
 
-* des recherches personnelles,
-* des expérimentations successives,
-* la documentation Julia,
-* **le cours du CQLS** : [https://cqls.dyndoc.fr/julia](https://cqls.dyndoc.fr/julia), qui nous a énormément aidés.
+- Aucune connaissance de Julia
+- Découverte d'un nouveau paradigme
+- Objectif ambitieux : créer un simulateur de combat
+:::
 
-Nous avons construit un moteur de combat tour par tour, structuré et modulable, en développant progressivement :
+::: {.column width="50%"}
+**Notre guide**
 
-* la structure des personnages (rôles, stats),
-* un système d’attaques et de compétences (skills),
-* des combats simples puis simulés,
-* l’utilisation du **multiple dispatch**, au cœur du design Julia,
-* des **tests unitaires**,
-* une **visualisation** des combats via **RShiny** et **BonitoBook**.
+Le cours CQLS nous a accompagnés tout au long du projet
 
-Ce document est un **rapport complet Quarto**, comprenant notre démarche, nos objectifs et le code essentiel.
+[cqls.dyndoc.fr/julia](https://cqls.dyndoc.fr/julia)
+:::
+::::
 
+**Le défi** : Transformer une page blanche en un simulateur de combat fonctionnel en 3 mois
 
-# 🎯 Objectifs du Projet
+# Phase 1 : Les Premiers Pas
 
-Nos objectifs étaient les suivants :
+**Comprendre les bases**
 
-1. **Apprendre Julia depuis zéro**, comprendre sa philosophie et ses spécificités (performance, types, multiple dispatch).
-2. Développer un **jeu RPG minimaliste** mais complet : rôles, attaques, compétences, combats.
-3. Structurer le code proprement en **plusieurs fichiers** (modules, fonctions séparées).
-4. Mettre en place un système efficace utilisant **le multiple dispatch**.
-5. Tester et fiabiliser l’ensemble via **tests unitaires**.
-6. Simuler des combats nombreux et analyser les résultats.
-7. Créer une **visualisation dynamique** des combats via **RShiny** et **BonitoBook**.
+- Découverte de la syntaxe Julia
+- Différence entre `struct` et `mutable struct`
+- Création de nos premières structures : `Stats` et `Role`
+- Apprentissage du REPL pour tester rapidement
 
+**Première victoire** : Un personnage avec des statistiques qui existent !
 
-# 🧱 Apprentissage de Julia
+**Première difficulté** : Pourquoi mes stats ne changent pas ? → Découverte de la mutabilité
 
-Nous avons procédé par étapes :
 
-* apprentissage des types, structs, méthodes,
-* compréhension du système de dispatch,
-* tests simples de fonctions,
-* manipulation des dictionnaires, modules, imports.
+# Phase 2 : Construire les Fondations
 
-Nous nous sommes beaucoup appuyés sur le cours :
-➡️ [https://cqls.dyndoc.fr/julia](https://cqls.dyndoc.fr/julia)
+**Le système prend forme**
 
+- Introduction aux **types abstraits** pour organiser notre hiérarchie
+- Découverte du **multiple dispatch** : un point indispensable
+- Création du système d'attaque avec probabilités
+- Intégration de `Distributions.jl` pour l'aléatoire
 
-# 🧩 Construction du Projet
+**Moment clé** : Réaliser qu'une fonction peut avoir plusieurs comportements selon les types d'arguments
 
-## Fichier : `stats.jl`
+**Difficulté surmontée** : Gérer l'ordre des `include()` dans notre module
 
-```julia
-struct Stats
-    PV::Int
-    PM::Int
-    ATK::Int
-    DEFENSE::Int
-    VITESSE::Int
-end
-```
 
+# Phase 3 : Le Multiple Dispatch, notre allié
 
-## Fichier : `roles.jl`
+**La puissance de Julia**
 
-```julia
-abstract type Role end
+Ce qui a changé notre vision du projet :
 
-struct Archer <: Role
-    nom::String
-    stats::Stats
-end
+- **Une fonction, plusieurs comportements** : `use_skill` s'adapte automatiquement au rôle
+- **Extension sans modification** : Ajouter un nouveau personnage n'oblige pas à toucher le code existant
+- **Spécialisation intelligente** : Le Mage lance Fireball, le Chevalier utilise PowerStrike
 
-struct Mage <: Role
-    nom::String
-    stats::Stats
-end
 
-struct Chevalier <: Role
-    nom::String
-    stats::Stats
-end
+# Phase 4 : Enrichir le Gameplay
 
-struct Gobelin <: Role
-    nom::String
-    stats::Stats
-end
-```
+**Complexité croissante**
 
+Ajout de profondeur stratégique :
 
-# ⚔️ Attaques & Multiple Dispatch
+- **Système d'effets composables** : Poison, Shield, Stun, Regen, Bleed
+- **Gestion temporelle** : Les effets durent plusieurs tours
+- **Combinaisons** : Un personnage peut subir plusieurs effets simultanés
 
-## Fonction de calcul des dégâts
+**Apprentissage clé** : `Vector{Any}` pour stocker des types différents dans un même vecteur
 
-```julia
-function compute_damage(base_atk, def; sd_frac=0.12, crit_chance=0.10, crit_mult=1.6)
-    sd = base_atk * sd_frac
-    raw = round(Int, rand(Normal(base_atk, sd)))
-    dmg = max(raw - def, 0)
-    crit = rand() < crit_chance
-    return crit ? (round(Int, dmg * crit_mult), true) : (dmg, false)
-end
-```
+**Défi technique** : Décrémenter les durées et retirer les effets expirés proprement
 
 
-# 🔥 Compétences Spécialisées
+# Phase 5 : Garantir la Qualité
 
-## Exemple clé : Fireball (Mage → Ennemi)
+**Tests et validation**
 
-```julia
-function use_skill(att::Mage, skl::Fireball, def::Role; dmg_mat=Dict(), skill_usage=Dict())
-    if att.stats.PM < skl.cost_pm
-        println("$(att.nom) n'a pas assez de PM pour Fireball.")
-        return 0
-    end
+Pourquoi les tests sont devenus essentiels :
 
-    att.stats.PM -= skl.cost_pm
-    effective_def = Int(round(def.stats.DEFENSE * 0.7))
+- Bugs aléatoires impossibles à reproduire → Solution : `Random.seed!()`
+- Modifications qui cassent le code existant → Tests systématiques
+- 12 suites de tests couvrant tous les aspects du jeu
 
-    base_atk = skl.power + Int(round(att.stats.ATK * 0.5))
+**Leçon importante** : Tester tôt évite les erreurs futures
 
-    dmg, crit = compute_damage(base_atk, effective_def,
-        sd_frac=0.05, crit_chance=0.22, crit_mult=2.2)
+**Satisfaction** : Voir tous les tests validés (100% de réussite)
 
-    def.stats.PV = max(def.stats.PV - dmg, 0)
 
-    println("$(att.nom) lance Fireball sur $(def.nom) => $dmg dégâts" * (crit ? " (CRIT!)" : ""))
+# Phase 6 : Simulations et Découvertes
 
-    skill_usage[string(typeof(skl))] = get(skill_usage,string(typeof(skl)),0) + 1
+**Analyser l'équilibrage**
 
-    return dmg
-end
-```
+Ce que les simulations nous ont révélé :
 
+- **Mage trop fort** contre Chevalier plus de 70% de victoires
+- **Matchup équilibré** : Archer vs Chevalier, combat rude et équilibré
+- **Impact des compétences** : Fireball augmente les dégâts de 62%
 
-# 🧪 Tests Unitaires
+**Apprentissage technique** : `deepcopy` pour isoler chaque simulation
 
-### Test sur compute_damage
+**Surprise** : Les résultats contredisent nos intuitions initiales
 
-```julia
-@testset "Test compute_damage" begin
-    dmg, crit = compute_damage(20, 5)
-    @test dmg >= 0
-end
-```
 
-### Test sur Fireball
+# Phase 7 : Visualiser pour Comprendre
 
-```julia
-@testset "Test Fireball" begin
-    m = Mage("Gandalf", Stats(70,100,25,5,10))
-    g = Gobelin("Gob", Stats(60,10,12,3,15))
-    fire = Fireball(30, 10)
-    dmg = use_skill(m, fire, g)
-    @test dmg > 0
-end
-```
+Deux approches complémentaires :
 
+**RShiny** : Interface interactive pour contrôler les combats
 
-# 🤖 Simulation de Combats
+- Choisir les personnages
+- Ajuster les statistiques
+- Voir l'évolution des PV en temps réel
 
-```julia
-function simulate_battles(att, def, n)
-    results = Int[]
-    for i in 1:n
-        att_copy = deepcopy(att)
-        def_copy = deepcopy(def)
-        push!(results, battle(att_copy, def_copy))
-    end
-    return results
-end
-```
+**Bonito** : Graphiques en pur Julia
 
+- Visualisation directe des combats
+- Tableaux round par round
+- Simulations interactives
 
-# 📈 Visualisation (RShiny & BonitoBook)
+**Défi** : Faire communiquer Julia et R (résolu avec le package Rulia)
 
-Nous avons représenté graphiquement :
 
-* l’évolution des PV,
-* les dégâts par tour,
-* les résultats de combats répétés.
+# Ce Que Julia Nous a Appris
 
-### Export des données
+**Changement de paradigme**
 
-```julia
-open("combat_data.csv", "w") do io
-    println(io, "round,pv_att,pv_def,dmg")
-    for r in logs
-        println(io, "$(r.round),$(r.pv_att),$(r.pv_def),$(r.dmg)")
-    end
-end
-```
+- Le multiple dispatch > POO classique pour notre cas d'usage
+- La composition d'objets > l'héritage complexe
+- Types abstraits pour structurer sans contraindre
 
+**Bonnes pratiques découvertes**
 
-# 🏁 Conclusion
+- Tests dès le début du projet
+- Prototypage rapide dans le REPL
+- Organisation modulaire en fichiers thématiques
+- Documentation indispensable
 
-En partant **sans aucune notion en Julia**, nous avons réussi à :
+**Outil préféré** : Le REPL pour tester chaque idée instantanément
 
-* comprendre les bases du langage,
-* écrire un moteur RPG structuré et modulaire,
-* implémenter un système complet de stats, attaques, compétences,
-* exploiter le **multiple dispatch** de manière avancée,
-* tester et valider le code,
-* simuler de nombreux combats,
-* visualiser nos résultats dans RShiny et BonitoBook.
 
-Ce projet fut une excellente introduction au langage Julia et à la programmation modulaire orientée performance.
+# Notre Évolution en Chiffres
 
+**Septembre** : 0 ligne de Julia aucune notion dans ce langage
 
+**Décembre** : 
 
+- 1200+ lignes de code structuré
+- 7 fichiers modulaires organisés
+- 12 suites de tests (100% de réussite)
+- 4 rôles, 5 effets, 2 compétences
+- 2 interfaces de visualisation
 
+**Temps total** : 3 mois d'apprentissage intensif
+
+
+# Et Maintenant ?
+
+**Ce qu'on pourrait ajouter si on continuait**
+
+- Nouveaux rôles : Voleur, Paladin, Assassin
+- Combats en équipe (3v3, 5v5)
+- Système d'équipement et d'inventaire
+- ...
+
+**L'important** : L'architecture permet tout ça sans réécrire l'existant !
+
+
+# Remerciements
+
+**Le cours CQLS** pour :
+
+- Les explications progressives et claires
+- Les exemples concrets et applicables
+- La documentation de référence toujours accessible
+
+**M. Drouilhet** pour :
+
+- Sa disponibilité constante
+- Son aide face à nos difficultés techniques
+- Ses conseils d'organisation
+
+**La communauté Julia** pour son écosystème de qualité
+
+
+# Conclusion
+
+**Notre voyage en une phrase** :
+
+De la découverte d'un langage inconnu à la maîtrise d'un paradigme puissant, en construisant un projet complet qui fonctionne et qui nous a passionné.
+
+**Ce qui reste** :
+
+- Une nouvelle façon de penser la programmation
+- Des outils pour résoudre des problèmes complexes
+- La confiance d'apprendre n'importe quel langage
+
+**Et surtout** : Un RPG Simulator dont on est fiers !
+
+
+# Merci de votre attention !
+
+**Équipe RPGSimulator**  
+Maxime, Jed, Hussin, Simon
