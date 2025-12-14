@@ -633,6 +633,29 @@ Nous avons également réfléchi pour développer d'avantage notre projet, en aj
 **Équipement** : Système d'items modifiant les stats (armes augmentent ATK, armures augmentent DEFENSE, accessoires donnent effets passifs).
 
 
+# Julia vs R
+
+## Pourquoi Julia après R ?
+
+En tant qu'étudiants en Master de Statistique et Science des Données, nous avions jusqu'à présent une forte expérience avec R, notre langage de référence pour l'analyse statistique et la visualisation. Ce projet nous a permis de découvrir Julia, un langage qui combine les atouts de R (facilité d'usage, écosystème statistique) avec les performances de langages compilés comme C++.
+
+**Julia vs R : Notre expérience comparative**
+
+**Performance** : Julia offre en général de meilleures performances que R pour les calculs intensifs, car son code est compilé et optimisé pour le calcul numérique.
+R reste toutefois très performant et pratique pour l’analyse statistique et la visualisation, surtout grâce à son vaste écosystème de packages.
+
+**Syntaxe** : La transition de R à Julia s'est révélée naturelle. La syntaxe est claire et intuitive, avec des similarités dans la manipulation de vecteurs et de matrices. Cependant, le multiple dispatch offre une flexibilité architecturale absente de R.
+
+**Écosystème** : R reste supérieur pour l'analyse statistique classique (modèles linéaires, tests) et possède un bon écosystème de visualisation (ggplot2, Shiny). Julia rattrape rapidement son retard avec des packages comme `Distributions.jl`, `DataFrames.jl` et `Plots.jl`, mais l'écosystème reste moins complet ou du moins nos connaissances sur ce langage reste moins poussées.
+
+
+## Notre Avis Personnel
+
+**Ce que nous retiendrons** : Julia n'est pas un remplacement de R, mais un complément puissant pour des tâches spécifiques. Pour l'analyse statistique quotidienne, R reste notre premier choix. Pour des projets nécessitant calcul intensif, simulations complexes ou prototypage d'algorithmes, Julia s'impose comme une alternative sérieuse à considérer.
+
+**En pratique** : Nous envisageons d'utiliser Julia pour nos futurs projets de simulation statistique, d'optimisation ou de modélisation stochastique, tout en conservant R pour l'analyse exploratoire, les modèles statistiques classiques et la communication de résultats (RMarkdown, Shiny).
+
+
 # Conclusion
 
 ## Réalisations

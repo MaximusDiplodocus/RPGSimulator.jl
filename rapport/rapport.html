@@ -70,7 +70,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="rapport_files/libs/quarto-html/quarto-syntax-highlighting-dc55a5b9e770e841cd82e46aadbfb9b0.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="rapport_files/libs/bootstrap/bootstrap.min.js"></script>
 <link href="rapport_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="rapport_files/libs/bootstrap/bootstrap-a74871fe4945b66d259aafc266475145.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="rapport_files/libs/bootstrap/bootstrap-4d7f0bce1131f3e5f9547cd857cfbfc8.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 
 
 </head>
@@ -174,10 +174,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#mécaniques-avancées" id="toc-mécaniques-avancées" class="nav-link" data-scroll-target="#mécaniques-avancées"><span class="header-section-number">8.1.2</span> Mécaniques Avancées</a></li>
   </ul></li>
   </ul></li>
-  <li><a href="#conclusion" id="toc-conclusion" class="nav-link" data-scroll-target="#conclusion"><span class="header-section-number">9</span> Conclusion</a>
+  <li><a href="#intérêt-de-julia-pour-notre-formation-en-statistique-et-science-des-données" id="toc-intérêt-de-julia-pour-notre-formation-en-statistique-et-science-des-données" class="nav-link" data-scroll-target="#intérêt-de-julia-pour-notre-formation-en-statistique-et-science-des-données"><span class="header-section-number">9</span> Intérêt de Julia pour notre Formation en Statistique et Science des Données</a>
   <ul class="collapse">
-  <li><a href="#réalisations" id="toc-réalisations" class="nav-link" data-scroll-target="#réalisations"><span class="header-section-number">9.1</span> Réalisations</a></li>
-  <li><a href="#remerciements" id="toc-remerciements" class="nav-link" data-scroll-target="#remerciements"><span class="header-section-number">9.2</span> Remerciements</a></li>
+  <li><a href="#pourquoi-julia-après-r" id="toc-pourquoi-julia-après-r" class="nav-link" data-scroll-target="#pourquoi-julia-après-r"><span class="header-section-number">9.1</span> Pourquoi Julia après R ?</a></li>
+  <li><a href="#notre-avis-personnel" id="toc-notre-avis-personnel" class="nav-link" data-scroll-target="#notre-avis-personnel"><span class="header-section-number">9.2</span> Notre Avis Personnel</a></li>
+  </ul></li>
+  <li><a href="#conclusion" id="toc-conclusion" class="nav-link" data-scroll-target="#conclusion"><span class="header-section-number">10</span> Conclusion</a>
+  <ul class="collapse">
+  <li><a href="#réalisations" id="toc-réalisations" class="nav-link" data-scroll-target="#réalisations"><span class="header-section-number">10.1</span> Réalisations</a></li>
+  <li><a href="#remerciements" id="toc-remerciements" class="nav-link" data-scroll-target="#remerciements"><span class="header-section-number">10.2</span> Remerciements</a></li>
   </ul></li>
   </ul>
 </nav>
@@ -746,15 +751,31 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 </section>
 </section>
-<section id="conclusion" class="level1" data-number="9">
-<h1 data-number="9"><span class="header-section-number">9</span> Conclusion</h1>
-<section id="réalisations" class="level2" data-number="9.1">
-<h2 data-number="9.1" class="anchored" data-anchor-id="réalisations"><span class="header-section-number">9.1</span> Réalisations</h2>
+<section id="intérêt-de-julia-pour-notre-formation-en-statistique-et-science-des-données" class="level1" data-number="9">
+<h1 data-number="9"><span class="header-section-number">9</span> Intérêt de Julia pour notre Formation en Statistique et Science des Données</h1>
+<section id="pourquoi-julia-après-r" class="level2" data-number="9.1">
+<h2 data-number="9.1" class="anchored" data-anchor-id="pourquoi-julia-après-r"><span class="header-section-number">9.1</span> Pourquoi Julia après R ?</h2>
+<p>En tant qu’étudiants en Master de Statistique et Science des Données, nous avions jusqu’à présent une forte expérience avec R, notre langage de référence pour l’analyse statistique et la visualisation. Ce projet nous a permis de découvrir Julia, un langage qui combine les atouts de R (facilité d’usage, écosystème statistique) avec les performances de langages compilés comme C++.</p>
+<p><strong>Julia vs R : Notre expérience comparative</strong></p>
+<p><strong>Performance</strong> : Julia offre en général de meilleures performances que R pour les calculs intensifs, car son code est compilé et optimisé pour le calcul numérique. R reste toutefois très performant et pratique pour l’analyse statistique et la visualisation, surtout grâce à son vaste écosystème de packages.</p>
+<p><strong>Syntaxe</strong> : La transition de R à Julia s’est révélée naturelle. La syntaxe est claire et intuitive, avec des similarités dans la manipulation de vecteurs et de matrices. Cependant, le multiple dispatch offre une flexibilité architecturale absente de R.</p>
+<p><strong>Écosystème</strong> : R reste supérieur pour l’analyse statistique classique (modèles linéaires, tests) et possède un bon écosystème de visualisation (ggplot2, Shiny). Julia rattrape rapidement son retard avec des packages comme <code>Distributions.jl</code>, <code>DataFrames.jl</code> et <code>Plots.jl</code>, mais l’écosystème reste moins complet ou du moins nos connaissances sur ce langage reste moins poussées.</p>
+</section>
+<section id="notre-avis-personnel" class="level2" data-number="9.2">
+<h2 data-number="9.2" class="anchored" data-anchor-id="notre-avis-personnel"><span class="header-section-number">9.2</span> Notre Avis Personnel</h2>
+<p><strong>Ce que nous retiendrons</strong> : Julia n’est pas un remplacement de R, mais un complément puissant pour des tâches spécifiques. Pour l’analyse statistique quotidienne, R reste notre premier choix. Pour des projets nécessitant calcul intensif, simulations complexes ou prototypage d’algorithmes, Julia s’impose comme une alternative sérieuse à considérer.</p>
+<p><strong>En pratique</strong> : Nous envisageons d’utiliser Julia pour nos futurs projets de simulation statistique, d’optimisation ou de modélisation stochastique, tout en conservant R pour l’analyse exploratoire, les modèles statistiques classiques et la communication de résultats (RMarkdown, Shiny).</p>
+</section>
+</section>
+<section id="conclusion" class="level1" data-number="10">
+<h1 data-number="10"><span class="header-section-number">10</span> Conclusion</h1>
+<section id="réalisations" class="level2" data-number="10.1">
+<h2 data-number="10.1" class="anchored" data-anchor-id="réalisations"><span class="header-section-number">10.1</span> Réalisations</h2>
 <p>En l’espace de trois mois, notre équipe est passée d’une <strong>connaissance nulle de Julia</strong> à la production d’un projet complet et fonctionnel. Le <strong>RPGSimulator</strong> intègre plus de 1200 lignes de code structuré, 12 suites de tests unitaires avec 100% de réussite, un système d’effets composables, des simulations et des visualisations interactives.</p>
 <p>Le projet démontre une maîtrise progressive des concepts fondamentaux (types, fonctions, modules) jusqu’aux techniques avancées (multiple dispatch, tests reproductibles, intégration multi-langage). L’architecture modulaire permet une extension facile : ajout de nouveaux rôles, compétences ou effets sans modifier le code existant.</p>
 </section>
-<section id="remerciements" class="level2" data-number="9.2">
-<h2 data-number="9.2" class="anchored" data-anchor-id="remerciements"><span class="header-section-number">9.2</span> Remerciements</h2>
+<section id="remerciements" class="level2" data-number="10.2">
+<h2 data-number="10.2" class="anchored" data-anchor-id="remerciements"><span class="header-section-number">10.2</span> Remerciements</h2>
 <p>Ce projet n’aurait pas été possible sans le <strong>cours CQLS</strong> ([https://cqls.dyndoc.fr/julia]) qui nous a fourni une base solide et des exemples concrets. Les explications progressives et la documentation de référence ont été des ressources importantes pour notre apprentissage autonome.</p>
 <p>Nous remercions également la communauté Julia pour l’excellente documentation officielle, les packages de qualité et les forums d’entraide qui ont répondu à nos questions techniques.</p>
 <p>Enfin, nous remercions M. Drouilhet pour sa disponibilité constante et son écoute attentive face aux difficultés que nous avons rencontrées.</p>
