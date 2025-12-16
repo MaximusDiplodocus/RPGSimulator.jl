@@ -2,7 +2,7 @@ library(shiny)
 library(Rulia)
 
 # Initialisation de Julia et du package
-jlrun('import Pkg; Pkg.activate("/Users/maximedesjobert/Documents/M1SSD/FormationJulia/Packages/RPGSimulator.jl")') # à personnaliser
+jlrun('import Pkg; Pkg.add(url="https://github.com/MaximusDiplodocus/RPGSimulator.jl")')
 jlusing(RPGSimulator)
 
 ui <- fluidPage(
